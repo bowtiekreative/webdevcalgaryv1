@@ -1,0 +1,92 @@
+---
+/**
+ * Shell for every signed-in page: sidebar, user chip, sign-out.
+ *
+ * Deliberately does not reuse BaseLayout — the marketing site's sticky header
+ * and prefetch-everything behaviour are wrong for an app screen.
+ */
+import '../styles/global.css';
+import '../styles/dashboard.css';
+import { site, ROLE_ADMIN } from '../config';
+import { csrfToken } from '../lib/auth/csrf';
+import type { WpUser } from '../lib/auth/wp';
+
+interface Props {
+	title: string;
+	user: WpUser;
+}
+
+const { title, user } = Astro.props;
+const csrf = await csrfToken(Astro);
+const current = Astro.url.pathname.replace(/\/+$/, '') || '/dashboard';
+const isAdmin = user.roles.includes(ROLE_ADMIN);
+
+const links = [
+	{ href: '/dashboard', label: 'Overview' },
+	{ href: '/dashboard/billing', label: 'Billing' },
+	{ href: '/dashboard/marketing', label: 'Marketing', adminOnly: true },
+	{ href: '/dashboard/users', label: 'Users', adminOnly: true },
+	{ href: '/dashboard/account', label: 'Account' },
+].filter((link) => !link.adminOnly || isAdmin);
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>{title} — {site.name}</title>
+	</head>
+	<body class="dash">
+		<a class="skip-link" href="#main">Skip to content</a>
+
+		<aside class="dash__nav">
+			<a class="dash__brand" href="/">
+				<span aria-hidden="true">{site.mark}</span> {site.name}
+			</a>
+
+			<nav aria-label="Dashboard">
+				<ul>
+					{
+						links.map((link) => (
+							<li>
+								<a
+									href={link.href}
+									aria-current={
+										link.href === '/dashboard'
+											? current === '/dashboard'
+												? 'page'
+												: undefined
+											: current.startsWith(link.href)
+												? 'page'
+												: undefined
+									}
+								>
+									{link.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<div class="dash__user">
+				<img src={user.avatarUrl} alt="" width="32" height="32" />
+				<div>
+					<p class="dash__user-name">{user.displayName}</p>
+					<p class="dash__user-role">{isAdmin ? 'Administrator' : 'Member'}</p>
+				</div>
+			</div>
+
+			<form method="POST" action="/api/auth/logout">
+				<input type="hidden" name="csrf" value={csrf} />
+				<button class="dash__signout" type="submit">Sign out</button>
+			</form>
+		</aside>
+
+		<main id="main" class="dash__main">
+			<slot />
+		</main>
+	</body>
+</html>

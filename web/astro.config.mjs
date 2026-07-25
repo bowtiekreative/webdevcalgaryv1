@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 import { loadEnv } from 'vite';
 import wpDevRefresh from './integrations/wp-dev-refresh.mjs';
 
@@ -23,8 +24,21 @@ const wpHostname = (() => {
 // https://astro.build/config
 export default defineConfig({
 	site: siteUrl,
+
+	/*
+	 * 'static' with an adapter is the hybrid mode: every route is prerendered
+	 * unless it opts out with `export const prerender = false`. The marketing
+	 * site stays fully static; only /login, /dashboard/** and /api/** render on
+	 * demand, because sessions, webhooks and payments cannot be baked at build
+	 * time.
+	 */
 	output: 'static',
+	adapter: node({ mode: 'standalone' }),
 	trailingSlash: 'never',
+
+	// The Node adapter supplies a default session driver, so this only needs to
+	// exist for Astro.session to be available.
+	session: {},
 
 	// wpDevRefresh only registers an astro:server:setup hook, so it does nothing
 	// during a production build.

@@ -1,0 +1,157 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ROLE_ADMIN, findPlan } from '../../config';
+import { formatDate } from '../../lib/routes';
+import { listUsers, type WpUser } from '../../lib/auth/wp';
+
+// Middleware already 404s non-admins for this path; this is belt and braces
+// in case the ADMIN_ONLY list in middleware.ts ever drifts.
+const user = Astro.locals.user!;
+
+if (!user.roles.includes(ROLE_ADMIN)) {
+	return new Response('Not found', { status: 404 });
+}
+
+const search = Astro.url.searchParams.get('q')?.trim() ?? '';
+const page = Math.max(1, Number.parseInt(Astro.url.searchParams.get('page') ?? '1', 10) || 1);
+const perPage = 50;
+
+let users: WpUser[] = [];
+let total = 0;
+let loadError: string | null = null;
+
+try {
+	const result = await listUsers({ page, perPage, search: search || undefined });
+	users = result.users;
+	total = result.total;
+} catch (error) {
+	loadError = error instanceof Error ? error.message : String(error);
+}
+
+const pages = Math.max(1, Math.ceil(total / perPage));
+const subscribers = users.filter((candidate) => candidate.subscription.isActive).length;
+
+const wpUsersUrl = (() => {
+	const endpoint = import.meta.env.WP_GRAPHQL_ENDPOINT ?? 'http://localhost:8080/graphql';
+
+	try {
+		return `${new URL(endpoint).origin}/wp-admin/users.php`;
+	} catch {
+		return '#';
+	}
+})();
+---
+
+<DashboardLayout title="Users" user={user}>
+	<header class="dash__head">
+		<h1>Users</h1>
+		<p>Everyone with an account, and where their subscription stands.</p>
+	</header>
+
+	{loadError && <p class="alert alert--error">Could not load users: {loadError}</p>}
+
+	<div class="stat-row">
+		<div class="stat">
+			<p class="stat__label">Total users</p>
+			<p class="stat__value">{total}</p>
+		</div>
+		<div class="stat">
+			<p class="stat__label">Active on this page</p>
+			<p class="stat__value">{subscribers}</p>
+		</div>
+	</div>
+
+	<div class="panel">
+		<form method="GET" style="display:flex;gap:0.5rem;margin-bottom:1.25rem;flex-wrap:wrap">
+			<input
+				class="field"
+				type="search"
+				name="q"
+				value={search}
+				placeholder="Search name or email"
+				style="flex:1;min-width:14rem;margin:0;padding:0.6rem 0.75rem;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font:inherit;font-size:var(--step--1)"
+			/>
+			<button class="button" type="submit" style="cursor:pointer;font:inherit">Search</button>
+			{search && <a class="button button--ghost" href="/dashboard/users">Clear</a>}
+		</form>
+
+		<div class="table-scroll">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>Role</th>
+						<th>Plan</th>
+						<th>Status</th>
+						<th>Joined</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						users.map((row) => {
+							const plan = findPlan(row.subscription.plan);
+							const status = row.subscription.status;
+							const badge = row.subscription.isActive
+								? 'badge--active'
+								: status === 'past_due'
+									? 'badge--warn'
+									: 'badge--none';
+
+							return (
+								<tr>
+									<td>
+										<strong>{row.displayName}</strong>
+										<br />
+										<span style="color:var(--ink-faint)">{row.email}</span>
+									</td>
+									<td>{row.roles.includes(ROLE_ADMIN) ? 'Administrator' : 'Member'}</td>
+									<td>{plan?.name ?? '—'}</td>
+									<td>
+										<span class={`badge ${badge}`}>{status === 'none' ? 'Free' : status}</span>
+									</td>
+									<td>{formatDate(row.registered) ?? '—'}</td>
+								</tr>
+							);
+						})
+					}
+					{
+						users.length === 0 && !loadError && (
+							<tr>
+								<td colspan="5" style="color:var(--ink-faint)">
+									No users matched.
+								</td>
+							</tr>
+						)
+					}
+				</tbody>
+			</table>
+		</div>
+
+		{
+			pages > 1 && (
+				<p style="margin-top:1.25rem;display:flex;gap:1rem;align-items:center">
+					{page > 1 && (
+						<a href={`/dashboard/users?page=${page - 1}${search ? `&q=${encodeURIComponent(search)}` : ''}`}>
+							← Previous
+						</a>
+					)}
+					<span class="field__hint" style="margin:0">
+						Page {page} of {pages}
+					</span>
+					{page < pages && (
+						<a href={`/dashboard/users?page=${page + 1}${search ? `&q=${encodeURIComponent(search)}` : ''}`}>
+							Next →
+						</a>
+					)}
+				</p>
+			)
+		}
+
+		<p class="field__hint" style="margin-top:1.25rem">
+			Read-only. Create users, change roles and reset passwords in
+			<a href={wpUsersUrl} target="_blank" rel="noopener noreferrer">WordPress</a>, which owns the accounts.
+		</p>
+	</div>
+</DashboardLayout>

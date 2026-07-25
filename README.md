@@ -161,6 +161,82 @@ docker compose exec wordpress php /var/www/html/app-tests/schema-contract.php
 php wordpress/tests/schema-contract.php
 ```
 
+## Dashboard, auth and billing
+
+A signed-in area at `/dashboard`, on top of the same WordPress install. There is
+**no WooCommerce and no WordPress e-commerce plugin** — Stripe and PayPal are
+called directly.
+
+| Concern | Where it lives |
+| --- | --- |
+| Identity | WordPress `wp_users`. Create users, set roles and reset passwords in wp-admin. |
+| Credential check | [app-auth.php](wordpress/mu-plugins/app-auth.php) — `POST /wp-json/app/v1/auth/login` |
+| Sessions | Astro's built-in session, holding only the user id |
+| Subscription state | Five meta fields on the WordPress user, written **only** by webhooks ([app-billing.php](wordpress/mu-plugins/app-billing.php)) |
+| Payments | Stripe Checkout + Billing Portal, PayPal Subscriptions API |
+| Marketing email | Emailit, from `/dashboard/marketing` |
+| Transactional email | Emailit, via a `wp_mail` override ([app-emailit.php](wordpress/mu-plugins/app-emailit.php)) |
+
+The Astro *server* talks to WordPress over a shared secret
+(`APP_SHARED_SECRET` = `WP_SHARED_SECRET`); the browser never sees it and never
+calls those endpoints. Without it the auth API refuses every request, so the
+dashboard fails closed rather than open.
+
+### Rendering modes
+
+Adding `@astrojs/node` did not make the marketing site dynamic. `output: 'static'`
+with an adapter prerenders everything **except** routes that opt out with
+`export const prerender = false` — which is only `/login`, `/dashboard/**` and
+`/api/**`. The public pages are still plain HTML.
+
+### Security decisions worth knowing
+
+- **Only webhooks grant access.** A browser returning from Checkout proves
+  nothing — the tab can be closed, and the redirect is forgeable. Stripe events
+  are HMAC-verified against the raw body; PayPal events are verified via their
+  API (a round trip, but skipping it would let anyone POST themselves a
+  subscription).
+- **Plans are resolved by key from [config.ts](web/src/config.ts)**, never by a
+  price id from the form, so nobody can subscribe themselves to a cheaper price.
+- **Roles are checked twice** — in [middleware.ts](web/src/middleware.ts) and
+  again in the page. Admin-only routes 404 rather than 403, so they don't
+  confirm they exist.
+- **CSRF**: a per-session token on every state-changing form, on top of Astro's
+  own `checkOrigin`. Sessions are regenerated on login to prevent fixation.
+- **Failed logins** return one generic message, so the endpoint can't be used to
+  discover which addresses are registered, and are rate limited per IP+login.
+
+### Getting it running
+
+```bash
+# 1. One shared secret, same value in both files
+openssl rand -hex 32          # -> APP_SHARED_SECRET in .env
+                              # -> WP_SHARED_SECRET  in web/.env
+docker compose up -d wordpress   # reload wp-config with the new constant
+
+# 2. Sign in at http://localhost:4321/login with any WordPress account
+```
+
+Stripe, PayPal and Emailit keys are optional: without them the dashboard still
+works, and the billing page says which provider is unconfigured instead of
+failing at checkout. See [web/.env.example](web/.env.example) for every key.
+
+For Stripe webhooks locally:
+
+```bash
+stripe listen --forward-to localhost:4321/api/billing/stripe-webhook
+```
+
+### The Emailit rate limit matters
+
+New Emailit workspaces are capped at **2 messages/second and 5,000/day**.
+Campaign sending is throttled to that and runs inline with the request, so a
+500-recipient list holds the request open for about four minutes — which is why
+sends above 500 are refused rather than silently truncated. For bigger lists,
+move `sendCampaign()` into a background worker; the throttling in
+[client.ts](web/src/lib/emailit/client.ts) is already separate from the route
+for exactly that reason.
+
 ## Content model
 
 | Type | GraphQL | Front-end route | Meta Box group |

@@ -53,6 +53,12 @@ services:
         define( 'APP_PREVIEW_SECRET', '${PREVIEW_SECRET:-dev-preview-secret}' );
         /* Optional: POSTed to on publish to trigger a front-end rebuild. */
         define( 'APP_BUILD_HOOK_URL', '${BUILD_HOOK_URL:-}' );
+        /* Shared secret the Astro server presents to the auth/billing API.
+           Must equal WP_SHARED_SECRET in web/.env. */
+        define( 'APP_SHARED_SECRET', '${APP_SHARED_SECRET:-}' );
+        /* Emailit, used for WordPress's own transactional mail. */
+        define( 'APP_EMAILIT_API_KEY', '${EMAILIT_API_KEY:-}' );
+        define( 'APP_EMAILIT_FROM', '${EMAILIT_FROM:-}' );
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
         define( 'DISALLOW_FILE_EDIT', true );

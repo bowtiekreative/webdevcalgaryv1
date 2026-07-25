@@ -1,0 +1,154 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { plans, findPlan } from '../../config';
+import { csrfToken } from '../../lib/auth/csrf';
+import { formatDate } from '../../lib/routes';
+import { stripeConfigured } from '../../lib/billing/stripe';
+import { paypalConfigured } from '../../lib/billing/paypal';
+
+const user = Astro.locals.user!;
+const csrf = await csrfToken(Astro);
+const subscription = user.subscription;
+const currentPlan = findPlan(subscription.plan);
+
+const params = Astro.url.searchParams;
+const error = params.get('error');
+const checkout = params.get('checkout');
+
+const hasStripe = stripeConfigured();
+const hasPayPal = paypalConfigured();
+---
+
+<DashboardLayout title="Billing" user={user}>
+	<header class="dash__head">
+		<h1>Billing</h1>
+		<p>Manage your subscription. Payments are handled by Stripe and PayPal.</p>
+	</header>
+
+	{error && <p class="alert alert--error">{error}</p>}
+
+	{
+		checkout === 'success' && (
+			<p class="alert alert--ok">
+				Thanks — payment received. Your plan updates here as soon as the provider confirms it, usually within a
+				few seconds.
+			</p>
+		)
+	}
+
+	{checkout === 'cancelled' && <p class="alert alert--error">Checkout was cancelled. Nothing was charged.</p>}
+
+	{
+		!hasStripe && !hasPayPal && (
+			<p class="alert alert--error">
+				Neither Stripe nor PayPal is configured on this server, so nothing can be purchased yet. Set the keys in{' '}
+				<code>web/.env</code> — see the README.
+			</p>
+		)
+	}
+
+	{
+		subscription.isActive && currentPlan && (
+			<div class="panel">
+				<h2 class="panel__title">Current subscription</h2>
+				<div class="stat-row" style="margin-bottom:1rem">
+					<div class="stat">
+						<p class="stat__label">Plan</p>
+						<p class="stat__value">{currentPlan.name}</p>
+					</div>
+					<div class="stat">
+						<p class="stat__label">Status</p>
+						<p class="stat__value"><span class="badge badge--active">{subscription.status}</span></p>
+					</div>
+					<div class="stat">
+						<p class="stat__label">Renews</p>
+						<p class="stat__value">{formatDate(subscription.renewsAt) ?? '—'}</p>
+					</div>
+				</div>
+
+				{subscription.provider === 'stripe' && (
+					<form method="POST" action="/api/billing/stripe-portal">
+						<input type="hidden" name="csrf" value={csrf} />
+						<button class="button" type="submit" style="cursor:pointer;font:inherit">
+							Manage payment &amp; cancel
+						</button>
+					</form>
+				)}
+
+				{subscription.provider === 'paypal' && (
+					<p class="field__hint">
+						This subscription is billed through PayPal. Manage or cancel it from your{' '}
+						<a href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener noreferrer">
+							PayPal automatic payments
+						</a>{' '}
+						page — changes appear here once PayPal notifies us.
+					</p>
+				)}
+			</div>
+		)
+	}
+
+	<div class="panel">
+		<h2 class="panel__title">{subscription.isActive ? 'Change plan' : 'Plans'}</h2>
+
+		<div class="plans">
+			{
+				plans.map((plan) => {
+					const isCurrent = subscription.isActive && subscription.plan === plan.id;
+					const stripeReady = hasStripe && Boolean(plan.stripePriceId);
+					const paypalReady = hasPayPal && Boolean(plan.paypalPlanId);
+
+					return (
+						<div
+							class={`plan${plan.featured ? ' plan--featured' : ''}${isCurrent ? ' plan--current' : ''}`}
+						>
+							<h3 style="margin:0;font-size:var(--step-1)">{plan.name}</h3>
+							<p class="plan__price">
+								{plan.price} <span>/ {plan.interval}</span>
+							</p>
+							<p style="margin:0;color:var(--ink-soft);font-size:var(--step--1)">{plan.description}</p>
+
+							<ul class="plan__features">
+								{plan.features.map((feature) => (
+									<li>{feature}</li>
+								))}
+							</ul>
+
+							<div class="plan__actions">
+								{isCurrent ? (
+									<p class="field__hint" style="text-align:center;margin:0">
+										Your current plan
+									</p>
+								) : (
+									<>
+										<form method="POST" action="/api/billing/stripe-checkout">
+											<input type="hidden" name="csrf" value={csrf} />
+											<input type="hidden" name="plan" value={plan.id} />
+											<button class="button" type="submit" disabled={!stripeReady}>
+												{stripeReady ? 'Pay with card' : 'Card unavailable'}
+											</button>
+										</form>
+
+										<form method="POST" action="/api/billing/paypal-subscribe">
+											<input type="hidden" name="csrf" value={csrf} />
+											<input type="hidden" name="plan" value={plan.id} />
+											<button class="button button--ghost" type="submit" disabled={!paypalReady}>
+												{paypalReady ? 'Pay with PayPal' : 'PayPal unavailable'}
+											</button>
+										</form>
+									</>
+								)}
+							</div>
+						</div>
+					);
+				})
+			}
+		</div>
+
+		<p class="field__hint" style="margin-top:1.5rem">
+			Prices shown here are display-only — Stripe and PayPal are authoritative for what you are actually charged.
+		</p>
+	</div>
+</DashboardLayout>
