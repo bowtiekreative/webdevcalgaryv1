@@ -1,5 +1,6 @@
 ---
 import { getPrimaryNav } from '../lib/wp/site';
+import { site } from '../config';
 
 const nav = await getPrimaryNav();
 const current = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -16,8 +17,8 @@ function isCurrent(href: string): boolean {
 <header class="site-header">
 	<div class="wrap site-header__inner">
 		<a class="brand" href="/">
-			<span class="brand__mark" aria-hidden="true">✦</span>
-			<span class="brand__name">Bow Tie Kreative</span>
+			<span class="brand__mark" aria-hidden="true">{site.mark}</span>
+			<span class="brand__name">{site.name}</span>
 		</a>
 
 		<nav aria-label="Primary">

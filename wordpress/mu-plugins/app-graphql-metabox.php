@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: BTK — Meta Box → WPGraphQL Bridge
+ * Plugin Name: App — Meta Box → WPGraphQL Bridge
  * Description: Exposes Meta Box (metabox.io) field groups in the WPGraphQL schema.
  * Version:     1.0.0
  *
@@ -14,7 +14,7 @@
  * How it works
  * ------------
  * 1. Field groups are read straight from the `rwmb_meta_boxes` filter, so any
- *    group registered anywhere (including btk-fields.php) is picked up.
+ *    group registered anywhere (including app-fields.php) is picked up.
  * 2. Each group becomes one GraphQL object type, exposed as a single field on
  *    every post type the group is attached to. Querying:
  *
@@ -37,24 +37,24 @@
  * Group field name : `graphql_name` on the group, else camelCase of its `id`.
  * Leaf field name  : `graphql_name` on the field, else the field `id` with the
  *                    group's common prefix stripped, camelCased. So the group
- *                    { btk_project_client, btk_project_year } yields `client`
- *                    and `year` — the shared `btk_project_` is inferred.
+ *                    { app_project_client, app_project_year } yields `client`
+ *                    and `year` — the shared `app_project_` is inferred.
  * Opt out          : set `'graphql' => false` on a group or a field.
  *
- * @package BTK
+ * @package App
  */
 
 declare( strict_types = 1 );
 
-namespace BTK\GraphQL\MetaBox;
+namespace App\GraphQL\MetaBox;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const MEDIA_TYPE     = 'BtkMediaItem';
-const POST_REF_TYPE  = 'BtkPostRef';
-const TYPE_PREFIX    = 'Btk';
+const MEDIA_TYPE     = 'AppMediaItem';
+const POST_REF_TYPE  = 'AppPostRef';
+const TYPE_PREFIX    = 'App';
 
 /** Field types whose value is one or more attachments. */
 const MEDIA_FIELDS = [
@@ -101,7 +101,7 @@ const SKIPPED_FIELDS = [
  *
  * @var array<string,bool>
  */
-$GLOBALS['btk_registered_graphql_types'] = [];
+$GLOBALS['app_registered_graphql_types'] = [];
 
 /**
  * Entry point.
@@ -188,7 +188,7 @@ function register_group( array $group ): void {
 				'type'        => $object_type,
 				'description' => sprintf(
 					/* translators: %s: field group title. */
-					__( 'Meta Box fields from the "%s" group.', 'btk' ),
+					__( 'Meta Box fields from the "%s" group.', 'app' ),
 					$group['title'] ?? $id
 				),
 				'resolve'     => static function ( $source ) {
@@ -196,7 +196,7 @@ function register_group( array $group ): void {
 
 					// Returning a marker rather than the values themselves is
 					// what makes leaf resolution lazy.
-					return null === $object_id ? null : [ '__btk_object_id' => $object_id ];
+					return null === $object_id ? null : [ '__app_object_id' => $object_id ];
 				},
 			]
 		);
@@ -252,20 +252,20 @@ function build_object_type( string $type_name, array $fields, string $prefix ): 
 		return null;
 	}
 
-	if ( empty( $GLOBALS['btk_registered_graphql_types'][ $type_name ] ) ) {
+	if ( empty( $GLOBALS['app_registered_graphql_types'][ $type_name ] ) ) {
 		register_graphql_object_type(
 			$type_name,
 			[
 				'description' => sprintf(
 					/* translators: %s: GraphQL type name. */
-					__( 'Meta Box field group: %s', 'btk' ),
+					__( 'Meta Box field group: %s', 'app' ),
 					$type_name
 				),
 				'fields'      => $graphql_fields,
 			]
 		);
 
-		$GLOBALS['btk_registered_graphql_types'][ $type_name ] = true;
+		$GLOBALS['app_registered_graphql_types'][ $type_name ] = true;
 	}
 
 	return $type_name;
@@ -371,9 +371,9 @@ function resolve_field( array $field, $source ) {
 	$id      = (string) $field['id'];
 	$is_list = ! empty( $field['clone'] ) || ! empty( $field['multiple'] );
 
-	if ( is_array( $source ) && isset( $source['__btk_object_id'] ) ) {
+	if ( is_array( $source ) && isset( $source['__app_object_id'] ) ) {
 		$args = array_key_exists( $type, MEDIA_FIELDS ) ? [ 'size' => 'full' ] : [];
-		$raw  = rwmb_meta( $id, $args, (int) $source['__btk_object_id'] );
+		$raw  = rwmb_meta( $id, $args, (int) $source['__app_object_id'] );
 	} elseif ( is_array( $source ) ) {
 		$raw = $source[ $id ] ?? null;
 	} else {
@@ -452,55 +452,55 @@ function resolve_field( array $field, $source ) {
  * Register the shared media object type.
  */
 function register_media_type(): void {
-	if ( ! empty( $GLOBALS['btk_registered_graphql_types'][ MEDIA_TYPE ] ) ) {
+	if ( ! empty( $GLOBALS['app_registered_graphql_types'][ MEDIA_TYPE ] ) ) {
 		return;
 	}
 
 	register_graphql_object_type(
 		MEDIA_TYPE,
 		[
-			'description' => __( 'An attachment selected in a Meta Box media field.', 'btk' ),
+			'description' => __( 'An attachment selected in a Meta Box media field.', 'app' ),
 			'fields'      => [
-				'databaseId'  => [ 'type' => 'Int', 'description' => __( 'Attachment post ID.', 'btk' ) ],
-				'url'         => [ 'type' => 'String', 'description' => __( 'Full-size URL.', 'btk' ) ],
-				'alt'         => [ 'type' => 'String', 'description' => __( 'Alt text.', 'btk' ) ],
-				'title'       => [ 'type' => 'String', 'description' => __( 'Attachment title.', 'btk' ) ],
-				'caption'     => [ 'type' => 'String', 'description' => __( 'Caption.', 'btk' ) ],
-				'description' => [ 'type' => 'String', 'description' => __( 'Description.', 'btk' ) ],
-				'width'       => [ 'type' => 'Int', 'description' => __( 'Intrinsic width in pixels.', 'btk' ) ],
-				'height'      => [ 'type' => 'Int', 'description' => __( 'Intrinsic height in pixels.', 'btk' ) ],
-				'srcset'      => [ 'type' => 'String', 'description' => __( 'Ready-made srcset attribute.', 'btk' ) ],
-				'mimeType'    => [ 'type' => 'String', 'description' => __( 'MIME type.', 'btk' ) ],
+				'databaseId'  => [ 'type' => 'Int', 'description' => __( 'Attachment post ID.', 'app' ) ],
+				'url'         => [ 'type' => 'String', 'description' => __( 'Full-size URL.', 'app' ) ],
+				'alt'         => [ 'type' => 'String', 'description' => __( 'Alt text.', 'app' ) ],
+				'title'       => [ 'type' => 'String', 'description' => __( 'Attachment title.', 'app' ) ],
+				'caption'     => [ 'type' => 'String', 'description' => __( 'Caption.', 'app' ) ],
+				'description' => [ 'type' => 'String', 'description' => __( 'Description.', 'app' ) ],
+				'width'       => [ 'type' => 'Int', 'description' => __( 'Intrinsic width in pixels.', 'app' ) ],
+				'height'      => [ 'type' => 'Int', 'description' => __( 'Intrinsic height in pixels.', 'app' ) ],
+				'srcset'      => [ 'type' => 'String', 'description' => __( 'Ready-made srcset attribute.', 'app' ) ],
+				'mimeType'    => [ 'type' => 'String', 'description' => __( 'MIME type.', 'app' ) ],
 			],
 		]
 	);
 
-	$GLOBALS['btk_registered_graphql_types'][ MEDIA_TYPE ] = true;
+	$GLOBALS['app_registered_graphql_types'][ MEDIA_TYPE ] = true;
 }
 
 /**
  * Register the shared post-reference object type.
  */
 function register_post_ref_type(): void {
-	if ( ! empty( $GLOBALS['btk_registered_graphql_types'][ POST_REF_TYPE ] ) ) {
+	if ( ! empty( $GLOBALS['app_registered_graphql_types'][ POST_REF_TYPE ] ) ) {
 		return;
 	}
 
 	register_graphql_object_type(
 		POST_REF_TYPE,
 		[
-			'description' => __( 'A post selected in a Meta Box post field.', 'btk' ),
+			'description' => __( 'A post selected in a Meta Box post field.', 'app' ),
 			'fields'      => [
-				'databaseId' => [ 'type' => 'Int', 'description' => __( 'Post ID.', 'btk' ) ],
-				'title'      => [ 'type' => 'String', 'description' => __( 'Post title.', 'btk' ) ],
-				'slug'       => [ 'type' => 'String', 'description' => __( 'Post slug.', 'btk' ) ],
-				'uri'        => [ 'type' => 'String', 'description' => __( 'Site-relative permalink.', 'btk' ) ],
-				'postType'   => [ 'type' => 'String', 'description' => __( 'Post type key.', 'btk' ) ],
+				'databaseId' => [ 'type' => 'Int', 'description' => __( 'Post ID.', 'app' ) ],
+				'title'      => [ 'type' => 'String', 'description' => __( 'Post title.', 'app' ) ],
+				'slug'       => [ 'type' => 'String', 'description' => __( 'Post slug.', 'app' ) ],
+				'uri'        => [ 'type' => 'String', 'description' => __( 'Site-relative permalink.', 'app' ) ],
+				'postType'   => [ 'type' => 'String', 'description' => __( 'Post type key.', 'app' ) ],
 			],
 		]
 	);
 
-	$GLOBALS['btk_registered_graphql_types'][ POST_REF_TYPE ] = true;
+	$GLOBALS['app_registered_graphql_types'][ POST_REF_TYPE ] = true;
 }
 
 /* -------------------------------------------------------------------------
@@ -624,8 +624,8 @@ function object_id_from_source( $source ): ?int {
 		return is_numeric( $id ) ? (int) $id : null;
 	}
 
-	if ( is_array( $source ) && isset( $source['__btk_object_id'] ) ) {
-		return (int) $source['__btk_object_id'];
+	if ( is_array( $source ) && isset( $source['__app_object_id'] ) ) {
+		return (int) $source['__app_object_id'];
 	}
 
 	return is_numeric( $source ) ? (int) $source : null;
@@ -678,7 +678,7 @@ function normalize_to_array( $value ): array {
 /**
  * Find the longest shared `snake_case` prefix across a group's field IDs.
  *
- * This is what lets `btk_project_client` be queried as `client` without any
+ * This is what lets `app_project_client` be queried as `client` without any
  * extra configuration. The prefix is always trimmed back to an underscore so a
  * partial word is never chopped, and it is never allowed to consume a field
  * name entirely.
@@ -697,7 +697,7 @@ function derive_common_prefix( array $fields ): string {
 
 	if ( count( $ids ) < 2 ) {
 		// Nothing to compare against; fall back to the project-wide prefix.
-		return 'btk_';
+		return 'app_';
 	}
 
 	$prefix = $ids[0];
@@ -713,7 +713,7 @@ function derive_common_prefix( array $fields ): string {
 		$prefix = substr( $prefix, 0, $i );
 
 		if ( '' === $prefix ) {
-			return 'btk_';
+			return 'app_';
 		}
 	}
 
@@ -724,11 +724,11 @@ function derive_common_prefix( array $fields ): string {
 	// Guard against a prefix that would empty out one of the field names.
 	foreach ( $ids as $id ) {
 		if ( '' === trim( strip_prefix( $id, $prefix ), '_' ) ) {
-			return 'btk_';
+			return 'app_';
 		}
 	}
 
-	return '' === $prefix ? 'btk_' : $prefix;
+	return '' === $prefix ? 'app_' : $prefix;
 }
 
 /**
@@ -747,13 +747,13 @@ function strip_prefix( string $id, string $prefix ): string {
 }
 
 /**
- * Remove the project-wide `btk_` prefix.
+ * Remove the project-wide `app_` prefix.
  *
  * @param string $id Identifier.
  * @return string
  */
 function strip_leading_prefix( string $id ): string {
-	return 0 === strpos( $id, 'btk_' ) ? substr( $id, 4 ) : $id;
+	return 0 === strpos( $id, 'app_' ) ? substr( $id, 4 ) : $id;
 }
 
 /**

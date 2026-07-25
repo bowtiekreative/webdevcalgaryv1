@@ -1,9 +1,9 @@
 {
-  "name": "btk-web",
+  "name": "app-web",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Bow Tie Kreative — Astro front end for headless WordPress",
+  "description": "Astro + headless WordPress boilerplate",
   "engines": {
     "node": ">=22.12.0"
   },

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: BTK — Headless Behaviour
+ * Plugin Name: App — Headless Behaviour
  * Description: Turns this WordPress into a pure content API for the Astro front end.
  * Version:     1.0.0
  *
@@ -12,14 +12,14 @@
  *  - a couple of small GraphQL additions the front end needs
  *
  * Configuration comes from wp-config.php constants (set by docker-compose.yml):
- *  BTK_FRONTEND_URL, BTK_PREVIEW_SECRET, BTK_BUILD_HOOK_URL
+ *  APP_FRONTEND_URL, APP_PREVIEW_SECRET, APP_BUILD_HOOK_URL
  *
- * @package BTK
+ * @package App
  */
 
 declare( strict_types = 1 );
 
-namespace BTK\Headless;
+namespace App\Headless;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function frontend_url(): string {
-	$url = defined( 'BTK_FRONTEND_URL' ) ? (string) BTK_FRONTEND_URL : '';
+	$url = defined( 'APP_FRONTEND_URL' ) ? (string) APP_FRONTEND_URL : '';
 
 	return untrailingslashit( $url );
 }
@@ -45,8 +45,8 @@ function routed_post_types(): array {
 	return [
 		'post'        => '/blog',
 		'page'        => '',
-		'btk_project' => '/work',
-		'btk_service' => '/services',
+		'app_project' => '/work',
+		'app_service' => '/services',
 	];
 }
 
@@ -80,7 +80,7 @@ function redirect_front_end(): void {
 		$post = get_queried_object();
 
 		if ( $post instanceof \WP_Post ) {
-			wp_safe_redirect( preview_url( $post ), 302, 'BTK Headless' );
+			wp_safe_redirect( preview_url( $post ), 302, 'App Headless' );
 			exit;
 		}
 	}
@@ -89,7 +89,7 @@ function redirect_front_end(): void {
 
 	// 302 rather than 301: the mapping is config, not a permanent fact, and a
 	// cached 301 is painful to undo in browsers.
-	wp_redirect( $target, 302, 'BTK Headless' );
+	wp_redirect( $target, 302, 'App Headless' );
 	exit;
 }
 add_action( 'template_redirect', __NAMESPACE__ . '\\redirect_front_end', 0 );
@@ -112,11 +112,11 @@ function front_end_path_for_request(): string {
 		}
 	}
 
-	if ( is_post_type_archive( 'btk_project' ) ) {
+	if ( is_post_type_archive( 'app_project' ) ) {
 		return '/work';
 	}
 
-	if ( is_post_type_archive( 'btk_service' ) ) {
+	if ( is_post_type_archive( 'app_service' ) ) {
 		return '/services';
 	}
 
@@ -161,7 +161,7 @@ function front_end_path_for_post( \WP_Post $post ): string {
  * @return string
  */
 function preview_url( \WP_Post $post ): string {
-	$secret = defined( 'BTK_PREVIEW_SECRET' ) ? (string) BTK_PREVIEW_SECRET : '';
+	$secret = defined( 'APP_PREVIEW_SECRET' ) ? (string) APP_PREVIEW_SECRET : '';
 
 	return add_query_arg(
 		array_filter(
@@ -288,7 +288,7 @@ function allowed_origins(): array {
 	 *
 	 * @param array $origins Allowed origins.
 	 */
-	return array_values( array_unique( (array) apply_filters( 'btk_allowed_origins', $origins ) ) );
+	return array_values( array_unique( (array) apply_filters( 'app_allowed_origins', $origins ) ) );
 }
 
 /**
@@ -305,7 +305,7 @@ function graphql_cors_headers( array $headers ): array {
 	}
 
 	$headers['Access-Control-Allow-Origin']      = untrailingslashit( $origin );
-	$headers['Access-Control-Allow-Headers']     = 'Content-Type, Authorization, X-BTK-Preview';
+	$headers['Access-Control-Allow-Headers']     = 'Content-Type, Authorization, X-App-Preview';
 	$headers['Access-Control-Allow-Methods']     = 'POST, GET, OPTIONS';
 	$headers['Access-Control-Allow-Credentials'] = 'true';
 	$headers['Vary']                             = 'Origin';
@@ -329,7 +329,7 @@ add_filter( 'graphql_response_headers_to_send', __NAMESPACE__ . '\\graphql_cors_
  * @param \WP_Post $post       Post.
  */
 function trigger_build( string $new_status, string $old_status, \WP_Post $post ): void {
-	$hook = defined( 'BTK_BUILD_HOOK_URL' ) ? (string) BTK_BUILD_HOOK_URL : '';
+	$hook = defined( 'APP_BUILD_HOOK_URL' ) ? (string) APP_BUILD_HOOK_URL : '';
 
 	if ( '' === $hook ) {
 		return;
@@ -343,7 +343,7 @@ function trigger_build( string $new_status, string $old_status, \WP_Post $post )
 		return;
 	}
 
-	$tracked = array_merge( array_keys( routed_post_types() ), [ 'btk_testimonial' ] );
+	$tracked = array_merge( array_keys( routed_post_types() ), [ 'app_testimonial' ] );
 
 	if ( ! in_array( $post->post_type, $tracked, true ) ) {
 		return;
@@ -358,7 +358,7 @@ function trigger_build( string $new_status, string $old_status, \WP_Post $post )
 			'headers'  => [ 'Content-Type' => 'application/json' ],
 			'body'     => wp_json_encode(
 				[
-					'trigger'   => 'btk-headless',
+					'trigger'   => 'app-headless',
 					'postType'  => $post->post_type,
 					'postId'    => $post->ID,
 					'newStatus' => $new_status,
@@ -390,7 +390,7 @@ function register_graphql_extras(): void {
 			'frontendPath',
 			[
 				'type'        => 'String',
-				'description' => __( 'Path of this content on the Astro front end.', 'btk' ),
+				'description' => __( 'Path of this content on the Astro front end.', 'app' ),
 				'resolve'     => static function ( $source ) {
 					$id   = $source->databaseId ?? $source->ID ?? null;
 					$post = is_numeric( $id ) ? get_post( (int) $id ) : null;
@@ -432,11 +432,11 @@ function dependency_notice(): void {
 
 	printf(
 		'<div class="notice notice-error"><p><strong>%s</strong> %s</p></div>',
-		esc_html__( 'Bow Tie Kreative headless setup:', 'btk' ),
+		esc_html__( 'Headless setup:', 'app' ),
 		esc_html(
 			sprintf(
 				/* translators: %s: comma-separated plugin names. */
-				__( 'the following required plugins are not active: %s. The GraphQL schema will be incomplete until they are.', 'btk' ),
+				__( 'the following required plugins are not active: %s. The GraphQL schema will be incomplete until they are.', 'app' ),
 				implode( ', ', $missing )
 			)
 		)
@@ -456,8 +456,8 @@ function admin_bar_link( \WP_Admin_Bar $bar ): void {
 
 	$bar->add_node(
 		[
-			'id'    => 'btk-graphiql',
-			'title' => __( 'GraphiQL', 'btk' ),
+			'id'    => 'app-graphiql',
+			'title' => __( 'GraphiQL', 'app' ),
 			'href'  => admin_url( 'admin.php?page=graphiql-ide' ),
 		]
 	);
@@ -465,8 +465,8 @@ function admin_bar_link( \WP_Admin_Bar $bar ): void {
 	if ( '' !== frontend_url() ) {
 		$bar->add_node(
 			[
-				'id'    => 'btk-frontend',
-				'title' => __( 'View Site (Astro)', 'btk' ),
+				'id'    => 'app-frontend',
+				'title' => __( 'View Site (Astro)', 'app' ),
 				'href'  => frontend_url(),
 				'meta'  => [ 'target' => '_blank' ],
 			]

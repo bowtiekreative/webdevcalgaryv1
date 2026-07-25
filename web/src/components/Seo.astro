@@ -6,6 +6,7 @@
  * in, and fall back to the page's own title/excerpt otherwise.
  */
 import type { Seo } from '../lib/wp/schema';
+import { site } from '../config';
 
 interface Props {
 	title: string;
@@ -28,7 +29,7 @@ const {
 	modifiedTime = null,
 } = Astro.props;
 
-const siteName = 'Bow Tie Kreative';
+const siteName = site.name;
 
 const resolvedTitle = seo?.title || title;
 const resolvedDescription = seo?.description || description || '';

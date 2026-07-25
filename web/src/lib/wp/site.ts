@@ -10,6 +10,7 @@
 
 import { MENU_QUERY, SITE_QUERY } from './queries';
 import { wpQuery } from './client';
+import { fallbackNav, site } from '../../config';
 
 export interface NavItem {
 	label: string;
@@ -22,17 +23,11 @@ export interface SiteMeta {
 	description: string;
 }
 
-const FALLBACK_NAV: NavItem[] = [
-	{ label: 'Work', href: '/work', external: false },
-	{ label: 'Services', href: '/services', external: false },
-	{ label: 'Journal', href: '/blog', external: false },
-	{ label: 'About', href: '/about', external: false },
-	{ label: 'Contact', href: '/contact', external: false },
-];
+const FALLBACK_NAV: NavItem[] = fallbackNav.map((item) => ({ ...item, external: false }));
 
 const FALLBACK_META: SiteMeta = {
-	title: 'Bow Tie Kreative',
-	description: 'Brand, web and creative studio.',
+	title: site.name,
+	description: site.tagline,
 };
 
 interface MenuItemNode {

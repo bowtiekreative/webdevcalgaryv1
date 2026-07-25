@@ -1,4 +1,4 @@
-# Local headless WordPress stack for Bow Tie Kreative.
+# Local headless WordPress stack.
 #
 #   docker compose up -d
 #   ./scripts/wp-bootstrap.sh     # installs core + WPGraphQL + Meta Box
@@ -6,7 +6,7 @@
 # WordPress admin : http://localhost:8080/wp-admin
 # GraphQL endpoint: http://localhost:8080/graphql
 
-name: btk
+name: app
 
 services:
   db:
@@ -48,11 +48,11 @@ services:
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-1}
       WORDPRESS_CONFIG_EXTRA: |
         /* Headless: where the Astro front end lives. */
-        define( 'BTK_FRONTEND_URL', '${FRONTEND_URL:-http://localhost:4321}' );
+        define( 'APP_FRONTEND_URL', '${FRONTEND_URL:-http://localhost:4321}' );
         /* Shared secret for draft previews (must match the Astro side). */
-        define( 'BTK_PREVIEW_SECRET', '${PREVIEW_SECRET:-dev-preview-secret}' );
+        define( 'APP_PREVIEW_SECRET', '${PREVIEW_SECRET:-dev-preview-secret}' );
         /* Optional: POSTed to on publish to trigger a front-end rebuild. */
-        define( 'BTK_BUILD_HOOK_URL', '${BUILD_HOOK_URL:-}' );
+        define( 'APP_BUILD_HOOK_URL', '${BUILD_HOOK_URL:-}' );
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
         define( 'DISALLOW_FILE_EDIT', true );
@@ -64,7 +64,8 @@ services:
       - ./wordpress/uploads:/var/www/html/wp-content/uploads
       # Outside wp-content so WordPress never tries to load it as a plugin.
       # See wordpress/tests/schema-contract.php for how to run it.
-      - ./wordpress/tests:/var/www/html/btk-tests:ro
+      - ./wordpress/tests:/var/www/html/app-tests:ro
+      - ./wordpress/bin:/var/www/html/app-bin:ro
     ports:
       - "${WORDPRESS_PORT:-8080}:80"
     extra_hosts:
@@ -89,6 +90,7 @@ services:
       - wp_data:/var/www/html
       - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ./wordpress/uploads:/var/www/html/wp-content/uploads
+      - ./wordpress/bin:/var/www/html/app-bin:ro
     # `wp` needs to run as the same uid as the apache container's files.
     user: "33:33"
     entrypoint: ["wp"]

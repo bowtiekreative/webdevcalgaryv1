@@ -1,4 +1,4 @@
-# Bow Tie Kreative
+# Astro + Headless WordPress Boilerplate
 
 Astro front end on headless WordPress, with **WPGraphQL** as the API and
 **Meta Box** for custom fields.
@@ -22,8 +22,40 @@ site, and every "View"/"Preview" link in wp-admin points there too.
 | --- | --- |
 | [docker-compose.yml](docker-compose.yml) | WordPress 6.8 + MySQL 8.4 + wp-cli for local dev |
 | [scripts/wp-bootstrap.sh](scripts/wp-bootstrap.sh) | One-shot setup: installs core, plugins, permalinks, demo content |
+| [scripts/migrate-prefix.sh](scripts/migrate-prefix.sh) | Rewrites the `app_` prefix across an existing database, after you change it in code |
 | [wordpress/mu-plugins/](wordpress/mu-plugins/) | The whole WordPress side — post types, fields, GraphQL bridge, headless behaviour |
+| [wordpress/bin/](wordpress/bin/) | wp-cli helper scripts, mounted into the container |
 | [web/](web/) | The Astro site |
+| [web/src/config.ts](web/src/config.ts) | Brand name, tagline, nav fallback and subscription plans — the only place with project-specific values |
+
+## Making it yours
+
+Everything project-specific is in two places:
+
+1. **[web/src/config.ts](web/src/config.ts)** — site name, tagline, mark, nav
+   fallback, plans. Reads `SITE_NAME` / `SITE_TAGLINE` from env, so the same
+   build can be rebranded without a code change.
+2. **The `app_` prefix** — post types (`app_project`), Meta Box field IDs
+   (`app_project_client`), GraphQL types (`AppMediaItem`), PHP namespace
+   (`App\…`) and constants (`APP_FRONTEND_URL`).
+
+To change the prefix, rename it in `wordpress/mu-plugins/`, `web/src/lib/wp/`,
+`web/scripts/mock-wp.mjs` and `wordpress/tests/schema-contract.php`, then rewrite
+any existing database rows:
+
+```bash
+./scripts/migrate-prefix.sh app mystudio
+```
+
+WordPress looks content up by the literal `post_type` / `meta_key` strings, so
+without that step existing posts and custom fields are orphaned. Run
+`php wordpress/tests/schema-contract.php` afterwards — it fails loudly if the
+code and the queries have drifted apart.
+
+One gotcha: `docker-compose.yml` sets `name: app`, which is the Compose *project*
+name and determines the volume names. Changing it points Compose at a brand new,
+empty stack. Set `COMPOSE_PROJECT_NAME` in `.env` to stay attached to an existing
+one.
 
 The WordPress core files live in a Docker volume and are not versioned. Only the
 must-use plugins are, which is the entire content model — see
@@ -71,20 +103,20 @@ up as a build failure against real WordPress.
 Meta Box fields are **not** in the WPGraphQL schema by default. Two community
 bridges exist ([wp-graphql-metabox], [wp-graphql-mb]) but both are third-party
 and have lagged WPGraphQL releases, so this repo ships its own:
-[btk-graphql-metabox.php](wordpress/mu-plugins/btk-graphql-metabox.php).
+[app-graphql-metabox.php](wordpress/mu-plugins/app-graphql-metabox.php).
 
 It reads every registered field group and exposes each one as a single object
 field, with the group's shared field-ID prefix stripped automatically:
 
 ```php
-// wordpress/mu-plugins/btk-fields.php
+// wordpress/mu-plugins/app-fields.php
 $meta_boxes[] = [
-    'id'           => 'btk_project_details',
-    'post_types'   => [ 'btk_project' ],
+    'id'           => 'app_project_details',
+    'post_types'   => [ 'app_project' ],
     'graphql_name' => 'projectDetails',
     'fields'       => [
-        [ 'id' => 'btk_project_client', 'name' => 'Client', 'type' => 'text' ],
-        [ 'id' => 'btk_project_year',   'name' => 'Year',   'type' => 'number' ],
+        [ 'id' => 'app_project_client', 'name' => 'Client', 'type' => 'text' ],
+        [ 'id' => 'app_project_year',   'name' => 'Year',   'type' => 'number' ],
     ],
 ];
 ```
@@ -95,21 +127,21 @@ becomes
 project(id: "northside-coffee", idType: SLUG) {
   title
   projectDetails {   # from graphql_name
-    client           # btk_project_client, common prefix stripped
+    client           # app_project_client, common prefix stripped
     year             # Int, because Meta Box numbers step by 1
   }
 }
 ```
 
-Media fields resolve to a `BtkMediaItem` (url, alt, dimensions, srcset), `post`
-fields to a `BtkPostRef` (title, slug, front-end path), cloned fields to lists,
+Media fields resolve to a `AppMediaItem` (url, alt, dimensions, srcset), `post`
+fields to a `AppPostRef` (title, slug, front-end path), cloned fields to lists,
 and groups to nested object types. Values load lazily — a field absent from the
 query costs no database read. Set `'graphql' => false` on a group or field to
 hide it.
 
 ### Adding a field, end to end
 
-1. Add it to a group in [btk-fields.php](wordpress/mu-plugins/btk-fields.php).
+1. Add it to a group in [app-fields.php](wordpress/mu-plugins/app-fields.php).
 2. Add it to the matching query in [web/src/lib/wp/queries.ts](web/src/lib/wp/queries.ts).
 3. Map it in the `build*` function and schema in [web/src/lib/wp/schema.ts](web/src/lib/wp/schema.ts).
 4. Mirror it in [web/scripts/mock-wp.mjs](web/scripts/mock-wp.mjs) so `npm run mock:validate` stays honest.
@@ -119,12 +151,12 @@ Step 3 is what makes a rename fail loudly: the zod schema runs during the build,
 so a missing field is a build error rather than `undefined` in the page.
 
 Because the bridge *derives* GraphQL names, nothing otherwise records that
-`btk_project_client` is queried as `client`. The contract check in step 5 closes
+`app_project_client` is queried as `client`. The contract check in step 5 closes
 that gap — it loads the real mu-plugins against a WordPress stub and asserts the
 derived schema matches the queries, no database or web server involved:
 
 ```bash
-docker compose exec wordpress php /var/www/html/btk-tests/schema-contract.php
+docker compose exec wordpress php /var/www/html/app-tests/schema-contract.php
 # or, with any PHP 8.1+ on the host:
 php wordpress/tests/schema-contract.php
 ```
@@ -135,11 +167,11 @@ php wordpress/tests/schema-contract.php
 | --- | --- | --- | --- |
 | Pages | `pages` | `/[...slug]` (nested URIs preserved) | `hero`, `seo` |
 | Posts | `posts` | `/blog/[slug]` | `seo` |
-| Projects (`btk_project`) | `projects` | `/work/[slug]` | `projectDetails`, `seo` |
-| Services (`btk_service`) | `services` | `/services/[slug]` | `serviceDetails`, `seo` |
-| Testimonials (`btk_testimonial`) | `testimonials` | rendered inline | `testimonialDetails` |
+| Projects (`app_project`) | `projects` | `/work/[slug]` | `projectDetails`, `seo` |
+| Services (`app_service`) | `services` | `/services/[slug]` | `serviceDetails`, `seo` |
+| Testimonials (`app_testimonial`) | `testimonials` | rendered inline | `testimonialDetails` |
 
-Taxonomies: `btk_capability` (projects + services) and `btk_industry`
+Taxonomies: `app_capability` (projects + services) and `app_industry`
 (projects). Services show related projects by shared capability.
 
 ## Data flow in Astro
@@ -233,12 +265,12 @@ The front end is a static bundle — `npm run build` in `web/` produces `dist/`.
 2. Set `WP_GRAPHQL_ENDPOINT` and `SITE_URL` in the front-end host's env, plus
    `WP_FAIL_ON_ERROR=1`.
 3. Put the host's deploy-hook URL in `BUILD_HOOK_URL` on the WordPress side.
-   [btk-headless.php](wordpress/mu-plugins/btk-headless.php) POSTs to it whenever
+   [app-headless.php](wordpress/mu-plugins/app-headless.php) POSTs to it whenever
    published content changes, so editors get a rebuild without leaving wp-admin.
 
 ### Draft previews
 
-The WordPress side is wired up: `BTK_FRONTEND_URL` and `BTK_PREVIEW_SECRET` make
+The WordPress side is wired up: `APP_FRONTEND_URL` and `APP_PREVIEW_SECRET` make
 the Preview button point at `/api/preview` on the Astro site. Serving that route
 needs on-demand rendering, which this static build does not have — add
 `@astrojs/node` (or your host's adapter), an `/api/preview` endpoint that checks
@@ -264,7 +296,7 @@ Now also verified end to end against a live stack (Docker + MySQL 8.4 +
 WordPress 6.8 + WPGraphQL + Meta Box): field values written with `wp post meta`
 come back through `/graphql` correctly typed — `year` as a real `Int`,
 `featured` as a `Boolean`, cloned `deliverables` as a list, the testimonial's
-`project` as a `BtkPostRef` — and `npm run build` renders them into the HTML.
+`project` as a `AppPostRef` — and `npm run build` renders them into the HTML.
 
 Two bugs only the live stack could surface, both fixed:
 

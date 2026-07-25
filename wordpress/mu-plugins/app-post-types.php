@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: BTK — Post Types & Taxonomies
+ * Plugin Name: App — Post Types & Taxonomies
  * Description: Content model for the headless site. Every type is exposed to WPGraphQL.
  * Version:     1.0.0
  *
@@ -8,12 +8,12 @@
  * so those must be unique across the whole schema and must not collide with
  * built-in types (Post, Page, Category, Tag, User, MediaItem, Menu...).
  *
- * @package BTK
+ * @package App
  */
 
 declare( strict_types = 1 );
 
-namespace BTK\PostTypes;
+namespace App\PostTypes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,18 +24,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function register_post_types(): void {
 	register_post_type(
-		'btk_project',
+		'app_project',
 		[
 			'labels'              => [
-				'name'          => __( 'Projects', 'btk' ),
-				'singular_name' => __( 'Project', 'btk' ),
-				'menu_name'     => __( 'Work', 'btk' ),
-				'add_new_item'  => __( 'Add New Project', 'btk' ),
-				'edit_item'     => __( 'Edit Project', 'btk' ),
+				'name'          => __( 'Projects', 'app' ),
+				'singular_name' => __( 'Project', 'app' ),
+				'menu_name'     => __( 'Work', 'app' ),
+				'add_new_item'  => __( 'Add New Project', 'app' ),
+				'edit_item'     => __( 'Edit Project', 'app' ),
 			],
 			'public'              => true,
 			// Keep the single views queryable so admin "Preview" works; the
-			// front end itself is redirected to Astro by btk-headless.php.
+			// front end itself is redirected to Astro by app-headless.php.
 			'publicly_queryable'  => true,
 			'has_archive'         => true,
 			'hierarchical'        => false,
@@ -52,13 +52,13 @@ function register_post_types(): void {
 	);
 
 	register_post_type(
-		'btk_service',
+		'app_service',
 		[
 			'labels'              => [
-				'name'          => __( 'Services', 'btk' ),
-				'singular_name' => __( 'Service', 'btk' ),
-				'add_new_item'  => __( 'Add New Service', 'btk' ),
-				'edit_item'     => __( 'Edit Service', 'btk' ),
+				'name'          => __( 'Services', 'app' ),
+				'singular_name' => __( 'Service', 'app' ),
+				'add_new_item'  => __( 'Add New Service', 'app' ),
+				'edit_item'     => __( 'Edit Service', 'app' ),
 			],
 			'public'              => true,
 			'publicly_queryable'  => true,
@@ -77,13 +77,13 @@ function register_post_types(): void {
 	);
 
 	register_post_type(
-		'btk_testimonial',
+		'app_testimonial',
 		[
 			'labels'              => [
-				'name'          => __( 'Testimonials', 'btk' ),
-				'singular_name' => __( 'Testimonial', 'btk' ),
-				'add_new_item'  => __( 'Add New Testimonial', 'btk' ),
-				'edit_item'     => __( 'Edit Testimonial', 'btk' ),
+				'name'          => __( 'Testimonials', 'app' ),
+				'singular_name' => __( 'Testimonial', 'app' ),
+				'add_new_item'  => __( 'Add New Testimonial', 'app' ),
+				'edit_item'     => __( 'Edit Testimonial', 'app' ),
 			],
 			/*
 			 * Testimonials are only rendered as part of another page, so they
@@ -121,12 +121,12 @@ add_action( 'init', __NAMESPACE__ . '\\register_post_types' );
  */
 function register_taxonomies(): void {
 	register_taxonomy(
-		'btk_capability',
-		[ 'btk_project', 'btk_service' ],
+		'app_capability',
+		[ 'app_project', 'app_service' ],
 		[
 			'labels'              => [
-				'name'          => __( 'Capabilities', 'btk' ),
-				'singular_name' => __( 'Capability', 'btk' ),
+				'name'          => __( 'Capabilities', 'app' ),
+				'singular_name' => __( 'Capability', 'app' ),
 			],
 			'public'              => true,
 			'hierarchical'        => false,
@@ -140,12 +140,12 @@ function register_taxonomies(): void {
 	);
 
 	register_taxonomy(
-		'btk_industry',
-		[ 'btk_project' ],
+		'app_industry',
+		[ 'app_project' ],
 		[
 			'labels'              => [
-				'name'          => __( 'Industries', 'btk' ),
-				'singular_name' => __( 'Industry', 'btk' ),
+				'name'          => __( 'Industries', 'app' ),
+				'singular_name' => __( 'Industry', 'app' ),
 			],
 			'public'              => true,
 			'hierarchical'        => true,
@@ -173,7 +173,7 @@ function default_ordering( \WP_Query $query ): void {
 
 	$post_type = $query->get( 'post_type' );
 
-	if ( in_array( $post_type, [ 'btk_project', 'btk_service' ], true ) && ! $query->get( 'orderby' ) ) {
+	if ( in_array( $post_type, [ 'app_project', 'app_service' ], true ) && ! $query->get( 'orderby' ) ) {
 		$query->set( 'orderby', [ 'menu_order' => 'ASC', 'date' => 'DESC' ] );
 	}
 }
@@ -188,11 +188,11 @@ add_action( 'pre_get_posts', __NAMESPACE__ . '\\default_ordering' );
 function maybe_flush_rewrites(): void {
 	$version = '1.0.1';
 
-	if ( get_option( 'btk_rewrite_version' ) === $version ) {
+	if ( get_option( 'app_rewrite_version' ) === $version ) {
 		return;
 	}
 
 	flush_rewrite_rules();
-	update_option( 'btk_rewrite_version', $version );
+	update_option( 'app_rewrite_version', $version );
 }
 add_action( 'init', __NAMESPACE__ . '\\maybe_flush_rewrites', 99 );

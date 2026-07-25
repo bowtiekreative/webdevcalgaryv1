@@ -10,7 +10,7 @@
  *
  * Run it inside the WordPress container (no WordPress bootstrap needed):
  *
- *   docker compose exec wordpress php /var/www/html/btk-tests/schema-contract.php
+ *   docker compose exec wordpress php /var/www/html/app-tests/schema-contract.php
  *
  * or with any PHP 8.1+ binary on the host:
  *
@@ -18,7 +18,7 @@
  *
  * Exits non-zero on a mismatch, so it works as a CI gate.
  *
- * @package BTK
+ * @package App
  */
 
 declare( strict_types = 1 );
@@ -112,13 +112,13 @@ function register_graphql_object_type( string $name, array $config ): void {
 
 /*
  * Works both from a checkout (../mu-plugins) and from inside the WordPress
- * container, where this directory is mounted at /var/www/html/btk-tests and the
+ * container, where this directory is mounted at /var/www/html/app-tests and the
  * plugins live under wp-content/.
  */
 $mu = null;
 
 foreach ( [ __DIR__ . '/../mu-plugins', '/var/www/html/wp-content/mu-plugins' ] as $candidate ) {
-	if ( is_file( $candidate . '/btk-graphql-metabox.php' ) ) {
+	if ( is_file( $candidate . '/app-graphql-metabox.php' ) ) {
 		$mu = $candidate;
 		break;
 	}
@@ -129,9 +129,9 @@ if ( null === $mu ) {
 	exit( 2 );
 }
 
-require $mu . '/btk-post-types.php';
-require $mu . '/btk-fields.php';
-require $mu . '/btk-graphql-metabox.php';
+require $mu . '/app-post-types.php';
+require $mu . '/app-fields.php';
+require $mu . '/app-graphql-metabox.php';
 
 do_action( 'init' );
 do_action( 'graphql_register_types' );
@@ -142,53 +142,53 @@ do_action( 'graphql_register_types' );
 
 /** Group field expected on each GraphQL type, and the object type it returns. */
 $expected_groups = [
-	'Project'     => [ 'projectDetails' => 'BtkProjectDetails', 'seo' => 'BtkSeo' ],
-	'Service'     => [ 'serviceDetails' => 'BtkServiceDetails', 'seo' => 'BtkSeo' ],
-	'Testimonial' => [ 'testimonialDetails' => 'BtkTestimonialDetails' ],
-	'Page'        => [ 'hero' => 'BtkHero', 'seo' => 'BtkSeo' ],
-	'Post'        => [ 'seo' => 'BtkSeo' ],
+	'Project'     => [ 'projectDetails' => 'AppProjectDetails', 'seo' => 'AppSeo' ],
+	'Service'     => [ 'serviceDetails' => 'AppServiceDetails', 'seo' => 'AppSeo' ],
+	'Testimonial' => [ 'testimonialDetails' => 'AppTestimonialDetails' ],
+	'Page'        => [ 'hero' => 'AppHero', 'seo' => 'AppSeo' ],
+	'Post'        => [ 'seo' => 'AppSeo' ],
 ];
 
 /** Leaf fields expected on each object type, with their GraphQL type. */
 $expected_fields = [
-	'BtkProjectDetails' => [
+	'AppProjectDetails' => [
 		'client'       => 'String',
 		'year'         => 'Int',
 		'role'         => 'String',
 		'summary'      => 'String',
 		'deliverables' => [ 'list_of' => 'String' ],
 		'url'          => 'String',
-		'hero'         => 'BtkMediaItem',
-		'gallery'      => [ 'list_of' => 'BtkMediaItem' ],
+		'hero'         => 'AppMediaItem',
+		'gallery'      => [ 'list_of' => 'AppMediaItem' ],
 		'featured'     => 'Boolean',
 	],
-	'BtkServiceDetails' => [
+	'AppServiceDetails' => [
 		'tagline'       => 'String',
 		'icon'          => 'String',
 		'bullets'       => [ 'list_of' => 'String' ],
 		'startingPrice' => 'String',
 	],
-	'BtkTestimonialDetails' => [
+	'AppTestimonialDetails' => [
 		'quote'   => 'String',
 		'author'  => 'String',
 		'role'    => 'String',
 		'company' => 'String',
-		'photo'   => 'BtkMediaItem',
+		'photo'   => 'AppMediaItem',
 		'rating'  => 'String',
-		'project' => 'BtkPostRef',
+		'project' => 'AppPostRef',
 	],
-	'BtkHero' => [
+	'AppHero' => [
 		'eyebrow'    => 'String',
 		'heading'    => 'String',
 		'subheading' => 'String',
-		'image'      => 'BtkMediaItem',
+		'image'      => 'AppMediaItem',
 		'ctaLabel'   => 'String',
 		'ctaUrl'     => 'String',
 	],
-	'BtkSeo' => [
+	'AppSeo' => [
 		'title'       => 'String',
 		'description' => 'String',
-		'image'       => 'BtkMediaItem',
+		'image'       => 'AppMediaItem',
 		'noindex'     => 'Boolean',
 	],
 ];

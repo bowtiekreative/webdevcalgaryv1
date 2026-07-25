@@ -15,7 +15,7 @@
  *       node scripts/mock-wp.mjs --validate
  *
  * This is a stand-in for the schema, not a second source of truth: when you
- * change a Meta Box group in btk-fields.php, update the SDL below to match.
+ * change a Meta Box group in app-fields.php, update the SDL below to match.
  */
 
 import { createServer } from 'node:http';
@@ -42,9 +42,9 @@ const PORT = Number(process.env.MOCK_WP_PORT ?? 8099);
 const ORIGIN = `http://localhost:${PORT}`;
 
 /*
- * Schema. Field-for-field with what btk-graphql-metabox.php registers:
- * one object field per Meta Box group, media as BtkMediaItem, post references
- * as BtkPostRef, cloned fields as lists.
+ * Schema. Field-for-field with what app-graphql-metabox.php registers:
+ * one object field per Meta Box group, media as AppMediaItem, post references
+ * as AppPostRef, cloned fields as lists.
  */
 const schema = buildSchema(/* GraphQL */ `
 	type PageInfo {
@@ -72,7 +72,7 @@ const schema = buildSchema(/* GraphQL */ `
 		featuredImage: FeaturedImageEdge
 	}
 
-	type BtkMediaItem {
+	type AppMediaItem {
 		databaseId: Int
 		url: String
 		alt: String
@@ -85,7 +85,7 @@ const schema = buildSchema(/* GraphQL */ `
 		mimeType: String
 	}
 
-	type BtkPostRef {
+	type AppPostRef {
 		databaseId: Int
 		title: String
 		slug: String
@@ -93,23 +93,23 @@ const schema = buildSchema(/* GraphQL */ `
 		postType: String
 	}
 
-	type BtkSeo {
+	type AppSeo {
 		title: String
 		description: String
 		noindex: Boolean
-		image: BtkMediaItem
+		image: AppMediaItem
 	}
 
-	type BtkHero {
+	type AppHero {
 		eyebrow: String
 		heading: String
 		subheading: String
 		ctaLabel: String
 		ctaUrl: String
-		image: BtkMediaItem
+		image: AppMediaItem
 	}
 
-	type BtkProjectDetails {
+	type AppProjectDetails {
 		client: String
 		year: Int
 		role: String
@@ -117,25 +117,25 @@ const schema = buildSchema(/* GraphQL */ `
 		deliverables: [String]
 		url: String
 		featured: Boolean
-		hero: BtkMediaItem
-		gallery: [BtkMediaItem]
+		hero: AppMediaItem
+		gallery: [AppMediaItem]
 	}
 
-	type BtkServiceDetails {
+	type AppServiceDetails {
 		tagline: String
 		icon: String
 		bullets: [String]
 		startingPrice: String
 	}
 
-	type BtkTestimonialDetails {
+	type AppTestimonialDetails {
 		quote: String
 		author: String
 		role: String
 		company: String
 		rating: String
-		photo: BtkMediaItem
-		project: BtkPostRef
+		photo: AppMediaItem
+		project: AppPostRef
 	}
 
 	type Term {
@@ -172,8 +172,8 @@ const schema = buildSchema(/* GraphQL */ `
 		isFrontPage: Boolean
 		parent: PageParentEdge
 		featuredImage: FeaturedImageEdge
-		seo: BtkSeo
-		hero: BtkHero
+		seo: AppSeo
+		hero: AppHero
 	}
 
 	type Post implements NodeWithFeaturedImage {
@@ -190,7 +190,7 @@ const schema = buildSchema(/* GraphQL */ `
 		categories: TermConnection
 		tags: TermConnection
 		featuredImage: FeaturedImageEdge
-		seo: BtkSeo
+		seo: AppSeo
 	}
 
 	type Project implements NodeWithFeaturedImage {
@@ -207,8 +207,8 @@ const schema = buildSchema(/* GraphQL */ `
 		capabilities: TermConnection
 		industries: TermConnection
 		featuredImage: FeaturedImageEdge
-		seo: BtkSeo
-		projectDetails: BtkProjectDetails
+		seo: AppSeo
+		projectDetails: AppProjectDetails
 	}
 
 	type Service implements NodeWithFeaturedImage {
@@ -224,8 +224,8 @@ const schema = buildSchema(/* GraphQL */ `
 		frontendPath: String
 		capabilities: TermConnection
 		featuredImage: FeaturedImageEdge
-		seo: BtkSeo
-		serviceDetails: BtkServiceDetails
+		seo: AppSeo
+		serviceDetails: AppServiceDetails
 	}
 
 	type Testimonial {
@@ -236,7 +236,7 @@ const schema = buildSchema(/* GraphQL */ `
 		date: String
 		modified: String
 		menuOrder: Int
-		testimonialDetails: BtkTestimonialDetails
+		testimonialDetails: AppTestimonialDetails
 	}
 
 	type PageConnection {
@@ -313,14 +313,14 @@ const image = (seed, width = 1600, height = 1200) => ({
 	databaseId: seed,
 	// picsum is only reachable when online; nothing in the build fetches these
 	// URLs, they are only written into src attributes.
-	url: `https://picsum.photos/seed/btk${seed}/${width}/${height}`,
+	url: `https://picsum.photos/seed/app${seed}/${width}/${height}`,
 	alt: `Placeholder image ${seed}`,
 	title: `Image ${seed}`,
 	caption: seed % 2 === 0 ? 'A caption from the media library.' : '',
 	description: '',
 	width,
 	height,
-	srcset: `https://picsum.photos/seed/btk${seed}/800/600 800w, https://picsum.photos/seed/btk${seed}/${width}/${height} ${width}w`,
+	srcset: `https://picsum.photos/seed/app${seed}/800/600 800w, https://picsum.photos/seed/app${seed}/${width}/${height} ${width}w`,
 	mimeType: 'image/jpeg',
 });
 
@@ -339,14 +339,14 @@ const pages = [
 			`<p>Here is <a href="${ORIGIN}/wp-content/uploads/2026/01/brief.pdf">a PDF</a> that must stay absolute, ` +
 			'and <a href="https://example.com" target="_blank">an external link</a>.</p>' +
 			'<h2>How we work</h2><p>Three people, one room, no account managers.</p>' +
-			'<figure class="wp-block-image"><img src="https://picsum.photos/seed/btkbody/1200/800" alt="Studio" /><figcaption>The studio.</figcaption></figure>',
+			'<figure class="wp-block-image"><img src="https://picsum.photos/seed/appbody/1200/800" alt="Studio" /><figcaption>The studio.</figcaption></figure>',
 		date: '2026-01-04T09:00:00',
 		modified: '2026-06-01T09:00:00',
 		frontendPath: '/',
 		isFrontPage: true,
 		parent: null,
 		featuredImage: null,
-		seo: { title: 'Bow Tie Kreative', description: 'Brand and web studio.', noindex: false, image: image(901, 1200, 630) },
+		seo: { title: 'Your Studio', description: 'Brand and web studio.', noindex: false, image: image(901, 1200, 630) },
 		hero: {
 			eyebrow: 'Independent studio',
 			heading: 'Brands that wear a bow tie.',
@@ -367,7 +367,7 @@ const pages = [
 		frontendPath: '/about',
 		isFrontPage: false,
 		parent: null,
-		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/btkabout/1400/900', altText: 'The team', title: 'Team', mediaDetails: { width: 1400, height: 900 } } },
+		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/appabout/1400/900', altText: 'The team', title: 'Team', mediaDetails: { width: 1400, height: 900 } } },
 		seo: noSeo,
 		hero: { eyebrow: 'Who we are', heading: null, subheading: 'A studio of three.', ctaLabel: null, ctaUrl: null, image: null },
 	},
@@ -417,7 +417,7 @@ const posts = [
 		author: { node: { name: 'Ryan', slug: 'ryan' } },
 		categories: { nodes: [{ name: 'Process', slug: 'process' }] },
 		tags: { nodes: [{ name: 'Astro', slug: 'astro' }, { name: 'WordPress', slug: 'wordpress' }] },
-		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/btkpost1/1400/900', altText: '', title: '', mediaDetails: { width: 1400, height: 900 } } },
+		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/apppost1/1400/900', altText: '', title: '', mediaDetails: { width: 1400, height: 900 } } },
 		seo: noSeo,
 	},
 	{
@@ -479,7 +479,7 @@ const projects = [
 		frontendPath: '/work/harbor-dental',
 		capabilities: { nodes: [{ name: 'Web Design', slug: 'web-design' }] },
 		industries: { nodes: [{ name: 'Healthcare', slug: 'healthcare' }] },
-		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/btkharbor/1600/1200', altText: 'Harbor Dental', title: '', mediaDetails: { width: 1600, height: 1200 } } },
+		featuredImage: { node: { sourceUrl: 'https://picsum.photos/seed/appharbor/1600/1200', altText: 'Harbor Dental', title: '', mediaDetails: { width: 1600, height: 1200 } } },
 		seo: noSeo,
 		// Deliberately empty: exercises the fallback to featuredImage and the
 		// "no gallery" branch.
@@ -570,7 +570,7 @@ const testimonials = [
 			company: 'Northside Coffee',
 			rating: '5',
 			photo: image(7, 400, 400),
-			project: { databaseId: 30, title: 'Northside Coffee Rebrand', slug: 'northside-coffee', uri: '/work/northside-coffee/', postType: 'btk_project' },
+			project: { databaseId: 30, title: 'Northside Coffee Rebrand', slug: 'northside-coffee', uri: '/work/northside-coffee/', postType: 'app_project' },
 		},
 	},
 	{
@@ -593,7 +593,7 @@ const root = {
 	services: () => ({ pageInfo: DONE, nodes: services }),
 	testimonials: () => ({ pageInfo: DONE, nodes: testimonials }),
 	generalSettings: () => ({
-		title: 'Bow Tie Kreative',
+		title: 'Your Studio',
 		description: 'Brand, web and creative studio.',
 		url: 'http://localhost:8080',
 	}),

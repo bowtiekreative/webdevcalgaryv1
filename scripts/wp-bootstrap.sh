@@ -21,7 +21,7 @@ WORDPRESS_PORT="${WORDPRESS_PORT:-8080}"
 WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
 WP_ADMIN_PASSWORD="${WP_ADMIN_PASSWORD:-admin}"
 WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@example.com}"
-WP_SITE_TITLE="${WP_SITE_TITLE:-Bow Tie Kreative}"
+WP_SITE_TITLE="${WP_SITE_TITLE:-Your Studio}"
 SITE_URL="http://localhost:${WORDPRESS_PORT}"
 
 wp() { docker compose run --rm -T wpcli "$@"; }
@@ -87,17 +87,17 @@ seed_post page "Home" "home" "<p>We build brands that wear a bow tie.</p>"
 seed_post page "About" "about" "<p>A small studio with big opinions about type.</p>"
 seed_post page "Contact" "contact" "<p>Say hello: ryan@bowtiekreative.com</p>"
 
-seed_post btk_project "Northside Coffee Rebrand" "northside-coffee" \
+seed_post app_project "Northside Coffee Rebrand" "northside-coffee" \
   "<p>A full identity refresh for a neighbourhood roaster.</p>"
-seed_post btk_project "Harbor Dental Website" "harbor-dental" \
+seed_post app_project "Harbor Dental Website" "harbor-dental" \
   "<p>A calm, fast site for a practice that hates dentist-office clichés.</p>"
 
-seed_post btk_service "Brand Identity" "brand-identity" \
+seed_post app_service "Brand Identity" "brand-identity" \
   "<p>Logo systems, type, colour and the rules that hold them together.</p>"
-seed_post btk_service "Web Design & Build" "web-design-build" \
+seed_post app_service "Web Design & Build" "web-design-build" \
   "<p>Design and development on a modern, fast stack.</p>"
 
-seed_post btk_testimonial "Dana at Northside" "dana-northside" \
+seed_post app_testimonial "Dana at Northside" "dana-northside" \
   "<p>They understood the brief better than we did.</p>"
 
 seed_post post "Why we went headless" "why-headless" \
@@ -129,54 +129,54 @@ set_meta_list() {
   fi
 }
 
-northside="$(post_id btk_project northside-coffee)"
-set_meta "${northside}" btk_project_client "Northside Coffee"
-set_meta "${northside}" btk_project_year 2026
-set_meta "${northside}" btk_project_role "Brand identity, packaging, art direction"
-set_meta "${northside}" btk_project_summary "One system, six touchpoints, zero committee meetings."
-set_meta "${northside}" btk_project_featured 1
-set_meta_list "${northside}" btk_project_deliverables '["Logo system","Packaging","Brand guidelines"]'
+northside="$(post_id app_project northside-coffee)"
+set_meta "${northside}" app_project_client "Northside Coffee"
+set_meta "${northside}" app_project_year 2026
+set_meta "${northside}" app_project_role "Brand identity, packaging, art direction"
+set_meta "${northside}" app_project_summary "One system, six touchpoints, zero committee meetings."
+set_meta "${northside}" app_project_featured 1
+set_meta_list "${northside}" app_project_deliverables '["Logo system","Packaging","Brand guidelines"]'
 
-harbor="$(post_id btk_project harbor-dental)"
-set_meta "${harbor}" btk_project_client "Harbor Dental"
-set_meta "${harbor}" btk_project_year 2025
-set_meta "${harbor}" btk_project_summary "A calm, fast site for a practice that hates dentist-office clichés."
-set_meta "${harbor}" btk_project_featured 1
+harbor="$(post_id app_project harbor-dental)"
+set_meta "${harbor}" app_project_client "Harbor Dental"
+set_meta "${harbor}" app_project_year 2025
+set_meta "${harbor}" app_project_summary "A calm, fast site for a practice that hates dentist-office clichés."
+set_meta "${harbor}" app_project_featured 1
 
-brand="$(post_id btk_service brand-identity)"
-set_meta "${brand}" btk_service_tagline "A system, not just a logo."
-set_meta "${brand}" btk_service_icon brand
-set_meta "${brand}" btk_service_starting_price "from \$6,500"
-set_meta_list "${brand}" btk_service_bullets '["Discovery workshop","Logo system","Type and colour","Guidelines"]'
+brand="$(post_id app_service brand-identity)"
+set_meta "${brand}" app_service_tagline "A system, not just a logo."
+set_meta "${brand}" app_service_icon brand
+set_meta "${brand}" app_service_starting_price "from \$6,500"
+set_meta_list "${brand}" app_service_bullets '["Discovery workshop","Logo system","Type and colour","Guidelines"]'
 
-web_service="$(post_id btk_service web-design-build)"
-set_meta "${web_service}" btk_service_tagline "Fast sites, built to stay fast."
-set_meta "${web_service}" btk_service_icon web
-set_meta "${web_service}" btk_service_starting_price "from \$9,000"
-set_meta_list "${web_service}" btk_service_bullets '["Design system","Build","CMS setup","Launch support"]'
+web_service="$(post_id app_service web-design-build)"
+set_meta "${web_service}" app_service_tagline "Fast sites, built to stay fast."
+set_meta "${web_service}" app_service_icon web
+set_meta "${web_service}" app_service_starting_price "from \$9,000"
+set_meta_list "${web_service}" app_service_bullets '["Design system","Build","CMS setup","Launch support"]'
 
-quote="$(post_id btk_testimonial dana-northside)"
-set_meta "${quote}" btk_testimonial_quote "They understood the brief better than we did."
-set_meta "${quote}" btk_testimonial_author "Dana Reyes"
-set_meta "${quote}" btk_testimonial_role "Owner"
-set_meta "${quote}" btk_testimonial_company "Northside Coffee"
-set_meta "${quote}" btk_testimonial_rating 5
-set_meta "${quote}" btk_testimonial_project "${northside}"
+quote="$(post_id app_testimonial dana-northside)"
+set_meta "${quote}" app_testimonial_quote "They understood the brief better than we did."
+set_meta "${quote}" app_testimonial_author "Dana Reyes"
+set_meta "${quote}" app_testimonial_role "Owner"
+set_meta "${quote}" app_testimonial_company "Northside Coffee"
+set_meta "${quote}" app_testimonial_rating 5
+set_meta "${quote}" app_testimonial_project "${northside}"
 
 home_page="$(post_id page home)"
-set_meta "${home_page}" btk_hero_eyebrow "Independent studio"
-set_meta "${home_page}" btk_hero_heading "Brands that wear a bow tie."
-set_meta "${home_page}" btk_hero_subheading "Identity, websites and campaigns for people who sweat the details."
-set_meta "${home_page}" btk_hero_cta_label "See the work"
-set_meta "${home_page}" btk_hero_cta_url "/work"
+set_meta "${home_page}" app_hero_eyebrow "Independent studio"
+set_meta "${home_page}" app_hero_heading "Brands that wear a bow tie."
+set_meta "${home_page}" app_hero_subheading "Identity, websites and campaigns for people who sweat the details."
+set_meta "${home_page}" app_hero_cta_label "See the work"
+set_meta "${home_page}" app_hero_cta_url "/work"
 
 info "Assigning capabilities"
-wp term create btk_capability "Brand Identity" --slug=brand-identity >/dev/null 2>&1 || true
-wp term create btk_capability "Web Design" --slug=web-design >/dev/null 2>&1 || true
-[[ -n "${northside}" ]] && wp post term add "${northside}" btk_capability brand-identity >/dev/null 2>&1 || true
-[[ -n "${harbor}" ]] && wp post term add "${harbor}" btk_capability web-design >/dev/null 2>&1 || true
-[[ -n "${brand}" ]] && wp post term add "${brand}" btk_capability brand-identity >/dev/null 2>&1 || true
-[[ -n "${web_service}" ]] && wp post term add "${web_service}" btk_capability web-design >/dev/null 2>&1 || true
+wp term create app_capability "Brand Identity" --slug=brand-identity >/dev/null 2>&1 || true
+wp term create app_capability "Web Design" --slug=web-design >/dev/null 2>&1 || true
+[[ -n "${northside}" ]] && wp post term add "${northside}" app_capability brand-identity >/dev/null 2>&1 || true
+[[ -n "${harbor}" ]] && wp post term add "${harbor}" app_capability web-design >/dev/null 2>&1 || true
+[[ -n "${brand}" ]] && wp post term add "${brand}" app_capability brand-identity >/dev/null 2>&1 || true
+[[ -n "${web_service}" ]] && wp post term add "${web_service}" app_capability web-design >/dev/null 2>&1 || true
 
 # Use the Home page as the front page so the page tree matches the front end.
 home_id="$(wp post list --post_type=page --name=home --field=ID)"

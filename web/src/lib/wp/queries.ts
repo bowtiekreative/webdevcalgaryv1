@@ -4,15 +4,15 @@
  * Field names here must match the schema produced by the mu-plugins in
  * ../../../../wordpress/mu-plugins. In particular the Meta Box groups are
  * exposed as one object field per group (`projectDetails`, `seo`, `hero`, …) by
- * btk-graphql-metabox.php, and `frontendPath` comes from btk-headless.php.
+ * app-graphql-metabox.php, and `frontendPath` comes from app-headless.php.
  *
  * Check anything you change against GraphiQL:
  *   http://localhost:8080/wp-admin/admin.php?page=graphiql-ide
  */
 
-/** Our BtkMediaItem object type, produced by any Meta Box media field. */
+/** Our AppMediaItem object type, produced by any Meta Box media field. */
 const MEDIA_FRAGMENT = /* GraphQL */ `
-	fragment MediaFields on BtkMediaItem {
+	fragment MediaFields on AppMediaItem {
 		databaseId
 		url
 		alt
@@ -43,7 +43,7 @@ const FEATURED_IMAGE_FRAGMENT = /* GraphQL */ `
 `;
 
 const SEO_FRAGMENT = /* GraphQL */ `
-	fragment SeoFields on BtkSeo {
+	fragment SeoFields on AppSeo {
 		title
 		description
 		noindex

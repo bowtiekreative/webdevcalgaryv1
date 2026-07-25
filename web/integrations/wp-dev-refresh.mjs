@@ -8,7 +8,7 @@
  *
  * It provides two ways to refresh, and both are no-ops in a production build:
  *
- * 1. POST /_refresh — a webhook endpoint. Point WordPress's BTK_BUILD_HOOK_URL
+ * 1. POST /_refresh — a webhook endpoint. Point WordPress's APP_BUILD_HOOK_URL
  *    at it and saving a post updates the dev server immediately. From inside the
  *    WordPress container the host is `host.docker.internal` (docker-compose.yml
  *    maps it), so:
@@ -95,7 +95,7 @@ async function fetchFingerprint(endpoint) {
 /** @returns {import('astro').AstroIntegration} */
 export default function wpDevRefresh() {
 	return {
-		name: 'btk:wp-dev-refresh',
+		name: 'app:wp-dev-refresh',
 		hooks: {
 			'astro:server:setup': ({ server, refreshContent, logger }) => {
 				const endpoint = process.env.WP_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
