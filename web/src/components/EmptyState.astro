@@ -1,0 +1,28 @@
+---
+/**
+ * Shown when a collection came back empty.
+ *
+ * This is a real state, not a placeholder: it happens on a fresh install, and
+ * when WordPress was unreachable during a build (the loader warns and keeps
+ * going rather than failing). Saying so beats rendering a blank page.
+ */
+interface Props {
+	/** What was expected, e.g. "projects". */
+	what: string;
+	/** Where an editor would add it in wp-admin. */
+	adminPath?: string;
+}
+
+const { what, adminPath } = Astro.props;
+---
+
+<div class="empty-state">
+	<p><strong>No {what} yet.</strong></p>
+	<p>
+		Add some in WordPress{adminPath ? ' under ' : ''}{adminPath && <code>{adminPath}</code>}, then rebuild the site.
+	</p>
+	<p class="meta">
+		If you expected content here, check that <code>WP_GRAPHQL_ENDPOINT</code> in <code>web/.env</code> is reachable — the
+		build logs a warning and continues when WordPress is down.
+	</p>
+</div>

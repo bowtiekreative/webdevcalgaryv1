@@ -1,0 +1,66 @@
+---
+import WpImage from './WpImage.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	/** Hero cards load eagerly; grid cards should not. */
+	eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const { data } = project;
+const image = data.hero ?? data.featuredImage;
+---
+
+<a class="card" href={data.path}>
+	{
+		image && (
+			<div class="card__media">
+				<WpImage media={image} eager={eager} sizes="(min-width: 60rem) 33vw, (min-width: 40rem) 50vw, 100vw" alt="" />
+			</div>
+		)
+	}
+
+	<div class="card__body">
+		{data.client && <p class="card__client">{data.client}</p>}
+		<h3 class="card__title">{data.title}</h3>
+		{data.summary && <p class="card__summary">{data.summary}</p>}
+
+		{
+			data.capabilities.length > 0 && (
+				<ul class="tag-list">
+					{data.capabilities.slice(0, 3).map((capability) => (
+						<li class="tag">{capability.name}</li>
+					))}
+				</ul>
+			)
+		}
+	</div>
+</a>
+
+<style>
+	.card__body {
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.card__client {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin: 0;
+	}
+
+	.card__summary {
+		margin: 0;
+		color: var(--ink-soft);
+		font-size: var(--step--1);
+	}
+
+	.tag-list {
+		margin-top: 0.35rem;
+	}
+</style>

@@ -1,0 +1,139 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { byMenuOrderThenDate } from '../../lib/routes';
+
+// getStaticPaths cannot infer prop types for Astro.props, so declare them.
+interface Props {
+	service: CollectionEntry<'services'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const services = await getCollection('services');
+
+	return services.map((service) => ({
+		params: { slug: service.id },
+		props: { service },
+	}));
+};
+
+const { service } = Astro.props;
+const { data } = service;
+const { Content } = await render(service);
+
+// Projects that share a capability with this service — a cheap "related work"
+// rail that needs no extra editorial work.
+const capabilities = new Set(data.capabilities.map((capability) => capability.slug));
+const related =
+	capabilities.size > 0
+		? (await getCollection('projects'))
+				.filter((project) => project.data.capabilities.some((capability) => capabilities.has(capability.slug)))
+				.sort(byMenuOrderThenDate)
+				.slice(0, 3)
+		: [];
+---
+
+<BaseLayout title={data.title} description={data.summary} seo={data.seo}>
+	<section class="section">
+		<div class="wrap">
+			<p class="eyebrow">Service</p>
+			<h1>{data.title}</h1>
+			{data.tagline && <p class="lede">{data.tagline}</p>}
+		</div>
+	</section>
+
+	<div class="section section--alt">
+		<div class="wrap service-body">
+			<div class="prose">
+				<Content />
+			</div>
+
+			<aside>
+				{
+					data.bullets.length > 0 && (
+						<div class="aside-block">
+							<h2 class="aside-block__title">What's included</h2>
+							<ul class="aside-list">
+								{data.bullets.map((bullet) => (
+									<li>{bullet}</li>
+								))}
+							</ul>
+						</div>
+					)
+				}
+
+				{
+					data.startingPrice && (
+						<div class="aside-block">
+							<h2 class="aside-block__title">Starting at</h2>
+							<p class="price">{data.startingPrice}</p>
+						</div>
+					)
+				}
+
+				<p><a class="button" href="/contact">Start a project</a></p>
+			</aside>
+		</div>
+	</div>
+
+	{
+		related.length > 0 && (
+			<section class="section">
+				<div class="wrap">
+					<h2>Related work</h2>
+					<div class="grid grid--3">
+						{related.map((project) => (
+							<ProjectCard project={project} />
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.service-body {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: start;
+	}
+
+	@media (min-width: 60rem) {
+		.service-body {
+			grid-template-columns: minmax(0, 1fr) 16rem;
+		}
+	}
+
+	.aside-block {
+		margin-bottom: 2rem;
+	}
+
+	.aside-block__title {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-faint);
+		margin-bottom: 0.5rem;
+	}
+
+	.aside-list {
+		margin: 0;
+		padding-left: 1.1rem;
+		font-size: var(--step--1);
+	}
+
+	.aside-list li + li {
+		margin-top: 0.25rem;
+	}
+
+	.price {
+		font-family: var(--font-serif);
+		font-size: var(--step-2);
+		margin: 0;
+	}
+</style>

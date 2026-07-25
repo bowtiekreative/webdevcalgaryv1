@@ -1,0 +1,152 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WpImage from '../../components/WpImage.astro';
+import { byDateDesc, formatDate, isoDate } from '../../lib/routes';
+
+// getStaticPaths cannot infer prop types for Astro.props, so declare them.
+interface Props {
+	post: CollectionEntry<'posts'>;
+	newer: CollectionEntry<'posts'> | null;
+	older: CollectionEntry<'posts'> | null;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const posts = (await getCollection('posts')).sort(byDateDesc);
+
+	return posts.map((post, index) => ({
+		params: { slug: post.id },
+		props: {
+			post,
+			newer: posts[index - 1] ?? null,
+			older: posts[index + 1] ?? null,
+		},
+	}));
+};
+
+const { post, newer, older } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
+---
+
+<BaseLayout
+	title={data.title}
+	description={data.summary}
+	seo={data.seo}
+	type="article"
+	publishedTime={data.date}
+	modifiedTime={data.modified}
+>
+	<article class="section">
+		<div class="wrap wrap--narrow">
+			<header class="post-head">
+				{
+					data.categories.length > 0 && (
+						<p class="eyebrow">{data.categories.map((category) => category.name).join(' · ')}</p>
+					)
+				}
+
+				<h1>{data.title}</h1>
+
+				<p class="meta post-head__meta">
+					{formatDate(data.date) && <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>}
+					{data.author && <span>{' · '}{data.author}</span>}
+				</p>
+			</header>
+
+			{
+				data.featuredImage && (
+					<div class="post-hero">
+						<WpImage media={data.featuredImage} eager sizes="(min-width: 48rem) 46rem, 100vw" />
+					</div>
+				)
+			}
+
+			<div class="prose">
+				<Content />
+			</div>
+
+			{
+				data.tags.length > 0 && (
+					<ul class="tag-list post-tags">
+						{data.tags.map((tag) => (
+							<li class="tag">{tag.name}</li>
+						))}
+					</ul>
+				)
+			}
+
+			{
+				(newer || older) && (
+					<nav class="post-nav" aria-label="More posts">
+						{newer && (
+							<a href={newer.data.path}>
+								<span class="meta">Newer</span>
+								<span>{newer.data.title}</span>
+							</a>
+						)}
+						{older && (
+							<a class="post-nav__older" href={older.data.path}>
+								<span class="meta">Older</span>
+								<span>{older.data.title}</span>
+							</a>
+						)}
+					</nav>
+				)
+			}
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.post-head {
+		margin-bottom: 2rem;
+	}
+
+	.post-head__meta {
+		margin: 0;
+	}
+
+	.post-hero {
+		margin-bottom: 2.5rem;
+	}
+
+	.post-hero img {
+		width: 100%;
+		border-radius: var(--radius);
+	}
+
+	.post-tags {
+		margin-top: 2.5rem;
+	}
+
+	.post-nav {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 2rem;
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.post-nav a {
+		display: grid;
+		gap: 0.2rem;
+		text-decoration: none;
+		font-family: var(--font-serif);
+		font-size: var(--step-1);
+		max-width: 18rem;
+	}
+
+	.post-nav a:hover {
+		color: var(--accent);
+	}
+
+	.post-nav__older {
+		text-align: right;
+		margin-left: auto;
+	}
+</style>

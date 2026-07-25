@@ -1,0 +1,178 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import WpImage from '../components/WpImage.astro';
+import { byMenuOrderThenDate, pickFeatured } from '../lib/routes';
+import { getSiteMeta } from '../lib/wp/site';
+
+const pages = await getCollection('pages');
+// Whichever page is set as "Front page" in Settings → Reading, else a page
+// with the slug "home".
+const home = pages.find((page) => page.data.isFrontPage) ?? pages.find((page) => page.id === 'home');
+const homeBody = home ? await render(home) : null;
+const HomeContent = homeBody?.Content;
+
+const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
+const services = (await getCollection('services')).sort(byMenuOrderThenDate);
+const testimonials = (await getCollection('testimonials')).sort(byMenuOrderThenDate);
+
+const featured = pickFeatured(projects, 3);
+const meta = await getSiteMeta();
+
+const hero = home?.data.hero ?? null;
+const heading = hero?.heading || meta.title;
+const subheading = hero?.subheading || meta.description;
+---
+
+<BaseLayout title={meta.title} description={meta.description} seo={home?.data.seo ?? null}>
+	<section class="hero">
+		<div class="wrap hero__inner">
+			<div class="hero__text">
+				{hero?.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+				<h1>{heading}</h1>
+				{subheading && <p class="lede">{subheading}</p>}
+
+				{
+					hero?.ctaLabel && hero.ctaUrl && (
+						<p class="hero__cta">
+							<a class="button" href={hero.ctaUrl}>{hero.ctaLabel}</a>
+						</p>
+					)
+				}
+			</div>
+
+			{
+				hero?.image && (
+					<div class="hero__media">
+						<WpImage media={hero.image} eager sizes="(min-width: 60rem) 45vw, 100vw" alt="" />
+					</div>
+				)
+			}
+		</div>
+	</section>
+
+	{
+		HomeContent && (
+			<section class="section">
+				<div class="wrap wrap--narrow prose">
+					<HomeContent />
+				</div>
+			</section>
+		)
+	}
+
+	<section class="section section--alt">
+		<div class="wrap">
+			<header class="section__head">
+				<h2>Selected work</h2>
+				<a href="/work">All projects →</a>
+			</header>
+
+			{
+				featured.length > 0 ? (
+					<div class="grid grid--3">
+						{featured.map((project) => (
+							<ProjectCard project={project} />
+						))}
+					</div>
+				) : (
+					<EmptyState what="projects" adminPath="Work → Add New Project" />
+				)
+			}
+		</div>
+	</section>
+
+	{
+		services.length > 0 && (
+			<section class="section">
+				<div class="wrap">
+					<header class="section__head">
+						<h2>What we do</h2>
+						<a href="/services">All services →</a>
+					</header>
+
+					<div class="grid grid--3">
+						{services.slice(0, 6).map((service) => (
+							<ServiceCard service={service} />
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
+
+	{
+		testimonials.length > 0 && (
+			<section class="section section--alt">
+				<div class="wrap">
+					<h2>Kind words</h2>
+					<div class="grid grid--2">
+						{testimonials.slice(0, 4).map((testimonial) => (
+							<TestimonialCard testimonial={testimonial} />
+						))}
+					</div>
+				</div>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.hero {
+		padding-block: clamp(3rem, 9vw, 7rem);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.hero__inner {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
+	}
+
+	@media (min-width: 60rem) {
+		.hero__inner {
+			grid-template-columns: 1.1fr 1fr;
+		}
+	}
+
+	.hero__text h1 {
+		margin-bottom: 0.5em;
+	}
+
+	.hero__cta {
+		margin-top: 1.75rem;
+	}
+
+	.hero__media img {
+		border-radius: var(--radius);
+		width: 100%;
+	}
+
+	.section__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+	}
+
+	.section__head h2 {
+		margin: 0;
+	}
+
+	.section__head a {
+		font-size: var(--step--1);
+		color: var(--ink-soft);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.section__head a:hover {
+		color: var(--accent);
+	}
+</style>

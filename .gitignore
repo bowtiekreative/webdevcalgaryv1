@@ -1,0 +1,23 @@
+# Secrets / local config
+.env
+web/.env
+web/.env.production
+
+# Editor / tooling state that is specific to one machine
+.claude/settings.local.json
+.idea/
+*.swp
+
+# WordPress runtime data. Core lives in a Docker volume and uploads are the
+# editor's content — we only version mu-plugins and tests.
+wordpress/uploads/*
+!wordpress/uploads/.gitkeep
+wordpress/wp-content/
+
+# Node / Astro
+node_modules/
+web/dist/
+web/.astro/
+.DS_Store
+*.log
+npm-debug.log*

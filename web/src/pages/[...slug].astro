@@ -1,0 +1,96 @@
+---
+/**
+ * Catch-all for WordPress Pages.
+ *
+ * Paths come from each page's WordPress `uri`, so a nested page (About →
+ * Team) lands at /about/team just as it does in wp-admin. Astro always prefers
+ * a static route over this rest param, but pages whose first segment collides
+ * with a route we own are skipped explicitly so the clash is visible here
+ * rather than as a mysteriously missing page.
+ */
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WpImage from '../components/WpImage.astro';
+import { RESERVED_SLUGS } from '../lib/routes';
+
+// getStaticPaths cannot infer prop types for Astro.props, so declare them.
+interface Props {
+	page: CollectionEntry<'pages'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const pages = await getCollection('pages');
+
+	return pages
+		.filter((page) => !page.data.isFrontPage)
+		.map((page) => {
+			// `uri` is "/about/" or "/about/team/"; turn it into "about/team".
+			const path = (page.data.uri || `/${page.id}/`).replace(/^\/+|\/+$/g, '');
+
+			return { page, path };
+		})
+		.filter(({ path }) => path !== '' && !RESERVED_SLUGS.has(path.split('/')[0]))
+		.map(({ page, path }) => ({
+			params: { slug: path },
+			props: { page },
+		}));
+};
+
+const { page } = Astro.props;
+const { data } = page;
+const { Content } = await render(page);
+
+const hero = data.hero;
+const heading = hero?.heading || data.title;
+---
+
+<BaseLayout
+	title={data.title}
+	description={data.summary}
+	seo={data.seo}
+	publishedTime={data.date}
+	modifiedTime={data.modified}
+>
+	<section class="section">
+		<div class="wrap">
+			{hero?.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+			<h1>{heading}</h1>
+			{hero?.subheading && <p class="lede">{hero.subheading}</p>}
+
+			{
+				hero?.ctaLabel && hero.ctaUrl && (
+					<p class="page-cta">
+						<a class="button" href={hero.ctaUrl}>{hero.ctaLabel}</a>
+					</p>
+				)
+			}
+		</div>
+	</section>
+
+	{
+		hero?.image && (
+			<div class="wrap page-hero">
+				<WpImage media={hero.image} eager sizes="(min-width: 72rem) 68rem, 100vw" alt="" />
+			</div>
+		)
+	}
+
+	<div class="section">
+		<div class="wrap wrap--narrow prose">
+			<Content />
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.page-cta {
+		margin-top: 1.75rem;
+	}
+
+	.page-hero img {
+		width: 100%;
+		border-radius: var(--radius);
+	}
+</style>
