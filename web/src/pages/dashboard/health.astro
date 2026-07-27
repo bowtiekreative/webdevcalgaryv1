@@ -60,7 +60,7 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 			as an error, so each hop is counted separately.
 		</p>
 		<div class="table-scroll">
-			<table class="table">
+			<table class="table table--wide">
 				<thead>
 					<tr>
 						<th>Type</th>
@@ -70,7 +70,7 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 						<th>Collection</th>
 						<th>Route</th>
 						<th>Fields</th>
-						<th></th>
+						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,31 +79,26 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 							<tr>
 								<td>
 									<strong>{row.label}</strong>
-									<br />
-									<code style="color:var(--ink-faint)">{row.postType}</code>
+									<code class="cell-sub">{row.postType}</code>
 								</td>
-								<td>{num(row.dbRows)}</td>
-								<td>
+								<td class="cell-num">{num(row.dbRows)}</td>
+								<td class="cell-num">
 									{num(row.graphqlCount)}
-									<br />
-									<code style="color:var(--ink-faint)">{row.graphql}</code>
+									<code class="cell-sub">{row.graphql}</code>
 								</td>
-								<td>
+								<td class="cell-num">
 									{num(row.restCount)}
-									<br />
-									<code style="color:var(--ink-faint)">{row.rest}</code>
+									<code class="cell-sub">{row.rest}</code>
 								</td>
-								<td>
+								<td class="cell-num">
 									{num(row.collectionCount)}
-									<br />
-									<code style="color:var(--ink-faint)">{row.collection}</code>
+									<code class="cell-sub">{row.collection}</code>
 								</td>
-								<td><code style="color:var(--ink-faint)">{row.route}</code></td>
-								<td>{row.fieldsInRest}</td>
-								<td>
+								<td><code>{row.route}</code></td>
+								<td class="cell-num">{row.fieldsInRest}</td>
+								<td class="cell-wrap">
 									<span class={`badge ${BADGE[row.status]}`}>{LABEL[row.status]}</span>
-									<br />
-									<span style="color:var(--ink-faint);font-size:var(--step--1)">{row.note}</span>
+									<span class="cell-sub">{row.note}</span>
 								</td>
 							</tr>
 						))
@@ -121,13 +116,13 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 	<div class="panel">
 		<h2 class="panel__title">Connectivity</h2>
 		<div class="table-scroll">
-			<table class="table">
+			<table class="table table--checks">
 				<tbody>
 					{
 						report.connectivity.map((check) => (
 							<tr>
-								<td style="width:14rem"><strong>{check.label}</strong></td>
-								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td><strong>{check.label}</strong></td>
+								<td><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
 								<td style="color:var(--ink-soft)">{check.detail}</td>
 							</tr>
 						))
@@ -143,13 +138,13 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 			Each of these made a real authenticated call, so "OK" means the key works — not merely that a value is set.
 		</p>
 		<div class="table-scroll">
-			<table class="table">
+			<table class="table table--checks">
 				<tbody>
 					{
 						report.integrations.map((check) => (
 							<tr>
-								<td style="width:14rem"><strong>{check.label}</strong></td>
-								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td><strong>{check.label}</strong></td>
+								<td><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
 								<td style="color:var(--ink-soft)">{check.detail}</td>
 							</tr>
 						))
@@ -166,13 +161,13 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 			succeed and the plan never appears.
 		</p>
 		<div class="table-scroll">
-			<table class="table">
+			<table class="table table--checks">
 				<tbody>
 					{
 						report.webhooks.map((check) => (
 							<tr>
-								<td style="width:14rem"><strong>{check.label}</strong></td>
-								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td><strong>{check.label}</strong></td>
+								<td><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
 								<td style="color:var(--ink-soft)">{check.detail}</td>
 							</tr>
 						))
@@ -185,13 +180,13 @@ const num = (value: number | null): string => (value === null ? '—' : value ==
 	<div class="panel">
 		<h2 class="panel__title">Security &amp; mode</h2>
 		<div class="table-scroll">
-			<table class="table">
+			<table class="table table--checks">
 				<tbody>
 					{
 						report.security.map((check) => (
 							<tr>
-								<td style="width:14rem"><strong>{check.label}</strong></td>
-								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td><strong>{check.label}</strong></td>
+								<td><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
 								<td style="color:var(--ink-soft)">{check.detail}</td>
 							</tr>
 						))

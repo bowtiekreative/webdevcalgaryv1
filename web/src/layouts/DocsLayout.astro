@@ -113,10 +113,35 @@ const sections = [
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
 		border-top: 1px solid var(--line);
+		/* Clears the sticky site header when arriving via an #anchor. */
+		scroll-margin-top: 5.5rem;
 	}
 
 	.docs__body :global(h2:first-of-type) {
 		margin-top: 1.5rem;
+	}
+
+	/*
+	 * Wrapper around each anchored section on the API page. The heading inside
+	 * already draws the rule and the spacing, so this only needs to own the
+	 * scroll offset — otherwise jumping to #rest puts the title under the header.
+	 */
+	.docs__body :global(.doc-section) {
+		scroll-margin-top: 5.5rem;
+	}
+
+	.docs__body :global(.doc-section > h2:first-child) {
+		margin-top: 2.5rem;
+	}
+
+	.docs__body :global(.doc-section:first-of-type > h2:first-child) {
+		margin-top: 1.5rem;
+	}
+
+	/* Nested headings inside a section shouldn't inherit the section rule. */
+	.docs__body :global(.doc-section h3) {
+		border-top: 0;
+		padding-top: 0;
 	}
 
 	.docs__body :global(h3) {
