@@ -329,7 +329,7 @@ add_filter( 'graphql_response_headers_to_send', __NAMESPACE__ . '\\graphql_cors_
  * @param \WP_Post $post       Post.
  */
 function trigger_build( string $new_status, string $old_status, \WP_Post $post ): void {
-	$hook = defined( 'APP_BUILD_HOOK_URL' ) ? (string) APP_BUILD_HOOK_URL : '';
+	$hook = build_hook_url();
 
 	if ( '' === $hook ) {
 		return;
@@ -355,7 +355,7 @@ function trigger_build( string $new_status, string $old_status, \WP_Post $post )
 		[
 			'timeout'  => 5,
 			'blocking' => false,
-			'headers'  => [ 'Content-Type' => 'application/json' ],
+			'headers'  => build_hook_headers(),
 			'body'     => wp_json_encode(
 				[
 					'trigger'   => 'app-headless',
@@ -367,6 +367,44 @@ function trigger_build( string $new_status, string $old_status, \WP_Post $post )
 			),
 		]
 	);
+}
+
+/**
+ * The build hook URL.
+ *
+ * @return string Empty when no hook is configured.
+ */
+function build_hook_url(): string {
+	$url = defined( 'APP_BUILD_HOOK_URL' ) ? trim( (string) APP_BUILD_HOOK_URL ) : '';
+
+	/** Lets app-settings.php supply it from the admin screen. */
+	return trim( (string) apply_filters( 'app_build_hook_url', $url ) );
+}
+
+/**
+ * Headers for the build hook.
+ *
+ * Netlify and Vercel build hooks are unauthenticated URLs, but Coolify's deploy
+ * endpoint (`POST /api/v1/deploy?uuid=…`) requires a bearer token, so the hook
+ * has to be able to carry one. Set APP_BUILD_HOOK_AUTH in wp-config, or fill in
+ * the field under Settings → App Settings.
+ *
+ * @return array<string,string>
+ */
+function build_hook_headers(): array {
+	$headers = [ 'Content-Type' => 'application/json' ];
+
+	$auth = defined( 'APP_BUILD_HOOK_AUTH' ) ? trim( (string) APP_BUILD_HOOK_AUTH ) : '';
+
+	/** Lets app-settings.php supply the token from the admin screen. */
+	$auth = (string) apply_filters( 'app_build_hook_auth', $auth );
+
+	if ( '' !== $auth ) {
+		// Accept a bare token or a full scheme; "Bearer x" and "x" both work.
+		$headers['Authorization'] = preg_match( '/^\w+\s/', $auth ) ? $auth : 'Bearer ' . $auth;
+	}
+
+	return $headers;
 }
 add_action( 'transition_post_status', __NAMESPACE__ . '\\trigger_build', 10, 3 );
 

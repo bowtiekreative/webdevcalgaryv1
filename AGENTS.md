@@ -6,6 +6,10 @@ fields, Stripe/PayPal for subscriptions, Emailit for email. **No WooCommerce.**
 Read this before editing. The rules below exist because breaking them produces
 code that looks correct and fails silently.
 
+Building a site with a supplied design? [BUILDING.md](BUILDING.md) is the
+procedure: what to replace, the data contract, and deployment. This file is the
+conventions. The shipped design is scaffolding — replacing it is expected.
+
 ## Verify with commands, never by reading
 
 ```bash

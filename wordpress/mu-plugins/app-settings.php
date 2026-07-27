@@ -91,6 +91,22 @@ function schema(): array {
 				],
 			],
 		],
+		'deploy'   => [
+			'title'       => __( 'Deploy hook', 'app' ),
+			'description' => __( 'Called when published content changes or the site mode is switched, so the static front end rebuilds.', 'app' ),
+			'fields'      => [
+				'build_hook_url'  => [
+					'label'       => __( 'Build hook URL', 'app' ),
+					'placeholder' => 'https://coolify.example.com/api/v1/deploy?uuid=…',
+					'desc'        => __( 'Netlify/Vercel build hooks need no token. Coolify does — put it below.', 'app' ),
+				],
+				'build_hook_auth' => [
+					'label'  => __( 'Authorization token', 'app' ),
+					'secret' => true,
+					'desc'   => __( 'Sent as "Authorization: Bearer …". Leave blank for hooks that need no auth.', 'app' ),
+				],
+			],
+		],
 		'site'     => [
 			'title'       => __( 'Maintenance & Coming Soon', 'app' ),
 			'description' => __( 'Takes effect immediately — the front end checks this on every request, no rebuild needed.', 'app' ),
@@ -279,7 +295,7 @@ function trigger_rebuild( string $mode ): void {
 		[
 			'timeout'  => 5,
 			'blocking' => false,
-			'headers'  => [ 'Content-Type' => 'application/json' ],
+			'headers'  => \App\Headless\build_hook_headers(),
 			'body'     => wp_json_encode( [ 'trigger' => 'app-site-mode', 'mode' => $mode ] ),
 		]
 	);
@@ -639,6 +655,28 @@ function filter_emailit_key( string $key ): string {
 	return '' !== $key ? $key : get( 'emailit_api_key' );
 }
 add_filter( 'app_emailit_api_key', __NAMESPACE__ . '\\filter_emailit_key' );
+
+/**
+ * Let the build hook URL come from the admin screen.
+ *
+ * @param string $url URL from the constant.
+ * @return string
+ */
+function filter_build_hook_url( string $url ): string {
+	return '' !== $url ? $url : get( 'build_hook_url' );
+}
+add_filter( 'app_build_hook_url', __NAMESPACE__ . '\\filter_build_hook_url' );
+
+/**
+ * ...and its authorization token.
+ *
+ * @param string $auth Token from the constant.
+ * @return string
+ */
+function filter_build_hook_auth( string $auth ): string {
+	return '' !== $auth ? $auth : get( 'build_hook_auth' );
+}
+add_filter( 'app_build_hook_auth', __NAMESPACE__ . '\\filter_build_hook_auth' );
 
 /**
  * Same for the From address.

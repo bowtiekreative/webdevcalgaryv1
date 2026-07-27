@@ -1,0 +1,94 @@
+# WordPress + MySQL, for Coolify.
+#
+# Deploy this as one resource, then deploy web/ as a *separate* resource. They
+# are split on purpose: the Astro site is prerendered, so its build queries
+# WordPress — WordPress has to already be up and have a domain before the front
+# end can be built. See BUILDING.md.
+#
+# In Coolify: New Resource -> Docker Compose, point it at this file, then give
+# the `wordpress` service a domain. Everything below with `${VAR:?}` must be
+# filled in before it will deploy.
+
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_USER: ${MYSQL_USER:-wordpress}
+      # SERVICE_PASSWORD_* asks Coolify to generate and store a strong password.
+      MYSQL_PASSWORD: ${SERVICE_PASSWORD_MYSQL}
+      MYSQL_ROOT_PASSWORD: ${SERVICE_PASSWORD_MYSQLROOT}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${SERVICE_PASSWORD_MYSQLROOT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  wordpress:
+    build:
+      context: ./wordpress
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Coolify fills this with the domain you assign to this service, which is
+      # also what WordPress needs as its own site URL.
+      SERVICE_FQDN_WORDPRESS: ${SERVICE_FQDN_WORDPRESS}
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${SERVICE_PASSWORD_MYSQL}
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Behind Coolify's proxy, so trust the forwarded scheme or WordPress
+           will build http:// URLs and mixed-content warnings follow. */
+        if ( isset( $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+            $$_SERVER['HTTPS'] = 'on';
+        }
+        define( 'WP_HOME', 'https://${SERVICE_FQDN_WORDPRESS}' );
+        define( 'WP_SITEURL', 'https://${SERVICE_FQDN_WORDPRESS}' );
+
+        /* Where the Astro front end lives. */
+        define( 'APP_FRONTEND_URL', '${FRONTEND_URL:?set this to your public site URL}' );
+        define( 'APP_PREVIEW_SECRET', '${SERVICE_PASSWORD_PREVIEW}' );
+
+        /* Shared secret for the app API. Must equal WP_SHARED_SECRET on the
+           front end — copy this value into that resource. */
+        define( 'APP_SHARED_SECRET', '${APP_SHARED_SECRET:?generate with: openssl rand -hex 32}' );
+
+        /* Coolify deploy webhook for the front-end resource, so publishing
+           content rebuilds the site. The token needs `deploy` permission. */
+        define( 'APP_BUILD_HOOK_URL', '${BUILD_HOOK_URL:-}' );
+        define( 'APP_BUILD_HOOK_AUTH', '${BUILD_HOOK_AUTH:-}' );
+
+        /* Emailit, for password resets and other WordPress mail. */
+        define( 'APP_EMAILIT_API_KEY', '${EMAILIT_API_KEY:-}' );
+        define( 'APP_EMAILIT_FROM', '${EMAILIT_FROM:-}' );
+
+        define( 'WP_ENVIRONMENT_TYPE', 'production' );
+        define( 'DISALLOW_FILE_EDIT', true );
+        define( 'WP_DEBUG', false );
+    volumes:
+      # Uploads are the only WordPress data not in the database or the image.
+      - wp_uploads:/var/www/html/wp-content/uploads
+      # Core + plugins installed through wp-admin.
+      - wp_data:/var/www/html
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1/wp-admin/install.php >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  db_data:
+  wp_data:
+  wp_uploads:

@@ -16,6 +16,11 @@ Astro front end on headless WordPress, with **WPGraphQL** as the API and
 WordPress is never public-facing: it redirects its own front end to the Astro
 site, and every "View"/"Preview" link in wp-admin points there too.
 
+> **Building a site with your own design?** Start with
+> **[BUILDING.md](BUILDING.md)** — which files are yours to replace, the data
+> your components receive, and how to deploy on Coolify. The design in this repo
+> is scaffolding and is meant to be deleted.
+
 ## Layout
 
 | Path | What it is |
