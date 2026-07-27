@@ -21,9 +21,38 @@ const wpHostname = (() => {
 	}
 })();
 
+/**
+ * Hosts whose X-Forwarded-* headers we trust.
+ *
+ * This is load-bearing in production and not obvious. TLS terminates at
+ * Coolify's Traefik, so the Node server sees a plain HTTP connection and — with
+ * no allowed domains configured — ignores X-Forwarded-Proto and builds
+ * `http://webdevcalgary.com` for Astro.url. A browser posting a form sends
+ * `Origin: https://webdevcalgary.com`, the two don't match, and Astro's
+ * checkOrigin rejects **every form submission on the site** with "Cross-site
+ * POST form submissions are forbidden".
+ *
+ * Listing the site's own hostnames makes the forwarded headers trusted, so the
+ * request is correctly seen as https and the origin check passes. Leaving it
+ * empty is only safe when nothing sits in front of the server.
+ */
+const siteHostname = (() => {
+	try {
+		return new URL(siteUrl).hostname;
+	} catch {
+		return 'localhost';
+	}
+})();
+
+const allowedDomains = [{ hostname: siteHostname }, { hostname: `www.${siteHostname}` }];
+
 // https://astro.build/config
 export default defineConfig({
 	site: siteUrl,
+
+	security: {
+		allowedDomains,
+	},
 
 	/*
 	 * 'static' with an adapter is the hybrid mode: every route is prerendered
