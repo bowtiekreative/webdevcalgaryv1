@@ -42,6 +42,31 @@ Pages: `/` (landing), `/teardown`, `/checkout`, `/thank-you`, `/work` (portfolio
 `/services`, `/blog`. The dashboard, docs and auth are inherited from the
 boilerplate and untouched.
 
+## The fourteen demo sites
+
+`/demo/<industry>` — fourteen complete websites, one per Calgary trade,
+generated from the design deck by
+[scripts/build-demo-sites.mjs](scripts/build-demo-sites.mjs) into
+`web/public/demo/`.
+
+They are **not** a template with swapped colours, and that is the whole point.
+HVAC is Barlow Condensed on navy, the med spa is Cormorant Garamond on clay, the
+law firm is Playfair on ink; the sections differ too — Hail claims, Snow, Menu,
+Practice areas, New patients. The argument they make on the landing page is "a
+roofer's site and a med spa's site should not look the same", which only works
+if it is true.
+
+Regenerate after editing the deck:
+
+```bash
+node scripts/build-demo-sites.mjs   # rewrites web/public/demo/ + web/src/demo-sites.json
+```
+
+The businesses are fictional, so every page carries a banner saying so and is
+`noindex` — indexing "Chinook Heating & Air" as a real Calgary HVAC company
+would misrepresent a business that does not exist and compete with actual
+clients' sites.
+
 ## Design rules, non-negotiable
 
 From `Design system and funnel review/Design System.dc.html`, which is the spec:
@@ -107,7 +132,17 @@ A fresh environment needs, in this order:
    the seed content **itself** on first boot — there is no manual bootstrap
    step in production. Sign in with `WP_ADMIN_USER` and the generated
    `SERVICE_PASSWORD_WPADMIN`, both on the resource's environment tab.
-3. Deploy `webdevcalgary-web`.
+3. **Wait for the seed to finish**, then deploy `webdevcalgary-web`. The
+   bootstrap runs in the background so it never delays Apache, which means a
+   front-end build started straight after a WordPress deploy will race it and
+   bake in half-seeded content. It looks like a caching bug and is not. Poll
+   until the counts are right:
+
+   ```bash
+   curl -s -X POST https://cms.webdevcalgary.com/graphql \
+     -H 'Content-Type: application/json' \
+     -d '{"query":"{testimonials(first:30){nodes{slug}}}"}'
+   ```
 
 ### Two things that are not obvious, and both broke production
 
