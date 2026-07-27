@@ -1,43 +1,46 @@
 ---
 /**
- * The portfolio index — every industry we've built for.
+ * The portfolio index.
  *
- * "These are live right now. Click any of them — that's the whole point." The
- * proof this page carries is not that the sites look good; it is that they are
- * still up and still maintained years later.
+ * Two things live here and they are not the same claim, so they do not share a
+ * heading:
+ *
+ *   Industry demos — fourteen complete sites, one per trade, each with its own
+ *   design. Fictional businesses, labelled as such on every page. They exist to
+ *   answer "what would mine look like".
+ *
+ *   Client work — real sites, from WordPress. Empty until a real one is
+ *   published, and the section simply does not render until then. Nothing here
+ *   claims a client we do not have.
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import EmptyState from '../../components/EmptyState.astro';
+import DemoCard from '../../components/DemoCard.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
 import { contact, offers } from '../../config';
+import demoSites from '../../demo-sites.json';
 
 const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
-
-const oldest = projects.reduce<number | null>((min, project) => {
-	const year = project.data.year;
-
-	return year && (min === null || year < min) ? year : min;
-}, null);
 ---
 
 <BaseLayout
 	title="Portfolio"
-	description="Calgary businesses we built websites for — and still maintain. HVAC, plumbing, electrical, roofing, dental, law, and more."
+	description="Fourteen Calgary industries, fourteen different websites — HVAC, plumbing, electrical, roofing, dental, law and more. Open the one closest to your business."
 	nav
 >
 	<section class="section hero">
 		<div class="wrap">
-			<p class="eyebrow">Still running</p>
-			<h1>Sites we built.<br /><em class="accent">Sites we still maintain.</em></h1>
+			<p class="eyebrow">Your trade, your site</p>
+			<h1>A roofer’s site and a med spa’s site<br /><em class="accent">should not look the same.</em></h1>
 			<p class="lede">
-				Anyone can show you a launch. The question is whether it’s still right three years later —
-				current hours, current prices, current photos. Every site below is live now.
+				So they don’t. Fourteen industries, fourteen complete designs — different type, different
+				colour, different sections, because a hail-claim page and a treatment menu are different jobs.
+				Open the one closest to your business.
 			</p>
 			<div class="stats">
-				<div><b>{projects.length || '14'}</b>Industries</div>
-				{oldest && <div><b>{new Date().getFullYear() - oldest}+ yrs</b>Longest-running</div>}
+				<div><b>{demoSites.length}</b>Industries</div>
+				<div><b>24 hrs</b>From start to live</div>
 				<div><b>Unlimited</b>Changes, all of them</div>
 			</div>
 		</div>
@@ -45,24 +48,37 @@ const oldest = projects.reduce<number | null>((min, project) => {
 
 	<section class="section listing">
 		<div class="wrap">
-			{
-				projects.length > 0 ? (
-					<div class="grid" style="--col:240px">
+			<div class="grid" style="--col:240px">
+				{demoSites.map((site) => <DemoCard site={site} />)}
+			</div>
+			<p class="mono note">
+				These fourteen are demonstrations — the businesses are made up, and every page says so. Yours
+				would be the real thing, on your domain, with your work in it.
+			</p>
+		</div>
+	</section>
+
+	{
+		projects.length > 0 && (
+			<section class="section section--concrete">
+				<div class="wrap">
+					<p class="eyebrow">Still running</p>
+					<h2>Client sites we built, and still maintain.</h2>
+					<p class="lede">These are live right now. Click any of them — that’s the whole point.</p>
+					<div class="grid spaced" style="--col:240px">
 						{projects.map((project) => (
 							<ProjectCard project={project} />
 						))}
 					</div>
-				) : (
-					<EmptyState what="projects" adminPath="Projects" />
-				)
-			}
-		</div>
-	</section>
+				</div>
+			</section>
+		)
+	}
 
 	<section class="section section--ink">
 		<div class="wrap">
 			<p class="eyebrow">Your turn</p>
-			<h2>Yours could be on this page tomorrow.</h2>
+			<h2>Yours could be live tomorrow.</h2>
 			<p class="lede">
 				Same build, same maintenance, same price lock. The only question is whether you want it live
 				tomorrow or in a week.
@@ -78,6 +94,10 @@ const oldest = projects.reduce<number | null>((min, project) => {
 <style>
 	.hero {
 		padding: 56px 0 32px;
+	}
+
+	h1 {
+		font-size: clamp(2.1rem, 6vw, 3.4rem);
 	}
 
 	.listing {
@@ -103,6 +123,16 @@ const oldest = projects.reduce<number | null>((min, project) => {
 		color: var(--ink);
 		letter-spacing: -0.02em;
 		margin-bottom: 2px;
+	}
+
+	.note {
+		margin: 18px 0 0;
+		max-width: 68ch;
+		line-height: 1.7;
+	}
+
+	.spaced {
+		margin-top: 32px;
 	}
 
 	.cta {

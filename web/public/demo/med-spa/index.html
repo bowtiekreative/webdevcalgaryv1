@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silverbirch Med Spa — demonstration site | WebDevCalgary</title>
+<meta name="description" content="Silverbirch Med Spa — a demonstration website for a Calgary med spa business, built by WebDevCalgary.">
+<!-- Fictional business. Indexing it would misrepresent a real Calgary company. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://webdevcalgary.com/demo/med-spa">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#FBF7F4;color:#3A3230;font-family:'Jost',system-ui,sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:#9C6B5E;text-decoration:none}a:hover{color:#3A3230}
+</style>
+<style>.dc0:hover{background:#3A3230;color:#fff}
+.dc1:hover{background:#9C6B5E;color:#fff}
+.dc2:focus-visible{outline:2px solid #9C6B5E}
+.dc3:focus-visible{outline:2px solid #9C6B5E}
+.dc4:hover{background:#9C6B5E}</style>
+</head>
+<body>
+
+<div class="wdc-demo-bar">
+  <span><strong>Demonstration site</strong> — Silverbirch Med Spa is not a real business. This shows what a Calgary med spa site looks like.</span>
+  <a href="/">Get one like it →</a>
+</div>
+<style>
+.wdc-demo-bar{position:relative;z-index:9999;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  background:#14161A;color:#fff;padding:10px 22px;font:400 13px/1.5 'JetBrains Mono',ui-monospace,monospace}
+.wdc-demo-bar strong{color:#F2B233;font-weight:700}
+.wdc-demo-bar a{color:#fff;font-weight:700;border-bottom:2px solid #F2B233;text-decoration:none;padding-bottom:1px;white-space:nowrap}
+.wdc-demo-bar a:hover{color:#F2B233}
+@media print{.wdc-demo-bar{display:none}}
+</style>
+<header data-screen-label="Nav" style="background:#FBF7F4;border-bottom:1px solid #EBE1DA;position:sticky;top:0;z-index:50">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:80px;gap:16px">
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:26px;letter-spacing:.06em">SILVERBIRCH <span style="font-style:italic;color:#9C6B5E">med spa</span></div>
+    <nav style="display:flex;gap:26px;align-items:center;font-weight:400;font-size:15px;letter-spacing:.04em">
+      <a href="#treatments" style="color:#3A3230">Treatments</a><a href="#approach" style="color:#3A3230">Our approach</a><a href="#reviews" style="color:#3A3230">Reviews</a>
+      <a href="#book" style="border:1px solid #3A3230;color:#3A3230;padding:12px 26px;letter-spacing:.08em;font-size:14px;text-transform:uppercase" class="dc0">Book</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:92px 0 72px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:center">
+    <div>
+      <div style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#9C6B5E;margin-bottom:20px">Nurse-led aesthetics · Marda Loop, Calgary</div>
+      <h1 style="margin:0 0 22px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.4rem,5.5vw,3.9rem);line-height:1.12">Subtle work.<br><em style="color:#9C6B5E">The kind no one can name.</em></h1>
+      <p style="margin:0 0 32px;color:#7A6E68;font-size:18px;max-width:46ch;font-weight:300">Injectables, skin treatments and laser — planned conservatively, dosed honestly, by registered nurses who will tell you when the answer is "nothing yet."</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+        <a href="#book" style="background:#3A3230;color:#fff;padding:16px 36px;letter-spacing:.08em;font-size:14px;text-transform:uppercase" class="dc1">Book a consultation</a>
+        <span style="font-size:14px;color:#7A6E68">Consults always free, never a hard sell.</span>
+      </div>
+    </div>
+    <div style="border:1px solid #EBE1DA;background:repeating-linear-gradient(45deg,#F3ECE6,#F3ECE6 24px,#EFE6DF 24px,#EFE6DF 48px);min-height:420px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:13px;color:#B3A297;line-height:1.9">photo: treatment room,<br>soft light, birch + linen palette</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="border-top:1px solid #EBE1DA;border-bottom:1px solid #EBE1DA;background:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;text-align:center;font-size:14px;letter-spacing:.06em;color:#7A6E68">
+    <span>RN injectors · MD oversight</span><span>Health-Canada-approved products only</span><span>Two-week complimentary follow-up</span><span>4.9★ · 290 reviews</span>
+  </div>
+</div>
+<section id="treatments" data-screen-label="Treatments" style="padding:80px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 10px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.9rem,4.5vw,2.8rem)">Treatments</h2>
+    <p style="margin:0 0 40px;color:#7A6E68;max-width:56ch;font-weight:300">Transparent pricing, posted like it should be.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#EBE1DA;border:1px solid #EBE1DA">
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Neuromodulators</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">Forehead, frown, crow's feet. Dosed to soften, not freeze.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">$9 / unit</span></div>
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Dermal filler</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">Lips, cheeks, jawline — half-syringe appointments welcome.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">from $395</span></div>
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Microneedling</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">Texture, scarring, pores. Series of three recommended honestly.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">$299 / session</span></div>
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Laser &amp; IPL</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">Redness, sun damage, hair removal — calibrated for winter-pale Calgary skin.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">from $199</span></div>
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Medical facials</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">HydraFacial and chemical peels, matched to your skin — not the menu.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">from $179</span></div>
+      <div style="background:#fff;padding:32px 28px"><h3 style="margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px">Skin consultations</h3><p style="margin:0 0 12px;font-size:15px;color:#7A6E68;font-weight:300">Thirty minutes, a written plan, zero obligation. Sometimes the plan is sunscreen.</p><span style="font-size:14px;letter-spacing:.06em;color:#9C6B5E">Complimentary</span></div>
+    </div>
+  </div>
+</section>
+<section id="approach" data-screen-label="Approach" style="padding:80px 0;background:#3A3230;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:52px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 18px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.9rem,4.5vw,2.8rem)">We'll talk you out of things.</h2>
+      <p style="margin:0;color:#CFC4BC;font-weight:300;font-size:17px;max-width:50ch">A third of consults end with us recommending less than the client came in for, or nothing at all. That's the practice: conservative plans, honest doses, and a face that still moves. If you want a dramatic change in one appointment, we're happily the wrong clinic.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <div style="border-left:1px solid #9C6B5E;padding-left:22px"><b style="font-family:'Cormorant Garamond',serif;font-size:20px;display:block;margin-bottom:4px">Start under-dosed</b><span style="font-size:15px;color:#CFC4BC;font-weight:300">Top-ups at two weeks are free. Dissolving regret isn't.</span></div>
+      <div style="border-left:1px solid #9C6B5E;padding-left:22px"><b style="font-family:'Cormorant Garamond',serif;font-size:20px;display:block;margin-bottom:4px">Photograph everything</b><span style="font-size:15px;color:#CFC4BC;font-weight:300">Your before/afters are yours, never posted without written consent.</span></div>
+      <div style="border-left:1px solid #9C6B5E;padding-left:22px"><b style="font-family:'Cormorant Garamond',serif;font-size:20px;display:block;margin-bottom:4px">No memberships, no pressure</b><span style="font-size:15px;color:#CFC4BC;font-weight:300">No locked-in packages. Come back when your face asks you to.</span></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Space" style="padding:80px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.9rem,4.5vw,2.8rem)">The studio</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <div style="border:1px solid #EBE1DA;background:repeating-linear-gradient(45deg,#F3ECE6,#F3ECE6 24px,#EFE6DF 24px,#EFE6DF 48px);height:240px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#B3A297">photo: reception</span></div>
+      <div style="border:1px solid #EBE1DA;background:repeating-linear-gradient(45deg,#F3ECE6,#F3ECE6 24px,#EFE6DF 24px,#EFE6DF 48px);height:240px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#B3A297">photo: treatment room</span></div>
+      <div style="border:1px solid #EBE1DA;background:repeating-linear-gradient(45deg,#F3ECE6,#F3ECE6 24px,#EFE6DF 24px,#EFE6DF 48px);height:240px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#B3A297">photo: product wall</span></div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Reviews" style="padding:80px 0;background:#fff;border-top:1px solid #EBE1DA">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.9rem,4.5vw,2.8rem)">In their words</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#FBF7F4;padding:30px 28px"><p style="margin:0 0 14px;font-size:15px;font-weight:300;font-style:italic">"Went in wanting filler. Left with a skin plan and half the units I asked for. Six months later I look rested, not different. Exactly the point."</p><b style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9C6B5E">Alana · Marda Loop</b></div>
+      <div style="background:#FBF7F4;padding:30px 28px"><p style="margin:0 0 14px;font-size:15px;font-weight:300;font-style:italic">"First time doing anything like this. Nobody rushed me, everything was explained, and the two-week follow-up was actually booked, not offered."</p><b style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9C6B5E">Jenn · Killarney</b></div>
+      <div style="background:#FBF7F4;padding:30px 28px"><p style="margin:0 0 14px;font-size:15px;font-weight:300;font-style:italic">"They told me no. A med spa told me no. I trust them completely now — and I've been back four times since."</p><b style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9C6B5E">Sam · Downtown</b></div>
+    </div>
+  </div>
+</section>
+<section id="book" data-screen-label="Booking" style="padding:80px 0;background:#FBF7F4">
+  <div style="max-width:680px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 10px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.9rem,4.5vw,2.8rem);text-align:center">Book a consultation</h2>
+    <p style="margin:0 0 32px;color:#7A6E68;text-align:center;font-weight:300">Complimentary, thirty minutes, and you leave with a written plan either way.</p>
+    <form style="display:grid;gap:12px;background:#fff;border:1px solid #EBE1DA;padding:32px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #D9CCC2;font-size:16px;font-family:'Jost',sans-serif;border-radius:0" class="dc2" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #D9CCC2;font-size:16px;font-family:'Jost',sans-serif;border-radius:0" class="dc3" />
+      </div>
+      <select style="padding:14px;border:1px solid #D9CCC2;font-size:16px;font-family:'Jost',sans-serif;border-radius:0"><option>I'm curious about…</option><option>Injectables</option><option>Skin treatments</option><option>Laser / IPL</option><option>Not sure — skin consult</option></select>
+      <button type="submit" style="background:#3A3230;color:#fff;border:none;padding:16px;letter-spacing:.1em;font-size:14px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif" class="dc4">Request my consult</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#2C2624;color:#B3A297;padding:38px 0;font-size:14px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.06em">SILVERBIRCH MED SPA</b><br>33rd Ave SW, Marda Loop · <a href="tel:4035550178" style="color:#E1D6CD">(403) 555-0178</a> · Tue–Sat by appointment</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="/" style="color:#C99B8A">Website by Website Calgary — live since 2022</a><br><a href="/work" style="color:#E1D6CD">← All deliverables</a></span>
+  </div>
+</footer>
+</body>
+</html>

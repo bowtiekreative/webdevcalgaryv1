@@ -178,13 +178,15 @@ export const fallbackTestimonials = [
 		company: null,
 	},
 	{
-		quote: 'Ryan was easy to work with and quick to respond. He makes it effortless and goes that extra mile.',
-		author: 'Ahmed Rammay',
+		quote:
+			'Bow Tie Kreative taught me how to modify and edit the site, as well as how to get the most out of its features. His methods of search engine optimization have already shown an increase in traffic to our site.',
+		author: 'Ryan Verkley',
 		company: null,
 	},
 	{
-		quote: 'His methods of search engine optimization have already shown an increase in traffic to our site.',
-		author: 'Ryan Verkley',
+		quote:
+			'Your work is incredible! 450 guests and Canada’s BEST in communications all LOVED what you did. Thank U',
+		author: 'Jully Black',
 		company: null,
 	},
 ];

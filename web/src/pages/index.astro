@@ -14,8 +14,10 @@ import WorkOrder from '../components/WorkOrder.astro';
 import PlanCard from '../components/PlanCard.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import DemoCard from '../components/DemoCard.astro';
 import AuthorityProof from '../components/AuthorityProof.astro';
 import StartForm from '../components/StartForm.astro';
+import demoSites from '../demo-sites.json';
 import { contact, offers, plans, site, STANDARD_BUILD_DAYS } from '../config';
 import { byMenuOrderThenDate } from '../lib/routes';
 import { comparison, faqs, fallbackTestimonials, problems, proofStrip } from '../funnel';
@@ -146,10 +148,28 @@ const description =
 		</div>
 	</section>
 
-	<!-- Portfolio -->
+	<!-- Industry demos -->
+	<section class="section">
+		<div class="wrap">
+			<p class="eyebrow">Your trade, your site</p>
+			<h2>Fourteen industries.<br />Fourteen different sites.</h2>
+			<p class="lede">
+				You don’t want a template with your logo dropped in. A roofer’s site and a med spa’s site
+				should not look the same. Open the one closest to your business — that’s the standard.
+			</p>
+			<div class="grid spaced" style="--col:220px">
+				{demoSites.slice(0, 8).map((site) => <DemoCard site={site} />)}
+			</div>
+			<p class="mono more">
+				<a href="/work">See all {demoSites.length} industries →</a>
+			</p>
+		</div>
+	</section>
+
+	<!-- Real client work, once there is some published -->
 	{
 		featuredWork.length > 0 && (
-			<section class="section">
+			<section class="section section--concrete">
 				<div class="wrap">
 					<p class="eyebrow">Still running</p>
 					<h2>Sites we built. Sites we still maintain.</h2>
@@ -159,9 +179,6 @@ const description =
 							<ProjectCard project={project} />
 						))}
 					</div>
-					<p class="mono more">
-						<a href="/work">See every industry →</a>
-					</p>
 				</div>
 			</section>
 		)

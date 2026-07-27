@@ -43,12 +43,32 @@ seed_post page "Refund policy" "refund-policy" \
 # Peer proof. Real quotes from real clients — this is what closes trades, so
 # it ships published. See web/src/funnel.ts for the copies used before
 # WordPress has any.
+# Tier 1 — the six the landing page shows. Ordered by menu_order below, so
+# the strongest is first. Selection rule from assets/testimonials.md: lead with
+# the ones that prove responsiveness, longevity and follow-through, because the
+# buyer's real fear is being abandoned after launch, not getting an ugly site.
 seed_post app_testimonial "Anatoli Barbu" "anatoli-barbu" ""
 seed_post app_testimonial "Tony Masone" "tony-masone" ""
 seed_post app_testimonial "Anna Rounseville" "anna-rounseville" ""
-seed_post app_testimonial "Fred Diblasio" "fred-diblasio" ""
-seed_post app_testimonial "Ahmed Rammay" "ahmed-rammay" ""
 seed_post app_testimonial "Ryan Verkley" "ryan-verkley" ""
+seed_post app_testimonial "Fred Diblasio" "fred-diblasio" ""
+seed_post app_testimonial "Jully Black" "jully-black" ""
+
+# Tier 2 — rotate through ads, drip emails and secondary pages.
+seed_post app_testimonial "Jason Fronco" "jason-fronco" ""
+seed_post app_testimonial "Dylan Mahaney" "dylan-mahaney" ""
+seed_post app_testimonial "Bronson Digital" "bronson-digital" ""
+seed_post app_testimonial "Nazim Beltran" "nazim-beltran" ""
+seed_post app_testimonial "Michael D Haines" "michael-haines" ""
+seed_post app_testimonial "Luis Class" "luis-class" ""
+seed_post app_testimonial "Gary Martin" "gary-martin" ""
+seed_post app_testimonial "Dave Boddy" "dave-boddy" ""
+seed_post app_testimonial "Ahmed Rammay" "ahmed-rammay" ""
+seed_post app_testimonial "S. Rasheem" "s-rasheem" ""
+seed_post app_testimonial "Paul E." "paul-e" ""
+seed_post app_testimonial "Joshua Therrien" "joshua-therrien" ""
+seed_post app_testimonial "Imran Mirza" "imran-mirza" ""
+seed_post app_testimonial "Danyelle Redwine" "danyelle-redwine" ""
 
 # --- Services ------------------------------------------------------------
 seed_post app_service "Website build and hosting" "website-build" \
@@ -133,35 +153,82 @@ seed_project deerfoot-auto     "Deerfoot Auto Works"        "Auto repair"       
 seed_project spruce-ember      "Spruce & Ember"             "Restaurant"          "restaurant"  2023 "Menu, hours and reservations — the three things people actually came for."
 
 info "Seeding testimonial fields"
+# order: menu_order, which is what the front end sorts by. Tier 1 gets 1-6 so
+# the six strongest lead; tier 2 gets 20+ and only appears where all of them
+# are listed.
 seed_quote() {
-  local slug="$1" quote="$2" author="$3" company="$4"
+  local slug="$1" order="$2" quote="$3" author="$4" company="$5"
   local id
   id="$(post_id app_testimonial "${slug}")"
   [[ -z "${id}" ]] && return 0
+  wp post update "${id}" --menu_order="${order}" >/dev/null 2>&1 || true
   set_meta "${id}" app_testimonial_quote "${quote}"
   set_meta "${id}" app_testimonial_author "${author}"
   set_meta "${id}" app_testimonial_company "${company}"
   set_meta "${id}" app_testimonial_rating 5
 }
 
-seed_quote anatoli-barbu \
-  "They communicated often, made sure I was updated every step of the way. Well priced and always responsive to my questions, ideas and changes." \
+seed_quote anatoli-barbu 1 \
+  "Ryan and his team are absolutely amazing! They went above and beyond when creating my new website from scratch. They communicated often, made sure I was updated every step of the way and ensured that I was fully satisfied with every aspect of my website. They are well priced and were always responsive to my questions, ideas and changes." \
   "Anatoli Barbu" "Barbu Entertainment"
-seed_quote tony-masone \
-  "Excellent service that was also on time and on budget. It has increased my business and given me new leads for additional work." \
-  "Tony Masone" "law firm"
-seed_quote anna-rounseville \
+seed_quote tony-masone 2 \
+  "I strongly recommend Ryan Perez and his team at Bow Tie Kreative. He has given my firm excellent service that was also on time and on budget. My profile has increased with the advertising and web work that Bow Tie Kreative has done for my firm. It has increased my business and given me new leads for additional work." \
+  "Tony Masone" ""
+seed_quote anna-rounseville 3 \
   "His work ethic is iron clad, and he researches the best tools to get things done even if it means coding something himself." \
   "Anna Rounseville" ""
-seed_quote fred-diblasio \
-  "Professional, asked the right questions and delivered on time. I would recommend them to family and friends!" \
+seed_quote ryan-verkley 4 \
+  "Bow Tie Kreative taught me how to modify and edit the site, as well as how to get the most out of its features. His methods of search engine optimization have already shown an increase in traffic to our site." \
+  "Ryan Verkley" ""
+seed_quote fred-diblasio 5 \
+  "I was pleased to work with Bow Tie Kreative - they were professional, asked the right questions and delivered on time. I would recommend them to family and friends!" \
   "Fred Diblasio" ""
-seed_quote ahmed-rammay \
+seed_quote jully-black 6 \
+  "Your work is incredible! 450 guests and Canada's BEST in communications all LOVED what you did. Thank U" \
+  "Jully Black" ""
+
+seed_quote jason-fronco 20 \
+  "Ryan Perez with Bow Tie Kreative is very knowledgeable in what they do and is a great valid asset for any design marketing agency." \
+  "Jason Fronco" ""
+seed_quote dylan-mahaney 21 \
+  "Ryan was really efficient and provided a really great product. We were able to use the graphics and websites to promote shows as well as contests. He also provided us with video editing." \
+  "Dylan Mahaney" ""
+seed_quote bronson-digital 22 \
+  "Ryan is an expert when it comes to website design, branding, and establishing your online presence." \
+  "Owner" "Bronson Digital"
+seed_quote nazim-beltran 23 \
+  "Ryan gave the site a full review and pointed me in the direction to implement the changes needed to improve its overall SEO reach." \
+  "Nazim Beltran" ""
+seed_quote michael-haines 24 \
+  "As a public speaker, with a need for a highly interactive website, these people are the best in the business." \
+  "Michael D Haines" ""
+seed_quote luis-class 25 \
+  "Bow Tie Kreative handled our production professionally and in a timely manner!" \
+  "Luis Class" ""
+seed_quote gary-martin 26 \
+  "Bow Tie Kreative is very innovative, always looking for new solutions and fresh ideas." \
+  "Gary Martin" ""
+seed_quote dave-boddy 27 \
+  "Ryan has been a great asset to my company. I will always refer Ryan and his company." \
+  "Dave Boddy" ""
+seed_quote ahmed-rammay 28 \
   "Ryan was easy to work with and quick to respond. He makes it effortless and goes that extra mile." \
   "Ahmed Rammay" ""
-seed_quote ryan-verkley \
-  "His methods of search engine optimization have already shown an increase in traffic to our site." \
-  "Ryan Verkley" ""
+seed_quote s-rasheem 29 \
+  "I had a fantastic experience with Bow Tie Kreative. He showed me how to transform my website and boost my SEO ranking." \
+  "S. Rasheem" ""
+seed_quote paul-e 30 \
+  "Ryan was just very good to work with, he explained everything to me and was very patient with me through this process." \
+  "Paul E." ""
+seed_quote joshua-therrien 31 \
+  "He did great work and really did a great job designing them. Great eye for design." \
+  "Joshua Therrien" ""
+seed_quote imran-mirza 32 \
+  "We wish to continue doing business with Bow Tie Kreative and also recommend others, not to look further for your brand development." \
+  "Imran Mirza" ""
+seed_quote danyelle-redwine 33 \
+  "I am learning a lot from your shows - especially branding and marketing." \
+  "Danyelle Redwine" ""
 
 info "Seeding service fields"
 set_service() {

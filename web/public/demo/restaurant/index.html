@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spruce &amp; Ember — demonstration site | WebDevCalgary</title>
+<meta name="description" content="Spruce &amp; Ember — a demonstration website for a Calgary restaurant business, built by WebDevCalgary.">
+<!-- Fictional business. Indexing it would misrepresent a real Calgary company. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://webdevcalgary.com/demo/restaurant">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mulish:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#1C1917;color:#EDE6DC;font-family:'Mulish',system-ui,sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:#D08C3C;text-decoration:none}a:hover{color:#EDE6DC}
+</style>
+<style>.dc0:hover{background:#D08C3C;color:#1C1917}
+.dc1:hover{background:#EDE6DC;color:#1C1917}
+.dc2:hover{border-color:#D08C3C;color:#D08C3C}
+.dc3:focus-visible{outline:2px solid #D08C3C}
+.dc4:focus-visible{outline:2px solid #D08C3C}
+.dc5:focus-visible{outline:2px solid #D08C3C}
+.dc6:hover{background:#EDE6DC}</style>
+</head>
+<body>
+
+<div class="wdc-demo-bar">
+  <span><strong>Demonstration site</strong> — Spruce &amp; Ember is not a real business. This shows what a Calgary restaurant site looks like.</span>
+  <a href="/">Get one like it →</a>
+</div>
+<style>
+.wdc-demo-bar{position:relative;z-index:9999;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  background:#14161A;color:#fff;padding:10px 22px;font:400 13px/1.5 'JetBrains Mono',ui-monospace,monospace}
+.wdc-demo-bar strong{color:#F2B233;font-weight:700}
+.wdc-demo-bar a{color:#fff;font-weight:700;border-bottom:2px solid #F2B233;text-decoration:none;padding-bottom:1px;white-space:nowrap}
+.wdc-demo-bar a:hover{color:#F2B233}
+@media print{.wdc-demo-bar{display:none}}
+</style>
+<header data-screen-label="Nav" style="background:#1C1917;border-bottom:1px solid #332D28;position:sticky;top:0;z-index:50">
+  <div style="max-width:1040px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:80px;gap:16px">
+    <div style="font-family:'Marcellus',serif;font-size:25px;letter-spacing:.1em">SPRUCE <span style="color:#D08C3C">&amp;</span> EMBER</div>
+    <nav style="display:flex;gap:26px;align-items:center;font-weight:400;font-size:14px;letter-spacing:.1em;text-transform:uppercase">
+      <a href="#menu" style="color:#EDE6DC">Menu</a><a href="#story" style="color:#EDE6DC">Story</a><a href="#visit" style="color:#EDE6DC">Visit</a>
+      <a href="#reserve" style="border:1px solid #D08C3C;color:#D08C3C;padding:12px 26px" class="dc0">Reserve</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:96px 0 80px;text-align:center">
+  <div style="max-width:760px;margin:0 auto;padding:0 24px">
+    <div style="font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#D08C3C;margin-bottom:22px">Wood-fired · Inglewood · Est. 2023</div>
+    <h1 style="margin:0 0 24px;font-family:'Marcellus',serif;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.15;font-weight:400">Alberta, cooked over fire.</h1>
+    <p style="margin:0 0 36px;color:#B5A996;font-size:19px;font-weight:300;max-width:52ch;margin-left:auto;margin-right:auto">A small room, a wood grill, and whatever the ranchers and foragers brought this week. Menu changes Tuesdays.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="#reserve" style="background:#D08C3C;color:#1C1917;padding:16px 38px;font-weight:600;letter-spacing:.1em;font-size:14px;text-transform:uppercase" class="dc1">Reserve a table</a>
+      <a href="#menu" style="border:1px solid #4A423B;color:#EDE6DC;padding:15px 36px;letter-spacing:.1em;font-size:14px;text-transform:uppercase" class="dc2">This week's menu</a>
+    </div>
+  </div>
+</section>
+<div data-screen-label="Photo band" style="border-top:1px solid #332D28;border-bottom:1px solid #332D28;background:repeating-linear-gradient(45deg,#241F1C,#241F1C 26px,#201C19 26px,#201C19 52px);height:320px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#6E6155">wide photo: open kitchen, wood grill, embers</span></div>
+<section id="menu" data-screen-label="Menu" style="padding:88px 0">
+  <div style="max-width:760px;margin:0 auto;padding:0 24px">
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#D08C3C;margin-bottom:14px">This week</div>
+      <h2 style="margin:0;font-family:'Marcellus',serif;font-size:clamp(1.9rem,4.5vw,2.8rem);font-weight:400">The menu, briefly.</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:26px">
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline;border-bottom:1px solid #332D28;padding-bottom:22px"><div><b style="font-family:'Marcellus',serif;font-size:19px;font-weight:400;letter-spacing:.02em">Sourdough &amp; smoked butter</b><p style="margin:4px 0 0;font-size:14px;color:#B5A996;font-weight:300">baked at 4pm, gone when it's gone</p></div><span style="font-family:'Marcellus',serif;color:#D08C3C">9</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline;border-bottom:1px solid #332D28;padding-bottom:22px"><div><b style="font-family:'Marcellus',serif;font-size:19px;font-weight:400;letter-spacing:.02em">Charred carrots, whipped ricotta</b><p style="margin:4px 0 0;font-size:14px;color:#B5A996;font-weight:300">Poplar Bluff carrots, hazelnut, honey from the roof</p></div><span style="font-family:'Marcellus',serif;color:#D08C3C">18</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline;border-bottom:1px solid #332D28;padding-bottom:22px"><div><b style="font-family:'Marcellus',serif;font-size:19px;font-weight:400;letter-spacing:.02em">Bow Valley trout, brown butter</b><p style="margin:4px 0 0;font-size:14px;color:#B5A996;font-weight:300">grilled whole, preserved lemon, last summer's dill</p></div><span style="font-family:'Marcellus',serif;color:#D08C3C">36</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline;border-bottom:1px solid #332D28;padding-bottom:22px"><div><b style="font-family:'Marcellus',serif;font-size:19px;font-weight:400;letter-spacing:.02em">Dry-aged ribeye for two</b><p style="margin:4px 0 0;font-size:14px;color:#B5A996;font-weight:300">Benchmark Angus, 45 days, bone marrow jus</p></div><span style="font-family:'Marcellus',serif;color:#D08C3C">98</span></div>
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:baseline"><div><b style="font-family:'Marcellus',serif;font-size:19px;font-weight:400;letter-spacing:.02em">Burnt basque cheesecake</b><p style="margin:4px 0 0;font-size:14px;color:#B5A996;font-weight:300">saskatoon compote</p></div><span style="font-family:'Marcellus',serif;color:#D08C3C">14</span></div>
+    </div>
+    <p style="margin:40px 0 0;text-align:center;font-size:14px;color:#B5A996;font-weight:300">Five-course chef's tasting, $89 · vegetarian tasting always available</p>
+  </div>
+</section>
+<section id="story" data-screen-label="Story" style="padding:88px 0;background:#241F1C;border-top:1px solid #332D28;border-bottom:1px solid #332D28">
+  <div style="max-width:1040px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center">
+    <div style="border:1px solid #332D28;background:repeating-linear-gradient(45deg,#2A2420,#2A2420 24px,#26211D 24px,#26211D 48px);min-height:380px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:13px;color:#6E6155;line-height:1.9">photo: chefs at the pass,<br>or the room at golden hour</span></div>
+    <div>
+      <div style="font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#D08C3C;margin-bottom:16px">The story</div>
+      <h2 style="margin:0 0 18px;font-family:'Marcellus',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:400">Two cooks, one grill, forty seats.</h2>
+      <p style="margin:0 0 14px;color:#B5A996;font-weight:300">We spent fifteen years in other people's kitchens — Rouge, a stint in Copenhagen, a food truck that broke down more than it drove. Then this room in Inglewood came up for lease and we stopped talking about it.</p>
+      <p style="margin:0;color:#B5A996;font-weight:300">Everything is cooked over Alberta birch. The menu is whatever was good this week. That's the restaurant.</p>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Press" style="padding:72px 0">
+  <div style="max-width:1040px;margin:0 auto;padding:0 24px;text-align:center">
+    <div style="display:flex;justify-content:center;gap:56px;flex-wrap:wrap;align-items:baseline">
+      <div><p style="margin:0 0 8px;font-family:'Marcellus',serif;font-size:19px;font-style:italic;color:#EDE6DC">"The best new room in Calgary."</p><span style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#B5A996">Avenue Magazine</span></div>
+      <div><p style="margin:0 0 8px;font-family:'Marcellus',serif;font-size:19px;font-style:italic;color:#EDE6DC">"Cooking with real nerve."</p><span style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#B5A996">The Herald</span></div>
+      <div><p style="margin:0 0 8px;font-family:'Marcellus',serif;font-size:19px;font-style:italic;color:#EDE6DC">Top 30 · Best New Restaurants</p><span style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#B5A996">enRoute, 2024</span></div>
+    </div>
+  </div>
+</section>
+<section id="visit" data-screen-label="Visit" style="padding:80px 0;background:#241F1C;border-top:1px solid #332D28;border-bottom:1px solid #332D28">
+  <div style="max-width:1040px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:40px;text-align:center">
+    <div><div style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#D08C3C;margin-bottom:12px">Find us</div><p style="margin:0;color:#B5A996;font-weight:300;font-size:15px">9th Ave SE, Inglewood<br>next to the record shop</p></div>
+    <div><div style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#D08C3C;margin-bottom:12px">Hours</div><p style="margin:0;color:#B5A996;font-weight:300;font-size:15px">Tue–Sat, 5pm–late<br>walk-ins at the bar</p></div>
+    <div><div style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#D08C3C;margin-bottom:12px">Contact</div><p style="margin:0;color:#B5A996;font-weight:300;font-size:15px"><a href="tel:4035550194">(403) 555-0194</a><br>hello@spruceandember.ca</p></div>
+  </div>
+</section>
+<section id="reserve" data-screen-label="Reserve" style="padding:88px 0">
+  <div style="max-width:640px;margin:0 auto;padding:0 24px;text-align:center">
+    <h2 style="margin:0 0 10px;font-family:'Marcellus',serif;font-size:clamp(1.9rem,4.5vw,2.8rem);font-weight:400">Reserve a table</h2>
+    <p style="margin:0 0 34px;color:#B5A996;font-weight:300">Forty seats. Two seatings. Book ahead for weekends.</p>
+    <form style="display:grid;gap:12px;text-align:left" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #4A423B;background:#241F1C;color:#EDE6DC;font-size:16px;font-family:'Mulish',sans-serif;border-radius:0" class="dc3" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #4A423B;background:#241F1C;color:#EDE6DC;font-size:16px;font-family:'Mulish',sans-serif;border-radius:0" class="dc4" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="date" style="padding:14px;border:1px solid #4A423B;background:#241F1C;color:#EDE6DC;font-size:16px;font-family:'Mulish',sans-serif;border-radius:0" class="dc5" />
+        <select style="padding:14px;border:1px solid #4A423B;background:#241F1C;color:#EDE6DC;font-size:16px;font-family:'Mulish',sans-serif;border-radius:0"><option>Party of…</option><option>2</option><option>3</option><option>4</option><option>5–6</option><option>The whole room (events)</option></select>
+      </div>
+      <button type="submit" style="background:#D08C3C;color:#1C1917;border:none;padding:16px;font-weight:600;letter-spacing:.12em;font-size:14px;text-transform:uppercase;cursor:pointer;font-family:'Mulish',sans-serif" class="dc6">Request reservation</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#151210;color:#8A7D6E;padding:40px 0;font-size:14px">
+  <div style="max-width:1040px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#EDE6DC;font-family:'Marcellus',serif;font-size:17px;letter-spacing:.08em">SPRUCE &amp; EMBER</b><br>Inglewood, Calgary · <a href="tel:4035550194" style="color:#B5A996">(403) 555-0194</a> · Tue–Sat from 5</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="/" style="color:#D08C3C">Website by Website Calgary — live since 2023</a><br><a href="/work" style="color:#B5A996">← All deliverables</a></span>
+  </div>
+</footer>
+</body>
+</html>

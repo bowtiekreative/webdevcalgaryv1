@@ -1,0 +1,86 @@
+[
+	{
+		"slug": "accounting",
+		"trade": "Accounting",
+		"brand": "Crossfield & Co. CPA",
+		"since": 2020
+	},
+	{
+		"slug": "auto-repair",
+		"trade": "Auto repair",
+		"brand": "Deerfoot Auto Works",
+		"since": 2019
+	},
+	{
+		"slug": "concrete",
+		"trade": "Concrete",
+		"brand": "Caliber Concrete Works",
+		"since": 2020
+	},
+	{
+		"slug": "dental",
+		"trade": "Dental",
+		"brand": "Kensington Dental Studio",
+		"since": 2021
+	},
+	{
+		"slug": "electrical",
+		"trade": "Electrical",
+		"brand": "Amped Electric",
+		"since": 2021
+	},
+	{
+		"slug": "garage-doors",
+		"trade": "Garage doors",
+		"brand": "Ridgeline Garage Doors",
+		"since": 2021
+	},
+	{
+		"slug": "hvac",
+		"trade": "HVAC",
+		"brand": "Chinook Heating & Air",
+		"since": 2019
+	},
+	{
+		"slug": "landscaping",
+		"trade": "Landscaping & snow",
+		"brand": "Prairie Edge Landscaping",
+		"since": 2022
+	},
+	{
+		"slug": "law",
+		"trade": "Law",
+		"brand": "Whitfield Law",
+		"since": 2018
+	},
+	{
+		"slug": "med-spa",
+		"trade": "Med spa",
+		"brand": "Silverbirch Med Spa",
+		"since": 2022
+	},
+	{
+		"slug": "plumbing",
+		"trade": "Plumbing",
+		"brand": "Bow River Plumbing Co.",
+		"since": 2020
+	},
+	{
+		"slug": "renovation",
+		"trade": "Renovation",
+		"brand": "Northmount Renovations",
+		"since": 2019
+	},
+	{
+		"slug": "restaurant",
+		"trade": "Restaurant",
+		"brand": "Spruce & Ember",
+		"since": 2023
+	},
+	{
+		"slug": "roofing",
+		"trade": "Roofing",
+		"brand": "Foothills Roofing",
+		"since": 2018
+	}
+]

@@ -1,0 +1,49 @@
+---
+/**
+ * A link to one of the fourteen industry demo sites.
+ *
+ * The sites themselves are static HTML in public/demo/, generated from the
+ * design deck by scripts/build-demo-sites.mjs — each one a different design,
+ * because the whole argument is "here is what *your* trade's site looks like",
+ * not "here is our template with your colours".
+ */
+
+interface Props {
+	site: { slug: string; trade: string; brand: string; since: number };
+}
+
+const { site } = Astro.props;
+---
+
+<a class="card demo" href={`/demo/${site.slug}`}>
+	<span class="card__index">{site.trade}</span>
+	<strong>{site.brand}</strong>
+	<span class="demo__note">See the site <em aria-hidden="true">↗</em></span>
+</a>
+
+<style>
+	.demo {
+		padding: 22px;
+	}
+
+	strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 17px;
+		color: var(--ink);
+		margin-bottom: 4px;
+	}
+
+	.demo__note {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--ink-2);
+		display: block;
+	}
+
+	em {
+		font-style: normal;
+		color: var(--rust);
+	}
+</style>

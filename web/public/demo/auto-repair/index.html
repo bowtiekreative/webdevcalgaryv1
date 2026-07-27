@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deerfoot Auto Works — demonstration site | WebDevCalgary</title>
+<meta name="description" content="Deerfoot Auto Works — a demonstration website for a Calgary auto repair business, built by WebDevCalgary.">
+<!-- Fictional business. Indexing it would misrepresent a real Calgary company. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://webdevcalgary.com/demo/auto-repair">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F5F5F4;color:#191A1C;font-family:'Open Sans',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#C0392B;text-decoration:none}a:hover{color:#191A1C}
+</style>
+<style>.dc0:hover{background:#fff;color:#191A1C}
+.dc1:hover{background:#E67E22;color:#191A1C}
+.dc2:hover{border-color:#E67E22;color:#E67E22}
+.dc3:focus-visible{outline:2px solid #C0392B}
+.dc4:focus-visible{outline:2px solid #C0392B}
+.dc5:focus-visible{outline:2px solid #C0392B}
+.dc6:focus-visible{outline:2px solid #C0392B}
+.dc7:hover{background:#191A1C}</style>
+</head>
+<body>
+
+<div class="wdc-demo-bar">
+  <span><strong>Demonstration site</strong> — Deerfoot Auto Works is not a real business. This shows what a Calgary auto repair site looks like.</span>
+  <a href="/">Get one like it →</a>
+</div>
+<style>
+.wdc-demo-bar{position:relative;z-index:9999;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  background:#14161A;color:#fff;padding:10px 22px;font:400 13px/1.5 'JetBrains Mono',ui-monospace,monospace}
+.wdc-demo-bar strong{color:#F2B233;font-weight:700}
+.wdc-demo-bar a{color:#fff;font-weight:700;border-bottom:2px solid #F2B233;text-decoration:none;padding-bottom:1px;white-space:nowrap}
+.wdc-demo-bar a:hover{color:#F2B233}
+@media print{.wdc-demo-bar{display:none}}
+</style>
+<header data-screen-label="Nav" style="background:#191A1C;color:#fff;position:sticky;top:0;z-index:50">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px">
+    <div style="font-family:'Titillium Web',sans-serif;font-weight:900;font-size:23px;text-transform:uppercase;letter-spacing:.02em">Deerfoot <span style="color:#C0392B">Auto Works</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#services" style="color:#fff">Services</a><a href="#how" style="color:#fff">How we quote</a><a href="#reviews" style="color:#fff">Reviews</a>
+      <a href="#book" style="background:#C0392B;color:#fff;padding:12px 22px;font-family:'Titillium Web',sans-serif;font-weight:700;text-transform:uppercase;font-size:15px" class="dc0">Book service</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="background:#191A1C;color:#fff;padding:76px 0 64px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#E67E22;font-weight:700;margin-bottom:16px">Independent shop · Southeast Calgary · Since 2013</div>
+      <h1 style="margin:0 0 18px;font-family:'Titillium Web',sans-serif;font-weight:900;font-size:clamp(2.4rem,6vw,4rem);line-height:1.05;text-transform:uppercase">The mechanic your dad<br><span style="color:#E67E22">wished he had.</span></h1>
+      <p style="margin:0 0 28px;color:#B8B9BB;font-size:19px;max-width:48ch">Photos of what's actually wrong, a quote you approve by text, and nothing replaced that didn't need replacing.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#book" style="background:#C0392B;color:#fff;padding:16px 30px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase" class="dc1">Book service</a>
+        <a href="tel:4035550167" style="border:2px solid #3A3B3E;color:#fff;padding:14px 28px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase" class="dc2">(403) 555-0167</a>
+      </div>
+    </div>
+    <div style="border:2px dashed #3A3B3E;background:repeating-linear-gradient(45deg,#222325,#222325 22px,#1E1F21 22px,#1E1F21 44px);min-height:340px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#77787B;line-height:1.8">photo: shop floor,<br>truck on the hoist</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#E67E22;color:#191A1C">
+  <div style="max-width:1120px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase">
+    <span>Photo inspections, every visit</span><span>Approve repairs by text</span><span>2 yr / 40,000 km warranty</span><span>4.9★ · 520 reviews</span>
+  </div>
+</div>
+<section id="services" data-screen-label="Services" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Titillium Web',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">Full service, minus the runaround</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Maintenance &amp; oil</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Oil, fluids, filters, tire rotations — with the multipoint photo inspection included, not upsold.</p></div>
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Brakes &amp; suspension</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Measured, photographed, and quoted with good/better options. Calgary potholes keep us busy.</p></div>
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Diagnostics</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Check-engine lights, no-starts, weird noises. Flat diag fee, applied to the repair.</p></div>
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Tires</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Seasonal swaps, storage, new sets price-matched. Book online, in and out in 45 minutes.</p></div>
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Out-of-province inspections</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Licensed inspection station. Booked within two days, report explained line by line.</p></div>
+      <div style="background:#fff;border-top:4px solid #C0392B;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase">Fleet &amp; work trucks</h3><p style="margin:0;font-size:15px;color:#5B5C5F">Priority bays for working vehicles — because a truck in the shop is a crew standing still.</p></div>
+    </div>
+  </div>
+</section>
+<section id="how" data-screen-label="How we quote" style="padding:72px 0;background:#fff;border-top:1px solid #E3E3E1;border-bottom:1px solid #E3E3E1">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 16px;font-family:'Titillium Web',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">You see the worn part before you pay for it.</h2>
+      <p style="margin:0;color:#5B5C5F;max-width:52ch">Every inspection comes back as a text with photos: green, yellow, red. You approve each line item — or don't — from your phone. No "while we were in there" invoices.</p>
+    </div>
+    <div style="background:#F5F5F4;border:1px solid #E3E3E1;padding:24px;display:flex;flex-direction:column;gap:10px">
+      <div style="background:#fff;border-left:5px solid #27AE60;padding:14px 16px;font-size:14px;display:flex;justify-content:space-between;gap:12px"><span><b>Front brakes — 8mm</b> · good</span><span style="color:#27AE60;font-weight:700">✓ No action</span></div>
+      <div style="background:#fff;border-left:5px solid #F1C40F;padding:14px 16px;font-size:14px;display:flex;justify-content:space-between;gap:12px"><span><b>Serpentine belt — cracking</b> · photo attached</span><span style="color:#B7950B;font-weight:700">Watch — next visit</span></div>
+      <div style="background:#fff;border-left:5px solid #C0392B;padding:14px 16px;font-size:14px;display:flex;justify-content:space-between;gap:12px"><span><b>Rear rotors — scored</b> · photo attached</span><span style="color:#C0392B;font-weight:700">$412 — approve?</span></div>
+      <div style="display:flex;gap:10px;margin-top:4px"><span style="flex:1;background:#191A1C;color:#fff;text-align:center;padding:12px;font-family:'Titillium Web',sans-serif;font-weight:700;text-transform:uppercase;font-size:14px">Approve</span><span style="flex:1;background:#fff;border:2px solid #191A1C;text-align:center;padding:10px;font-family:'Titillium Web',sans-serif;font-weight:700;text-transform:uppercase;font-size:14px">Decline</span></div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Reviews" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Titillium Web',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">Straight from Google</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#fff;padding:26px 24px;border:1px solid #E3E3E1"><div style="color:#E67E22;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"They sent photos of my brake pads and said the fronts were fine — dealer had quoted all four. Saved $600 by switching shops."</p><b style="font-size:14px;color:#5B5C5F">Kara J. · Douglasdale</b></div>
+      <div style="background:#fff;padding:26px 24px;border:1px solid #E3E3E1"><div style="color:#E67E22;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Fleet of five vans through them for four years. Priority booking is real — never lost a work day waiting on a bay."</p><b style="font-size:14px;color:#5B5C5F">Owner, cleaning company · SE</b></div>
+      <div style="background:#fff;padding:26px 24px;border:1px solid #E3E3E1"><div style="color:#E67E22;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Out-of-province inspection explained line by line, fixed only what the report required. Zero drama."</p><b style="font-size:14px;color:#5B5C5F">Liam P. · new to Calgary</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Hours + location" style="padding:56px 0;background:#191A1C;color:#fff">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-size:19px;text-transform:uppercase;color:#E67E22">Location</h3><p style="margin:0;color:#B8B9BB;font-size:15px">Off Deerfoot &amp; Glenmore, SE Calgary · Courtesy shuttle within 10 km</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-size:19px;text-transform:uppercase;color:#E67E22">Hours</h3><p style="margin:0;color:#B8B9BB;font-size:15px">Mon–Fri 7:30am–5:30pm · Sat 8am–2pm (tires &amp; oil)</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-size:19px;text-transform:uppercase;color:#E67E22">Direct</h3><p style="margin:0;color:#B8B9BB;font-size:15px"><a href="tel:4035550167">(403) 555-0167</a> · service@deerfootautoworks.ca</p></div>
+  </div>
+</section>
+<section id="book" data-screen-label="Booking" style="padding:72px 0">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Titillium Web',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase;text-align:center">Book your service</h2>
+    <p style="margin:0 0 28px;color:#5B5C5F;text-align:center">We confirm by text with a drop-off time and a loaner/shuttle option.</p>
+    <form style="display:grid;gap:12px;background:#fff;border:1px solid #E3E3E1;padding:28px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #D2D2D0;font-size:16px;font-family:'Open Sans',sans-serif;border-radius:0" class="dc3" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #D2D2D0;font-size:16px;font-family:'Open Sans',sans-serif;border-radius:0" class="dc4" />
+      </div>
+      <input type="text" placeholder="Year / make / model" style="padding:14px;border:1px solid #D2D2D0;font-size:16px;font-family:'Open Sans',sans-serif;border-radius:0" class="dc5" />
+      <textarea rows="3" placeholder="What's it doing (or what do you need)?" style="padding:14px;border:1px solid #D2D2D0;font-size:16px;font-family:'Open Sans',sans-serif;border-radius:0;resize:vertical" class="dc6"></textarea>
+      <button type="submit" style="background:#C0392B;color:#fff;border:none;padding:16px;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;cursor:pointer" class="dc7">Book it</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#111214;color:#77787B;padding:36px 0;font-size:14px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Titillium Web',sans-serif;text-transform:uppercase;font-size:16px">Deerfoot Auto Works</b><br>SE Calgary · <a href="tel:4035550167" style="color:#B8B9BB">(403) 555-0167</a> · AMVIC licensed</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="/" style="color:#E67E22">Website by Website Calgary — live since 2019</a><br><a href="/work" style="color:#B8B9BB">← All deliverables</a></span>
+  </div>
+</footer>
+</body>
+</html>

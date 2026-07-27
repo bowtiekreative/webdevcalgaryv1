@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whitfield Law — demonstration site | WebDevCalgary</title>
+<meta name="description" content="Whitfield Law — a demonstration website for a Calgary law business, built by WebDevCalgary.">
+<!-- Fictional business. Indexing it would misrepresent a real Calgary company. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://webdevcalgary.com/demo/law">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#FCFBF8;color:#22283A;font-family:'Source Sans 3',system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:#8C6D2F;text-decoration:none}a:hover{color:#22283A}
+</style>
+<style>.dc0:hover{background:#C9A64E;color:#22283A}
+.dc1:hover{background:#fff;color:#22283A}
+.dc2:hover{border-color:#C9A64E;color:#C9A64E}
+.dc3:focus-visible{outline:2px solid #C9A64E}
+.dc4:focus-visible{outline:2px solid #C9A64E}
+.dc5:focus-visible{outline:2px solid #C9A64E}
+.dc6:hover{background:#C9A64E;color:#22283A}</style>
+</head>
+<body>
+
+<div class="wdc-demo-bar">
+  <span><strong>Demonstration site</strong> — Whitfield Law is not a real business. This shows what a Calgary law site looks like.</span>
+  <a href="/">Get one like it →</a>
+</div>
+<style>
+.wdc-demo-bar{position:relative;z-index:9999;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  background:#14161A;color:#fff;padding:10px 22px;font:400 13px/1.5 'JetBrains Mono',ui-monospace,monospace}
+.wdc-demo-bar strong{color:#F2B233;font-weight:700}
+.wdc-demo-bar a{color:#fff;font-weight:700;border-bottom:2px solid #F2B233;text-decoration:none;padding-bottom:1px;white-space:nowrap}
+.wdc-demo-bar a:hover{color:#F2B233}
+@media print{.wdc-demo-bar{display:none}}
+</style>
+<header data-screen-label="Nav" style="background:#22283A;color:#fff;position:sticky;top:0;z-index:50">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:80px;gap:16px">
+    <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:24px">Whitfield <span style="color:#C9A64E">Law</span></div>
+    <nav style="display:flex;gap:26px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#practice" style="color:#fff">Practice areas</a><a href="#fees" style="color:#fff">Fees</a><a href="#team" style="color:#fff">Our people</a>
+      <a href="#consult" style="border:1px solid #C9A64E;color:#C9A64E;padding:12px 24px" class="dc0">Free consultation</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="background:#22283A;color:#fff;padding:88px 0 72px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <div style="font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#C9A64E;margin-bottom:20px">Family · Real estate · Wills &amp; estates — Calgary</div>
+    <h1 style="margin:0 0 22px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2.3rem,5.5vw,3.8rem);line-height:1.15;max-width:20ch">Plain answers at the worst moments.</h1>
+    <p style="margin:0 0 32px;color:#B9BFCD;font-size:19px;max-width:52ch">Divorce, a house deal, a will you've been putting off. We explain your options in plain English, quote fees up front, and return calls the same day.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <a href="#consult" style="background:#C9A64E;color:#22283A;padding:16px 32px;font-weight:600;font-size:17px" class="dc1">Book a free consultation</a>
+      <a href="tel:4035550122" style="border:1px solid #4A5268;color:#fff;padding:15px 30px;font-weight:600;font-size:17px" class="dc2">(403) 555-0122</a>
+    </div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#fff;border-bottom:1px solid #E8E4D8">
+  <div style="max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:15px;color:#5A6070">
+    <span>Law Society of Alberta</span><span>Flat fees on most matters</span><span>Same-day call returns</span><span>Downtown + video appointments</span>
+  </div>
+</div>
+<section id="practice" data-screen-label="Practice areas" style="padding:76px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">Practice areas</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+      <div style="background:#fff;border:1px solid #E8E4D8;border-top:3px solid #C9A64E;padding:30px 28px"><h3 style="margin:0 0 10px;font-family:'Playfair Display',serif;font-size:21px">Family law</h3><p style="margin:0 0 14px;font-size:15px;color:#5A6070">Divorce, separation agreements, parenting plans, support. We push for settlement first — court is the expensive last resort, and we'll tell you when it's the necessary one.</p><span style="font-size:14px;color:#8C6D2F;font-weight:600">Initial consult free · hourly or block fees</span></div>
+      <div style="background:#fff;border:1px solid #E8E4D8;border-top:3px solid #C9A64E;padding:30px 28px"><h3 style="margin:0 0 10px;font-family:'Playfair Display',serif;font-size:21px">Real estate</h3><p style="margin:0 0 14px;font-size:15px;color:#5A6070">Purchases, sales, refinances. Fixed fee, no surprise disbursements, and your documents ready before possession day — not the morning of.</p><span style="font-size:14px;color:#8C6D2F;font-weight:600">From $1,150 flat, all-in quoted</span></div>
+      <div style="background:#fff;border:1px solid #E8E4D8;border-top:3px solid #C9A64E;padding:30px 28px"><h3 style="margin:0 0 10px;font-family:'Playfair Display',serif;font-size:21px">Wills &amp; estates</h3><p style="margin:0 0 14px;font-size:15px;color:#5A6070">Wills, enduring powers of attorney, personal directives, probate. The appointment everyone delays — done in two visits.</p><span style="font-size:14px;color:#8C6D2F;font-weight:600">Will packages from $650 / couple $950</span></div>
+      <div style="background:#fff;border:1px solid #E8E4D8;border-top:3px solid #C9A64E;padding:30px 28px"><h3 style="margin:0 0 10px;font-family:'Playfair Display',serif;font-size:21px">Small business</h3><p style="margin:0 0 14px;font-size:15px;color:#5A6070">Incorporations, shareholder agreements, contract review for owner-operators. Lawyers who know what a work truck costs.</p><span style="font-size:14px;color:#8C6D2F;font-weight:600">Incorporation from $850 + filing</span></div>
+    </div>
+  </div>
+</section>
+<section id="fees" data-screen-label="Fees" style="padding:76px 0;background:#F4F1E9">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 16px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">The fee conversation happens first.</h2>
+      <p style="margin:0;color:#5A6070;max-width:52ch">Legal bills scare people out of getting help early — which is exactly when help is cheapest. So we quote before we start: flat fees where the work is predictable, and written estimates with caps where it isn't.</p>
+    </div>
+    <div style="background:#fff;border:1px solid #E8E4D8;padding:30px">
+      <div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #E8E4D8;font-size:15px"><span>Initial consultation (30 min)</span><b>Free</b></div>
+      <div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #E8E4D8;font-size:15px"><span>Written fee quote</span><b>Before any work begins</b></div>
+      <div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #E8E4D8;font-size:15px"><span>Billing surprises</span><b>Called before, never after</b></div>
+      <div style="display:flex;justify-content:space-between;padding:13px 0;font-size:15px"><span>Payment plans</span><b>Available on family matters</b></div>
+    </div>
+  </div>
+</section>
+<section id="team" data-screen-label="Team" style="padding:76px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">Our people</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+      <div style="background:#fff;border:1px solid #E8E4D8;padding:28px;text-align:center"><div style="width:140px;height:140px;border-radius:50%;margin:0 auto 16px;border:1px dashed #C9BF9F;background:repeating-linear-gradient(45deg,#F0EDE2,#F0EDE2 16px,#EAE6D8 16px,#EAE6D8 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#A79F86">photo</span></div><b style="font-family:'Playfair Display',serif;font-size:19px">Margaret Whitfield, KC</b><p style="margin:6px 0 0;font-size:14px;color:#5A6070">Family law · called to the bar 1998</p></div>
+      <div style="background:#fff;border:1px solid #E8E4D8;padding:28px;text-align:center"><div style="width:140px;height:140px;border-radius:50%;margin:0 auto 16px;border:1px dashed #C9BF9F;background:repeating-linear-gradient(45deg,#F0EDE2,#F0EDE2 16px,#EAE6D8 16px,#EAE6D8 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#A79F86">photo</span></div><b style="font-family:'Playfair Display',serif;font-size:19px">David Osei</b><p style="margin:6px 0 0;font-size:14px;color:#5A6070">Real estate &amp; business · called 2012</p></div>
+      <div style="background:#fff;border:1px solid #E8E4D8;padding:28px;text-align:center"><div style="width:140px;height:140px;border-radius:50%;margin:0 auto 16px;border:1px dashed #C9BF9F;background:repeating-linear-gradient(45deg,#F0EDE2,#F0EDE2 16px,#EAE6D8 16px,#EAE6D8 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#A79F86">photo</span></div><b style="font-family:'Playfair Display',serif;font-size:19px">Sarah Lindqvist</b><p style="margin:6px 0 0;font-size:14px;color:#5A6070">Wills &amp; estates · called 2017</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Testimonials" style="padding:76px 0;background:#22283A;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">Client experiences</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div style="border:1px solid #3A4258;padding:28px"><p style="margin:0 0 14px;font-size:15px;color:#CBD0DC;font-style:italic">"Margaret told me on day one what my divorce would likely cost and where it could go sideways. It cost less. Nothing went sideways."</p><b style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#C9A64E">R.T. · family matter</b></div>
+      <div style="border:1px solid #3A4258;padding:28px"><p style="margin:0 0 14px;font-size:15px;color:#CBD0DC;font-style:italic">"Our possession was a Friday before a long weekend. Documents were done Tuesday. Our realtor now sends everyone here."</p><b style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#C9A64E">J. &amp; K.M. · home purchase</b></div>
+      <div style="border:1px solid #3A4258;padding:28px"><p style="margin:0 0 14px;font-size:15px;color:#CBD0DC;font-style:italic">"Ten years of 'we should do our wills.' Done in two appointments, explained without a single word of Latin."</p><b style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#C9A64E">The B. family · estate planning</b></div>
+    </div>
+  </div>
+</section>
+<section id="consult" data-screen-label="Consultation" style="padding:76px 0">
+  <div style="max-width:700px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 10px;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);text-align:center">Book a free consultation</h2>
+    <p style="margin:0 0 30px;color:#5A6070;text-align:center">Thirty minutes, in person or by video. Confidential from the first call.</p>
+    <form style="display:grid;gap:12px;background:#fff;border:1px solid #E8E4D8;padding:30px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #D5CFBC;font-size:16px;font-family:'Source Sans 3',sans-serif;border-radius:0" class="dc3" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #D5CFBC;font-size:16px;font-family:'Source Sans 3',sans-serif;border-radius:0" class="dc4" />
+      </div>
+      <select style="padding:14px;border:1px solid #D5CFBC;font-size:16px;font-family:'Source Sans 3',sans-serif;border-radius:0"><option>What can we help with?</option><option>Family / divorce</option><option>Buying or selling a home</option><option>Will / estate</option><option>Business</option></select>
+      <textarea rows="3" placeholder="Briefly, what's the situation? (kept confidential)" style="padding:14px;border:1px solid #D5CFBC;font-size:16px;font-family:'Source Sans 3',sans-serif;border-radius:0;resize:vertical" class="dc5"></textarea>
+      <button type="submit" style="background:#22283A;color:#fff;border:none;padding:16px;font-weight:600;font-size:17px;cursor:pointer;font-family:'Source Sans 3',sans-serif" class="dc6">Request my consultation</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#1A1F2E;color:#8A90A0;padding:38px 0;font-size:14px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Playfair Display',serif;font-size:17px">Whitfield Law</b><br>Downtown Calgary · <a href="tel:4035550122" style="color:#CBD0DC">(403) 555-0122</a> · Law Society of Alberta</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="/" style="color:#C9A64E">Website by Website Calgary — live since 2018</a><br><a href="/work" style="color:#CBD0DC">← All deliverables</a></span>
+  </div>
+</footer>
+</body>
+</html>
