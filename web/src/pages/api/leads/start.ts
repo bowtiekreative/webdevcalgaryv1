@@ -12,40 +12,13 @@
 
 import type { APIContext, APIRoute } from 'astro';
 import { newReference, notifyLead, recordOrder } from '../../../lib/orders';
+import { clientKey, rateLimited } from '../../../lib/rate-limit';
 
 export const prerender = false;
 
 /** Per-IP submissions allowed in the window. */
 const LIMIT = 5;
 const WINDOW_MS = 10 * 60_000;
-
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string): boolean {
-	const now = Date.now();
-	const recent = (hits.get(ip) ?? []).filter((at) => now - at < WINDOW_MS);
-
-	recent.push(now);
-	hits.set(ip, recent);
-
-	// The map is per-process and small, but a long-lived server would still
-	// grow it forever without this.
-	if (hits.size > 5_000) {
-		for (const [key, times] of hits) {
-			if (times.every((at) => now - at >= WINDOW_MS)) {
-				hits.delete(key);
-			}
-		}
-	}
-
-	return recent.length > LIMIT;
-}
-
-function clientIp(context: APIContext): string {
-	const forwarded = context.request.headers.get('x-forwarded-for');
-
-	return forwarded?.split(',')[0]?.trim() || context.clientAddress || 'unknown';
-}
 
 function field(form: FormData, name: string, max = 500): string {
 	return String(form.get(name) ?? '')
@@ -90,7 +63,13 @@ export const POST: APIRoute = async (context) => {
 		return respond(context, { ok: true, redirect: '/thank-you?lead=1' });
 	}
 
-	if (rateLimited(clientIp(context))) {
+	if (
+		rateLimited(clientKey(context.request, context.clientAddress), {
+			name: 'leads',
+			limit: LIMIT,
+			windowMs: WINDOW_MS,
+		})
+	) {
 		return respond(
 			context,
 			{ ok: false, error: 'Too many submissions. Call us instead — we always pick up.' },

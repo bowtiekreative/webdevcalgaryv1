@@ -14,8 +14,16 @@ import { site } from '../../../config';
 import { buildCart, createOrder } from '../../../lib/billing/paypal-orders';
 import { paypalConfigured } from '../../../lib/billing/paypal';
 import { newReference, recordOrder } from '../../../lib/orders';
+import { clientKey, rateLimited } from '../../../lib/rate-limit';
 
 export const prerender = false;
+
+/**
+ * A real buyer retries a couple of times at most. Anything past this is a
+ * script filling the order queue with junk and running up PayPal API calls.
+ */
+const LIMIT = 10;
+const WINDOW_MS = 10 * 60_000;
 
 interface Body {
 	offers?: unknown;
@@ -41,6 +49,16 @@ function fail(message: string, status = 400): Response {
 }
 
 export const POST: APIRoute = async (context) => {
+	if (
+		rateLimited(clientKey(context.request, context.clientAddress), {
+			name: 'paypal-order',
+			limit: LIMIT,
+			windowMs: WINDOW_MS,
+		})
+	) {
+		return fail('Too many attempts. Call us and we will take payment directly.', 429);
+	}
+
 	if (!(await paypalConfigured())) {
 		return fail('PayPal is not configured on this server. Call us and we will take payment directly.', 503);
 	}
