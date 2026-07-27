@@ -183,10 +183,18 @@ it and taking money.
       These are live right now." Replace each with a real client, then publish.
 - [ ] Legal pages (`/terms`, `/privacy`, `/refund-policy`) are seeded with
       placeholder copy and say so. Have them reviewed.
-- [ ] Create the two PayPal billing plans and set `PAYPAL_PLAN_CORE` /
-      `PAYPAL_PLAN_GROWTH`.
-- [ ] Point `PAYPAL_ENV=live` only once a sandbox order has been taken
-      end-to-end and the confirmation email arrived.
+- [x] PayPal **sandbox** is wired and working — credentials, webhook, and both
+      billing plans (Core `P-224223…`, Growth `P-4K1539…`, product
+      `PROD-6AT465…`). Verified live: the checkout creates real orders at the
+      right amounts, and a request that tries to name its own price still gets
+      charged $497.
+- [ ] **Switch to live PayPal.** New credentials from the live app, new billing
+      plans (sandbox plan ids do not carry over), a new webhook against the live
+      app, then `PAYPAL_ENV=live`. Do it only after taking one sandbox order
+      end-to-end and confirming the email arrived. Anything other than exactly
+      `live` keeps using the sandbox, so a typo cannot bill a real card.
+- [ ] Clear the `app-pending` test orders from wp-admin → Orders. They are from
+      smoke-testing the checkout and were never paid.
 - [ ] Verify `webdevcalgary.com` in Emailit, then move `EMAILIT_FROM` onto it.
       Until then mail sends from `websites@bowtiekreative.com`.
 - [ ] Register the PayPal webhook at `/api/billing/paypal-webhook` and set

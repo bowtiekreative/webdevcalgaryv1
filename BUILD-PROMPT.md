@@ -156,9 +156,33 @@ while `npm ci` downloaded from the same network without complaint. Internal
 service-to-service traffic should not leave the box; point the build at a
 direct hostname.
 
+**Rate limiting did nothing.** Both public endpoints had a per-IP limiter. Behind
+Cloudflare, neither ever fired: Cloudflare answers from many edge addresses and
+rotates between them, so `X-Forwarded-For`'s first entry — and Astro's
+`clientAddress` with it — was a different edge IP on nearly every request. Every
+bucket held one hit. Key on `CF-Connecting-IP`, which Cloudflare rewrites on
+every proxied request.
+
+That one is worth generalising: **a limiter that fails open is
+indistinguishable from a working one until you try to trip it.** Test the limit,
+not the happy path. Testing both sides of the CDN is what isolated it — through
+Cloudflare twelve attempts all passed; straight to the origin the eleventh
+returned 429, same container, same code.
+
 The general lesson: anything involving proxies, protocol, or DNS is invisible
 until it is deployed. Budget for a deploy-then-debug cycle instead of treating
 the first deploy as a formality.
+
+```bash
+# Prove a limiter actually limits, on both paths
+for i in $(seq 1 13); do
+  curl -s -o /dev/null -w '%{http_code} ' -X POST https://«site»/api/«endpoint» \
+       -H 'Content-Type: application/json' -H 'Origin: https://«site»' -d '{}'
+done; echo
+# then again with --resolve «site»:443:«origin-ip» to bypass the CDN.
+# Different results between the two means your client key is the CDN's, not the
+# visitor's.
+```
 
 ```bash
 # The check that finds the origin bug in one command
