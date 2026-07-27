@@ -93,6 +93,14 @@ function update_option( string $name, $value ): bool {
 function flush_rewrite_rules( bool $hard = true ): void {
 }
 
+/**
+ * False here on purpose: this harness runs the registration hooks as a fully
+ * installed site would, so anything guarded by wp_installing() must run.
+ */
+function wp_installing(): bool {
+	return false;
+}
+
 // Presence of these two is how the bridge decides whether to run at all.
 function rwmb_meta( string $id, $args = [], $object_id = null ) {
 	return null;
