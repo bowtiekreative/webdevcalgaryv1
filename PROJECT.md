@@ -85,13 +85,28 @@ nothing on its own — anyone can visit that URL — so nothing is fulfilled off
 
 ## Deployment
 
-Two Coolify resources in the **WebDevCalgary** project, and the order matters:
+Coolify at `https://cauziva.com`, project **WebDevCalgary**
+(`q2h4n68fo8ctxjzmmrwr5kwv`), environment `production`, server `localhost`
+(`v77gud1vzixsbejg9kqw3eze`, `212.1.213.81`).
 
-1. **`webdevcalgary-wordpress`** — Docker Compose from
-   [docker-compose.coolify.yml](docker-compose.coolify.yml). Give it a domain.
-2. **`webdevcalgary-web`** — Dockerfile build from `web/`. It must be built
-   *after* WordPress is up and reachable, because the Astro build queries it for
-   content.
+| Resource | UUID | Build | Domain |
+|---|---|---|---|
+| `webdevcalgary-wordpress` | `drp4wlpdbsqst4qoi442h054` | compose, `/docker-compose.coolify.yml` | `cms.webdevcalgary.com` |
+| `webdevcalgary-web` | `dhu40u5p8o1607y2l2f0qibn` | Dockerfile, base `/web` | `webdevcalgary.com` |
+
+**The order matters and is not cosmetic.** The Astro site is prerendered, so
+`npm run build` inside its Dockerfile queries WPGraphQL. WordPress has to be up,
+bootstrapped and reachable at `WP_GRAPHQL_ENDPOINT` *before* the front end will
+build at all — with `WP_FAIL_ON_ERROR=1` it fails the build rather than shipping
+a site with no content.
+
+That is why a fresh environment needs, in this order:
+
+1. DNS: `webdevcalgary.com` and `cms.webdevcalgary.com` → `212.1.213.81`.
+2. Deploy `webdevcalgary-wordpress`, wait for the certificate.
+3. Run `scripts/wp-bootstrap.sh` against it — installs WPGraphQL and Meta Box
+   and seeds the content model. Nothing works before this.
+4. Deploy `webdevcalgary-web`.
 
 GitHub Actions:
 
