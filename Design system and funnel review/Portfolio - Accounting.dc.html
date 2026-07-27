@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F7F8F5;color:#1E2B24;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:#1F5C40;text-decoration:none}a:hover{color:#1E2B24}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#F7F8F5;border-bottom:2px solid #1F5C40;position:sticky;top:0;z-index:50">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px">
+    <div style="font-family:'IBM Plex Serif',serif;font-weight:700;font-size:22px">Crossfield &amp; Co. <span style="color:#1F5C40">CPA</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#services" style="color:#1E2B24">Services</a><a href="#pricing" style="color:#1E2B24">Pricing</a><a href="#reviews" style="color:#1E2B24">Clients</a>
+      <a href="#call" style="background:#1F5C40;color:#fff;padding:12px 24px;font-weight:600" style-hover="background:#153F2C;color:#fff">Book a call</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:84px 0 64px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:52px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#1F5C40;font-weight:600;margin-bottom:18px">CPAs for Calgary owner-operators</div>
+      <h1 style="margin:0 0 20px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.15">Your books, boring.<br><span style="color:#1F5C40">The way books should be.</span></h1>
+      <p style="margin:0 0 30px;color:#54655C;font-size:19px;max-width:48ch">Year-ends, payroll, GST and tax planning for trades and small business — flat monthly pricing, no June surprises, no CRA letters you find out about late.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#call" style="background:#1F5C40;color:#fff;padding:16px 32px;font-weight:600;font-size:17px" style-hover="background:#153F2C;color:#fff">Book a free intro call</a>
+        <a href="#pricing" style="border:2px solid #1F5C40;color:#1F5C40;padding:14px 30px;font-weight:600;font-size:17px" style-hover="background:#1F5C40;color:#fff">See pricing</a>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #DDE3DC;padding:28px">
+      <div style="font-family:'IBM Plex Serif',serif;font-weight:700;font-size:17px;margin-bottom:16px;color:#1F5C40">A month with us, roughly:</div>
+      <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E8ECE7;font-size:15px"><span>Books reconciled</span><b>Monthly, not at year-end</b></div>
+      <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E8ECE7;font-size:15px"><span>Payroll run</span><b>On time, every time</b></div>
+      <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E8ECE7;font-size:15px"><span>GST filed</span><b>Before the deadline</b></div>
+      <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #E8ECE7;font-size:15px"><span>Tax owing</span><b>Known in October, not April</b></div>
+      <div style="display:flex;justify-content:space-between;padding:11px 0;font-size:15px"><span>Questions answered</span><b>Same week, plain English</b></div>
+    </div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#1F5C40;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:20px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:15px">
+    <span>CPA Alberta</span><span>180+ small business clients</span><span>QuickBooks + Xero certified</span><span>CRA correspondence handled for you</span>
+  </div>
+</div>
+<section id="services" data-screen-label="Services" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">What we handle</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">Monthly bookkeeping</h3><p style="margin:0;font-size:15px;color:#54655C">Receipts in, reconciled books out. You see profit by job, not just a bank balance.</p></div>
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">Year-end &amp; corporate tax</h3><p style="margin:0;font-size:15px;color:#54655C">Financial statements and T2 filed on time — with a planning meeting before year-end, when it can still change the number.</p></div>
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">Payroll &amp; source deductions</h3><p style="margin:0;font-size:15px;color:#54655C">Crew of 2 or 20 — stubs, remittances, ROEs, T4s, WCB. Never a late remittance penalty.</p></div>
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">GST filings</h3><p style="margin:0;font-size:15px;color:#54655C">Filed from real books, quarterly or annually — whichever actually suits your cash flow.</p></div>
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">Owner tax planning</h3><p style="margin:0;font-size:15px;color:#54655C">Salary vs. dividends, buying the truck this year or next, RRSP vs. paying down the line. Modelled, not guessed.</p></div>
+      <div style="background:#fff;border:1px solid #DDE3DC;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-size:18px">CRA representation</h3><p style="margin:0;font-size:15px;color:#54655C">Reviews, audits, and those brown envelopes. We respond; you keep working.</p></div>
+    </div>
+  </div>
+</section>
+<section id="pricing" data-screen-label="Pricing" style="padding:72px 0;background:#fff;border-top:1px solid #DDE3DC;border-bottom:1px solid #DDE3DC">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">Flat monthly pricing</h2>
+    <p style="margin:0 0 36px;color:#54655C;max-width:60ch">No hourly meter running while you ask a question. One number, everything included.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px">
+      <div style="border:1px solid #DDE3DC;padding:28px"><b style="font-family:'IBM Plex Serif',serif;font-size:19px;display:block;margin-bottom:8px">Solo</b><div style="font-family:'IBM Plex Serif',serif;font-weight:700;font-size:34px;color:#1F5C40">$295<span style="font-size:15px;font-weight:400;color:#54655C">/mo</span></div><p style="margin:12px 0 0;font-size:14px;color:#54655C;line-height:1.8">Sole proprietor or single-member corp · books, GST, year-end, personal return</p></div>
+      <div style="border:2px solid #1F5C40;padding:28px;position:relative"><span style="position:absolute;top:-12px;left:24px;background:#1F5C40;color:#fff;font-size:12px;font-weight:600;padding:3px 12px;letter-spacing:.06em">MOST COMMON</span><b style="font-family:'IBM Plex Serif',serif;font-size:19px;display:block;margin-bottom:8px">Crew</b><div style="font-family:'IBM Plex Serif',serif;font-weight:700;font-size:34px;color:#1F5C40">$595<span style="font-size:15px;font-weight:400;color:#54655C">/mo</span></div><p style="margin:12px 0 0;font-size:14px;color:#54655C;line-height:1.8">Incorporated, up to 10 staff · everything in Solo plus payroll, planning meeting twice a year</p></div>
+      <div style="border:1px solid #DDE3DC;padding:28px"><b style="font-family:'IBM Plex Serif',serif;font-size:19px;display:block;margin-bottom:8px">Multi</b><div style="font-family:'IBM Plex Serif',serif;font-weight:700;font-size:34px;color:#1F5C40">Quoted</div><p style="margin:12px 0 0;font-size:14px;color:#54655C;line-height:1.8">Multiple corps, holdcos, 10+ staff · scoped in the intro call, still flat</p></div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Clients" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 36px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem)">Clients say</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#fff;border-left:4px solid #1F5C40;padding:26px 24px"><p style="margin:0 0 12px;font-size:15px">"First year in a decade I knew my tax bill in October. We bought equipment in December because of it and saved real money."</p><b style="font-size:14px;color:#54655C">Owner, electrical contractor · 6 staff</b></div>
+      <div style="background:#fff;border-left:4px solid #1F5C40;padding:26px 24px"><p style="margin:0 0 12px;font-size:15px">"CRA review letter went straight to them. I heard about it after it was already resolved. Worth the monthly fee for that alone."</p><b style="font-size:14px;color:#54655C">Owner, landscaping company</b></div>
+      <div style="background:#fff;border-left:4px solid #1F5C40;padding:26px 24px"><p style="margin:0 0 12px;font-size:15px">"They answer email like a business, not like an accountant in April. Same week, every time, in sentences I understand."</p><b style="font-size:14px;color:#54655C">Owner, café · 9 staff</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Switching" style="padding:64px 0;background:#1F5C40;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap">
+    <div>
+      <h2 style="margin:0 0 10px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(1.6rem,3.5vw,2.2rem)">Switching accountants feels harder than it is.</h2>
+      <p style="margin:0;color:#BFD6C9;max-width:56ch;font-size:16px">We request the files from your old firm, rebuild the books if needed, and you sign two forms. That's the whole thing.</p>
+    </div>
+    <a href="#call" style="background:#fff;color:#1F5C40;padding:16px 32px;font-weight:600;font-size:17px;white-space:nowrap" style-hover="background:#BFD6C9;color:#153F2C">Start the switch →</a>
+  </div>
+</section>
+<section id="call" data-screen-label="Intro call" style="padding:72px 0">
+  <div style="max-width:700px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 10px;font-family:'IBM Plex Serif',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);text-align:center">Book a free intro call</h2>
+    <p style="margin:0 0 30px;color:#54655C;text-align:center">Twenty minutes. Bring your messiest question.</p>
+    <form style="display:grid;gap:12px;background:#fff;border:1px solid #DDE3DC;padding:30px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #C9D3CB;font-size:16px;font-family:'IBM Plex Sans',sans-serif;border-radius:0" style-focus="outline:2px solid #1F5C40" />
+        <input type="email" placeholder="Email" required="required" style="padding:14px;border:1px solid #C9D3CB;font-size:16px;font-family:'IBM Plex Sans',sans-serif;border-radius:0" style-focus="outline:2px solid #1F5C40" />
+      </div>
+      <input type="text" placeholder="Business name &amp; what you do" style="padding:14px;border:1px solid #C9D3CB;font-size:16px;font-family:'IBM Plex Sans',sans-serif;border-radius:0" style-focus="outline:2px solid #1F5C40" />
+      <button type="submit" style="background:#1F5C40;color:#fff;border:none;padding:16px;font-weight:600;font-size:17px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif" style-hover="background:#153F2C">Book my call</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#152A1F;color:#8FA898;padding:38px 0;font-size:14px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'IBM Plex Serif',serif;font-size:16px">Crossfield &amp; Co. CPA</b><br>Calgary AB · <a href="tel:4035550143" style="color:#BFD6C9">(403) 555-0143</a> · CPA Alberta</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#7FBF9A">Website by Website Calgary — live since 2020</a><br><a href="Home.dc.html" style="color:#BFD6C9">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700;800&family=Saira:ital@1&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F4F6F8;color:#1A2733;font-family:'Saira',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#C42B2B;text-decoration:none}a:hover{color:#1A2733}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#1A2733;color:#fff;position:sticky;top:0;z-index:50">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px">
+    <div style="font-weight:800;font-size:23px;letter-spacing:.02em;text-transform:uppercase">Ridgeline <span style="color:#C42B2B">Garage Doors</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#repair" style="color:#fff">Repair</a><a href="#doors" style="color:#fff">New doors</a><a href="#reviews" style="color:#fff">Reviews</a>
+      <a href="tel:4035550115" style="background:#C42B2B;color:#fff;padding:12px 22px;font-weight:700" style-hover="background:#fff;color:#1A2733">(403) 555-0115</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="background:#1A2733;color:#fff;padding:76px 0 64px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#E8A13C;font-weight:700;margin-bottom:16px">Same-day garage door repair · Calgary</div>
+      <h1 style="margin:0 0 18px;font-weight:800;font-size:clamp(2.4rem,6vw,4rem);line-height:1.05;text-transform:uppercase">Stuck at work?<br><span style="color:#E8A13C">Stuck at home?</span></h1>
+      <p style="margin:0 0 28px;color:#B9C4CE;font-size:19px;max-width:48ch">Broken springs, dead openers, doors off track. Same-day service across Calgary, trucks stocked, price quoted on the phone.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="tel:4035550115" style="background:#C42B2B;color:#fff;padding:16px 30px;font-weight:700;font-size:17px;text-transform:uppercase" style-hover="background:#E8A13C;color:#1A2733">Call — same day</a>
+        <a href="#book" style="border:2px solid #3C4C5C;color:#fff;padding:14px 28px;font-weight:700;font-size:17px;text-transform:uppercase" style-hover="border-color:#E8A13C;color:#E8A13C">Book online</a>
+      </div>
+      <p style="margin:16px 0 0;font-size:14px;color:#7C8B99">Evening &amp; Saturday calls at the same rate — no "emergency" markup.</p>
+    </div>
+    <div style="border:2px dashed #3C4C5C;background:repeating-linear-gradient(45deg,#22303D,#22303D 22px,#1E2B37 22px,#1E2B37 44px);min-height:340px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#7C8B99;line-height:1.8">photo: tech replacing a torsion spring,<br>branded truck in driveway</span></div>
+  </div>
+</section>
+<div data-screen-label="Price strip" style="background:#E8A13C;color:#1A2733">
+  <div style="max-width:1120px;margin:0 auto;padding:18px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-weight:700;font-size:15px">
+    <span>Spring replacement from $249</span><span>Opener install from $549</span><span>Off-track reset from $189</span><span>Free quotes on new doors</span>
+  </div>
+</div>
+<section id="repair" data-screen-label="Repair services" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-weight:800;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">Fixed today, most of the time.</h2>
+    <p style="margin:0 0 34px;color:#5C6B78;max-width:60ch">Both trucks carry springs, openers, rollers, cables and panels for the doors Calgary actually has.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Broken springs</h3><p style="margin:0;font-size:15px;color:#5C6B78">The loud bang, then a door that won't lift. Both springs replaced, high-cycle rated, same visit.</p></div>
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Openers</h3><p style="margin:0;font-size:15px;color:#5C6B78">Repair or replace — belt-drive units with battery backup and phone control.</p></div>
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Off-track doors</h3><p style="margin:0;font-size:15px;color:#5C6B78">Don't force it — the second bend costs more than the first. Reset, rollers, realign.</p></div>
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Cables &amp; rollers</h3><p style="margin:0;font-size:15px;color:#5C6B78">Frayed cables and seized rollers, swapped before they strand the door.</p></div>
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Panels &amp; weather seal</h3><p style="margin:0;font-size:15px;color:#5C6B78">Dented panel? Often replaceable alone. New bottom seal keeps the snow out.</p></div>
+      <div style="background:#fff;border-bottom:4px solid #C42B2B;padding:26px 24px"><h3 style="margin:0 0 8px;font-weight:700;font-size:18px;text-transform:uppercase">Annual tune-up — $129</h3><p style="margin:0;font-size:15px;color:#5C6B78">25-point check, lube, balance, safety test. Catches the spring before the bang.</p></div>
+    </div>
+  </div>
+</section>
+<section id="doors" data-screen-label="New doors" style="padding:72px 0;background:#fff;border-top:1px solid #E1E6EA;border-bottom:1px solid #E1E6EA">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-weight:800;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">New doors, installed in a morning</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div><div style="border:2px dashed #C6D0D8;background:repeating-linear-gradient(45deg,#EDF1F4,#EDF1F4 22px,#E7ECF0 22px,#E7ECF0 44px);height:190px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8B99A5">photo: classic steel door</span></div><div style="padding:14px 0"><b style="text-transform:uppercase">Insulated steel</b><p style="margin:4px 0 0;font-size:14px;color:#5C6B78">R-16, quiet hardware. From $1,850 installed.</p></div></div>
+      <div><div style="border:2px dashed #C6D0D8;background:repeating-linear-gradient(45deg,#EDF1F4,#EDF1F4 22px,#E7ECF0 22px,#E7ECF0 44px);height:190px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8B99A5">photo: carriage style door</span></div><div style="padding:14px 0"><b style="text-transform:uppercase">Carriage house</b><p style="margin:4px 0 0;font-size:14px;color:#5C6B78">Curb appeal for older neighbourhoods. From $2,900 installed.</p></div></div>
+      <div><div style="border:2px dashed #C6D0D8;background:repeating-linear-gradient(45deg,#EDF1F4,#EDF1F4 22px,#E7ECF0 22px,#E7ECF0 44px);height:190px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8B99A5">photo: modern glass door</span></div><div style="padding:14px 0"><b style="text-transform:uppercase">Modern aluminum + glass</b><p style="margin:4px 0 0;font-size:14px;color:#5C6B78">Full-view panels for infills. From $4,200 installed.</p></div></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Why us" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 18px;font-weight:800;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">The phone quote is the real quote.</h2>
+      <p style="margin:0;color:#5C6B78;max-width:52ch">Garage door repair has a bait-and-switch problem — $89 specials that become $900 in the driveway. We quote the fix on the phone, parts and labour, and the invoice matches.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:#fff;padding:18px 22px;display:flex;gap:14px;align-items:center;border-left:4px solid #E8A13C"><b style="font-size:26px;color:#C42B2B">✓</b><span style="font-size:15px">Price confirmed on the phone, honoured in the driveway</span></div>
+      <div style="background:#fff;padding:18px 22px;display:flex;gap:14px;align-items:center;border-left:4px solid #E8A13C"><b style="font-size:26px;color:#C42B2B">✓</b><span style="font-size:15px">High-cycle springs standard — not the 10,000-cycle minimum</span></div>
+      <div style="background:#fff;padding:18px 22px;display:flex;gap:14px;align-items:center;border-left:4px solid #E8A13C"><b style="font-size:26px;color:#C42B2B">✓</b><span style="font-size:15px">5-year warranty on springs, 1 year on all other work</span></div>
+      <div style="background:#fff;padding:18px 22px;display:flex;gap:14px;align-items:center;border-left:4px solid #E8A13C"><b style="font-size:26px;color:#C42B2B">✓</b><span style="font-size:15px">Local — two trucks, two brothers, since 2017</span></div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Reviews" style="padding:72px 0;background:#1A2733;color:#fff">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-weight:800;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase">Reviews</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#22303D;padding:26px 24px"><div style="color:#E8A13C;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px;color:#D5DDE3">"Spring went at 7am, car trapped inside. Fixed by 11:30, price matched the phone quote exactly."</p><b style="font-size:14px;color:#7C8B99">Steve N. · Panorama Hills</b></div>
+      <div style="background:#22303D;padding:26px 24px"><div style="color:#E8A13C;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px;color:#D5DDE3">"Another company quoted $1,400 for 'full overhaul.' Ridgeline fixed the actual problem for $310 and told me what to watch for."</p><b style="font-size:14px;color:#7C8B99">Farah H. · Skyview</b></div>
+      <div style="background:#22303D;padding:26px 24px"><div style="color:#E8A13C;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px;color:#D5DDE3">"New carriage door installed in under four hours. They hauled the old one away and swept the garage."</p><b style="font-size:14px;color:#7C8B99">Gwen R. · Altadore</b></div>
+    </div>
+  </div>
+</section>
+<section id="book" data-screen-label="Booking" style="padding:72px 0">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-weight:800;font-size:clamp(1.9rem,4.5vw,2.7rem);text-transform:uppercase;text-align:center">Book a repair</h2>
+    <p style="margin:0 0 28px;color:#5C6B78;text-align:center">Door won't open at all? Call <a href="tel:4035550115" style="font-weight:700">(403) 555-0115</a> — that's a same-day.</p>
+    <form style="display:grid;gap:12px;background:#fff;padding:28px;border-top:4px solid #C42B2B" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #C6D0D8;font-size:16px;font-family:'Saira',sans-serif;border-radius:0" style-focus="outline:2px solid #C42B2B" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #C6D0D8;font-size:16px;font-family:'Saira',sans-serif;border-radius:0" style-focus="outline:2px solid #C42B2B" />
+      </div>
+      <select style="padding:14px;border:1px solid #C6D0D8;font-size:16px;font-family:'Saira',sans-serif;border-radius:0"><option>What's it doing?</option><option>Won't open — loud bang happened (spring)</option><option>Opener not responding</option><option>Crooked / off track</option><option>New door quote</option><option>Tune-up</option></select>
+      <button type="submit" style="background:#C42B2B;color:#fff;border:none;padding:16px;font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;font-family:'Saira',sans-serif" style-hover="background:#1A2733">Get me on the schedule</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#12202B;color:#7C8B99;padding:36px 0;font-size:14px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-size:16px;text-transform:uppercase">Ridgeline Garage Doors</b><br>Calgary AB · <a href="tel:4035550115" style="color:#D5DDE3">(403) 555-0115</a> · Insured · WCB</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#E8A13C">Website by Website Calgary — live since 2021</a><br><a href="Home.dc.html" style="color:#D5DDE3">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

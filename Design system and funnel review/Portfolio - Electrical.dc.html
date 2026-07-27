@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#141414;color:#F2F2EE;font-family:'Source Sans 3',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#FFD400;text-decoration:none}a:hover{color:#fff}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#141414;border-bottom:3px solid #FFD400;position:sticky;top:0;z-index:50">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px">
+    <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.04em"><span style="color:#FFD400">⚡</span> Amped Electric</div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#services" style="color:#F2F2EE">Services</a><a href="#work" style="color:#F2F2EE">Work</a><a href="#reviews" style="color:#F2F2EE">Reviews</a>
+      <a href="#quote" style="background:#FFD400;color:#141414;padding:12px 22px;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:15px" style-hover="background:#fff;color:#141414">Get a quote</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:80px 0 64px;background:linear-gradient(180deg,#141414 0%,#1C1C1C 100%)">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+    <div>
+      <div style="font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#FFD400;margin-bottom:16px">Master electrician · Calgary · Est. 2016</div>
+      <h1 style="margin:0 0 18px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(2.5rem,6vw,4.2rem);line-height:1.05;text-transform:uppercase;letter-spacing:.01em">Wired right.<br><span style="color:#FFD400">Priced straight.</span></h1>
+      <p style="margin:0 0 28px;color:#B8B8B0;font-size:19px;max-width:48ch">Panel upgrades, EV chargers, renovations, troubleshooting. Master electrician on every job, permit on every panel.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#quote" style="background:#FFD400;color:#141414;padding:16px 30px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.06em" style-hover="background:#fff;color:#141414">Get a quote</a>
+        <a href="tel:4035550147" style="border:2px solid #3A3A3A;color:#F2F2EE;padding:14px 28px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.06em" style-hover="border-color:#FFD400;color:#FFD400">(403) 555-0147</a>
+      </div>
+    </div>
+    <div style="border:2px dashed #3A3A3A;background:repeating-linear-gradient(45deg,#1E1E1E,#1E1E1E 22px,#191919 22px,#191919 44px);min-height:340px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#6E6E66;line-height:1.8">photo: electrician at a panel,<br>labelled breakers close-up</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#FFD400;color:#141414">
+  <div style="max-width:1120px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:'Oswald',sans-serif;font-size:15px;text-transform:uppercase;letter-spacing:.06em;font-weight:600">
+    <span>Master electrician</span><span>Permits on every job</span><span>4.9★ · 310 reviews</span><span>2-yr workmanship warranty</span><span>WCB + $5M insured</span>
+  </div>
+</div>
+<section id="services" data-screen-label="Services" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase">What we do</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:#2A2A2A;border:1px solid #2A2A2A">
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">01</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">Panel upgrades</h3><p style="margin:0;font-size:15px;color:#B8B8B0">100A to 200A service upgrades for EVs, suites and shops. Permit, inspection, done.</p></div>
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">02</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">EV chargers</h3><p style="margin:0;font-size:15px;color:#B8B8B0">Level 2 installs, load calculations, rebate paperwork. Usually one visit.</p></div>
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">03</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">Troubleshooting</h3><p style="margin:0;font-size:15px;color:#B8B8B0">Dead circuits, tripping breakers, mystery switches. Flat diagnostic rate, credited to the fix.</p></div>
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">04</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">Renovations</h3><p style="margin:0;font-size:15px;color:#B8B8B0">Basement developments, kitchens, garages. Wired to code, inspected, warrantied.</p></div>
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">05</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">Aluminum wiring</h3><p style="margin:0;font-size:15px;color:#B8B8B0">Pigtailing and remediation for 60s–70s homes. Insurance letters included.</p></div>
+      <div style="background:#1C1C1C;padding:26px 24px"><span style="font-family:'Oswald',sans-serif;color:#FFD400;font-size:13px;letter-spacing:.14em">06</span><h3 style="margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;text-transform:uppercase">Hot tubs &amp; heaters</h3><p style="margin:0;font-size:15px;color:#B8B8B0">Dedicated circuits for spas, saunas, garage heaters and shop tools.</p></div>
+    </div>
+  </div>
+</section>
+<section id="work" data-screen-label="Recent work" style="padding:72px 0;background:#1C1C1C">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase">Recent jobs</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+      <div><div style="border:2px dashed #3A3A3A;background:repeating-linear-gradient(45deg,#222,#222 22px,#1E1E1E 22px,#1E1E1E 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#6E6E66">photo: 200A panel</span></div><p style="margin:10px 0 0;font-size:14px;color:#B8B8B0"><b style="color:#F2F2EE">200A service upgrade</b> · Ramsay · permitted + inspected</p></div>
+      <div><div style="border:2px dashed #3A3A3A;background:repeating-linear-gradient(45deg,#222,#222 22px,#1E1E1E 22px,#1E1E1E 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#6E6E66">photo: EV charger</span></div><p style="margin:10px 0 0;font-size:14px;color:#B8B8B0"><b style="color:#F2F2EE">Level 2 EV charger</b> · Seton · one visit, rebate filed</p></div>
+      <div><div style="border:2px dashed #3A3A3A;background:repeating-linear-gradient(45deg,#222,#222 22px,#1E1E1E 22px,#1E1E1E 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#6E6E66">photo: basement wiring</span></div><p style="margin:10px 0 0;font-size:14px;color:#B8B8B0"><b style="color:#F2F2EE">Legal suite wiring</b> · Forest Lawn · code + inspection</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Why us" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 20px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase">Why people call us second<br><span style="color:#FFD400">and never third.</span></h2>
+      <p style="margin:0;color:#B8B8B0;max-width:55ch">Half our work is fixing the last guy's work. Uninspected panels, junction boxes buried in drywall, aluminum pigtails done wrong. We fix it once, pull the permit, and put our name on the invoice.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px;background:#2A2A2A;border:1px solid #2A2A2A">
+      <div style="background:#1C1C1C;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;font-size:15px"><span style="color:#B8B8B0">Quote honoured</span><b style="color:#FFD400;font-family:'Oswald',sans-serif">100% — no surprises</b></div>
+      <div style="background:#1C1C1C;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;font-size:15px"><span style="color:#B8B8B0">Permits pulled</span><b style="color:#FFD400;font-family:'Oswald',sans-serif">Every panel, every suite</b></div>
+      <div style="background:#1C1C1C;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;font-size:15px"><span style="color:#B8B8B0">Cleanup</span><b style="color:#FFD400;font-family:'Oswald',sans-serif">Vacuumed, labelled, done</b></div>
+      <div style="background:#1C1C1C;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;font-size:15px"><span style="color:#B8B8B0">Warranty</span><b style="color:#FFD400;font-family:'Oswald',sans-serif">2 years, in writing</b></div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Reviews" style="padding:72px 0;background:#1C1C1C">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase">Reviews</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div style="border:1px solid #2A2A2A;padding:26px 24px"><div style="color:#FFD400;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 14px;font-size:15px;color:#D8D8D0">"Panel upgrade quoted at $3,200, invoiced at $3,200. Inspector signed off first visit. Every breaker labelled."</p><b style="font-size:14px;color:#8A8A82">Colin R. · Ramsay</b></div>
+      <div style="border:1px solid #2A2A2A;padding:26px 24px"><div style="color:#FFD400;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 14px;font-size:15px;color:#D8D8D0">"Found the dead circuit two other companies couldn't. Charged the diagnostic rate he quoted, nothing more."</p><b style="font-size:14px;color:#8A8A82">Melissa K. · Dalhousie</b></div>
+      <div style="border:1px solid #2A2A2A;padding:26px 24px"><div style="color:#FFD400;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 14px;font-size:15px;color:#D8D8D0">"EV charger installed while I was on a work call. Rebate forms filled out and sitting on the counter when I came up."</p><b style="font-size:14px;color:#8A8A82">Jason T. · Seton</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Service area" style="padding:56px 0;border-top:1px solid #2A2A2A">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div><h3 style="margin:0 0 10px;font-family:'Oswald',sans-serif;font-size:20px;text-transform:uppercase;color:#FFD400">Service area</h3><p style="margin:0;color:#B8B8B0;font-size:15px">All Calgary, Airdrie, Chestermere, Cochrane.</p></div>
+    <div><h3 style="margin:0 0 10px;font-family:'Oswald',sans-serif;font-size:20px;text-transform:uppercase;color:#FFD400">Hours</h3><p style="margin:0;color:#B8B8B0;font-size:15px">Mon–Sat 7am–6pm · After-hours for no-power calls</p></div>
+    <div><h3 style="margin:0 0 10px;font-family:'Oswald',sans-serif;font-size:20px;text-transform:uppercase;color:#FFD400">Direct</h3><p style="margin:0;color:#B8B8B0;font-size:15px"><a href="tel:4035550147">(403) 555-0147</a> · quotes@ampedelectric.ca</p></div>
+  </div>
+</section>
+<section id="quote" data-screen-label="Quote form" style="padding:72px 0;background:#FFD400;color:#141414">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.9rem,4.5vw,2.8rem);text-transform:uppercase;text-align:center">Get a straight quote</h2>
+    <p style="margin:0 0 28px;text-align:center;font-weight:600">Photos of your panel help — attach them and we can often quote same day.</p>
+    <form style="display:grid;gap:12px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:2px solid #141414;font-size:16px;font-family:'Source Sans 3',sans-serif;background:#fff;border-radius:0" style-focus="outline:3px solid #141414" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:2px solid #141414;font-size:16px;font-family:'Source Sans 3',sans-serif;background:#fff;border-radius:0" style-focus="outline:3px solid #141414" />
+      </div>
+      <textarea rows="3" placeholder="What needs doing?" style="padding:14px;border:2px solid #141414;font-size:16px;font-family:'Source Sans 3',sans-serif;background:#fff;border-radius:0;resize:vertical" style-focus="outline:3px solid #141414"></textarea>
+      <button type="submit" style="background:#141414;color:#FFD400;border:none;padding:16px;font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer" style-hover="background:#000;color:#fff">Send it</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#0E0E0E;color:#8A8A82;padding:36px 0;font-size:14px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#F2F2EE;font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:16px">Amped Electric</b><br>Calgary AB · <a href="tel:4035550147" style="color:#D8D8D0">(403) 555-0147</a> · Master electrician · Permit on every panel</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#FFD400">Website by Website Calgary — live since 2021</a><br><a href="Home.dc.html" style="color:#D8D8D0">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

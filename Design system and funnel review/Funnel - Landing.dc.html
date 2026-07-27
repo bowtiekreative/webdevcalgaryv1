@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:#14161A;font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#A83A1C;text-decoration:none}a:hover{color:#14161A}
+</style>
+</helmet>
+<header style="border-bottom:1px solid #D6D2C8;position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);z-index:50">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px">
+    <a href="#" style="font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;color:#14161A">Website<span style="color:#A83A1C">Calgary</span></a>
+    <div style="display:flex;align-items:center;gap:18px">
+      <a href="tel:8887550507" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#14161A">(888) 755-0507</a>
+      <a href="#start" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#14161A;border-bottom:2px solid #F2B233;padding-bottom:2px">Start →</a>
+    </div>
+  </div>
+</header>
+
+<section data-screen-label="Hero" style="padding:56px 0 20px">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Calgary, AB · 403</div>
+    <h1 style="margin:0 0 22px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(2.45rem,8vw,4.6rem)">Your new website.<br><em style="font-style:normal;color:#A83A1C">Live tomorrow.</em></h1>
+    <p style="margin:0 0 32px;color:#4A4F58;font-size:clamp(1.05rem,2.4vw,1.28rem);max-width:56ch">Built in 24 hours. Changed as often as you want, forever. Hosting, security and updates included — and the price never goes up.</p>
+    <div style="border:2px solid #14161A;background:#14161A;color:#fff;padding:20px 22px;margin:0 0 30px;max-width:520px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#8D949F;margin-bottom:10px"><span><span style="color:#F2B233">●</span> Dispatch</span><span>{{stamp}}</span></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(1.9rem,7vw,2.7rem);letter-spacing:-.03em;color:#F2B233;line-height:1">{{clock}}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#B7BCC4;margin-top:12px;line-height:1.5">Start now and your site is live by <b style="color:#fff">{{deadline}}</b>. Miss that window and <b style="color:#fff">the rush fee is refunded</b> — you keep the site.</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <a href="#start" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;padding:15px 26px;background:#A83A1C;border:2px solid #A83A1C;color:#fff;box-shadow:4px 4px 0 #14161A;transition:transform .12s,box-shadow .12s" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #14161A;color:#fff">Start my website</a>
+      <a href="tel:8887550507" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;padding:15px 26px;background:transparent;border:2px solid #14161A;color:#14161A;transition:background .12s" style-hover="background:#14161A;color:#fff">Call (888) 755-0507</a>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;margin:14px 0 0">No contract · No lock-in · You own the site and the domain</p>
+  </div>
+</section>
+
+<div data-screen-label="Proof strip" style="background:#ECEAE4;border-top:1px solid #D6D2C8;border-bottom:1px solid #D6D2C8;padding:26px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:#4A4F58"><b style="display:block;font-family:'Archivo',sans-serif;font-size:26px;font-weight:800;color:#14161A;letter-spacing:-.02em;margin-bottom:2px">20+ yrs</b>Building websites in Calgary</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:#4A4F58"><b style="display:block;font-family:'Archivo',sans-serif;font-size:26px;font-weight:800;color:#14161A;letter-spacing:-.02em;margin-bottom:2px">120+</b>Businesses launched</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:#4A4F58"><b style="display:block;font-family:'Archivo',sans-serif;font-size:26px;font-weight:800;color:#14161A;letter-spacing:-.02em;margin-bottom:2px">24 hrs</b>From start to live</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:#4A4F58"><b style="display:block;font-family:'Archivo',sans-serif;font-size:26px;font-weight:800;color:#14161A;letter-spacing:-.02em;margin-bottom:2px">Locked</b>Your price never rises</div>
+  </div>
+</div>
+
+<section data-screen-label="Problem" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Sound familiar?</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">The website isn't the problem.<br>Nobody owning it is.</h2>
+    <p style="margin:0;color:#4A4F58;font-size:clamp(1.05rem,2.4vw,1.28rem);max-width:56ch">Most Calgary businesses don't have a bad website. They have a website nobody has touched since it launched.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8;margin-top:34px">
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">01</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">Your hours are wrong</h3><p style="margin:0;font-size:15px;color:#4A4F58">Prices changed, you added a service, someone left the team. It's all still sitting there from three years ago.</p></div>
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">02</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">Your web guy went quiet</h3><p style="margin:0;font-size:15px;color:#4A4F58">You emailed twice. Nothing. Now you don't even know who has the login, the domain, or the hosting.</p></div>
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">03</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">Every edit costs you</h3><p style="margin:0;font-size:15px;color:#4A4F58">$150 and a two-week wait to change a phone number, so you stopped bothering. The site slowly went stale.</p></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Peer proof" style="padding:72px 0;background:#ECEAE4;border-top:1px solid #D6D2C8;border-bottom:1px solid #D6D2C8">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">From business owners</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">Ask them how long I've stuck around.</h2>
+    <p style="margin:0;color:#4A4F58;font-size:clamp(1.05rem,2.4vw,1.28rem);max-width:56ch">Anyone can build you a website. The question is whether they answer the phone in year three.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8;margin-top:34px">
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"They communicated often, made sure I was updated every step of the way. Well priced and always responsive to my questions, ideas and changes."</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Anatoli Barbu</b> · Barbu Entertainment</div></div>
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"Excellent service that was also on time and on budget. It has increased my business and given me new leads for additional work."</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Tony Masone</b> · law firm</div></div>
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"His work ethic is iron clad, and he researches the best tools to get things done even if it means coding something himself."</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Anna Rounseville</b></div></div>
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"Professional, asked the right questions and delivered on time. I would recommend them to family and friends!"</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Fred Diblasio</b></div></div>
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"Ryan was easy to work with and quick to respond. He makes it effortless and goes that extra mile."</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Ahmed Rammay</b></div></div>
+      <div style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:14px"><p style="margin:0;font-size:15px;color:#14161A;line-height:1.7">"His methods of search engine optimization have already shown an increase in traffic to our site."</p><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><b style="color:#14161A">Ryan Verkley</b></div></div>
+    </div>
+    <div style="border:2px solid #14161A;background:#fff;margin-top:24px;padding:20px 24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <div style="font-size:15px;color:#4A4F58;max-width:58ch"><b style="color:#14161A;font-family:'Archivo',sans-serif">The work has put me in some remarkable rooms.</b> Video endorsements from Norman Seeff, Renée Taylor and Jully Black — same attention goes into a Calgary contractor's site.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="border:1px solid #D6D2C8;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><span style="color:#F2B233">▶</span> Norman Seeff</div>
+        <div style="border:1px solid #D6D2C8;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><span style="color:#F2B233">▶</span> Renée Taylor</div>
+        <div style="border:1px solid #D6D2C8;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58"><span style="color:#F2B233">▶</span> Jully Black</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Portfolio" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Still running</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">Sites we built. Sites we still maintain.</h2>
+    <p style="margin:0;color:#4A4F58;font-size:clamp(1.05rem,2.4vw,1.28rem);max-width:56ch">These are live right now. Click any of them — that's the whole point.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8;margin-top:30px">
+      <a href="Portfolio - HVAC.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Chinook Heating &amp; Air</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">HVAC · live since 2019 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+      <a href="Portfolio - Plumbing.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Bow River Plumbing Co.</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">Plumbing · live since 2020 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+      <a href="Portfolio - Electrical.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Amped Electric</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">Electrical · live since 2021 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+      <a href="Portfolio - Roofing.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Foothills Roofing</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">Roofing · live since 2018 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+      <a href="Portfolio - Landscaping.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Prairie Edge Landscaping</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">Landscaping &amp; snow · live since 2022 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+      <a href="Portfolio - Dental.dc.html" style="display:block;background:#fff;padding:20px;transition:background .12s" style-hover="background:#ECEAE4"><strong style="display:block;font-family:'Archivo',sans-serif;font-size:16px;color:#14161A;margin-bottom:3px">Kensington Dental Studio</strong><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">Dental · live since 2021 <em style="font-style:normal;color:#A83A1C">↗</em></span></a>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;margin:16px 0 0"><a href="Home.dc.html" style="color:#A83A1C">See all 14 industries →</a></p>
+  </div>
+</section>
+
+<section data-screen-label="Comparison" style="padding:72px 0;background:#ECEAE4;border-top:1px solid #D6D2C8;border-bottom:1px solid #D6D2C8">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Straight comparison</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">What your other options actually cost.</h2>
+    <div style="overflow-x:auto;margin-top:30px;border:2px solid #14161A;background:#fff">
+      <table style="width:100%;border-collapse:collapse;min-width:660px">
+        <thead><tr>
+          <th style="padding:14px 16px;text-align:left;background:#14161A;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase"></th>
+          <th style="padding:14px 16px;text-align:left;background:#A83A1C;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase">Website Calgary</th>
+          <th style="padding:14px 16px;text-align:left;background:#14161A;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase">Calgary agency</th>
+          <th style="padding:14px 16px;text-align:left;background:#14161A;color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase">DIY builder</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">Live in</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">24 hours</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">6–12 weeks</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">40+ hrs of your time</td></tr>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">To start</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">$497 rush fee</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">$3,000–$10,000</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">$0</td></tr>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">Monthly</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">$147, locked</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">$150–$300 + change fees</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">$30–60 + your labour</td></tr>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">Changes</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">Unlimited, 48h</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">Billed hourly</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">You do them</td></tr>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">Price increases</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">Never</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">Yes</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">Yes</td></tr>
+          <tr><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;font-weight:600">You own it</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;background:#FDF6E8;font-weight:600">Always</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">Sometimes</td><td style="padding:14px 16px;border-bottom:1px solid #D6D2C8;font-size:15px;color:#4A4F58">Yes</td></tr>
+          <tr><td style="padding:14px 16px;font-size:15px;font-weight:600">Someone answers</td><td style="padding:14px 16px;font-size:15px;background:#FDF6E8;font-weight:600">Yes</td><td style="padding:14px 16px;font-size:15px;color:#4A4F58">Depends</td><td style="padding:14px 16px;font-size:15px;color:#4A4F58">No</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" data-screen-label="Pricing" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Pricing</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">You're not paying for the website.<br>You're paying for tomorrow.</h2>
+    <p style="margin:0;color:#4A4F58;font-size:clamp(1.05rem,2.4vw,1.28rem);max-width:56ch">The build is included. What costs money is jumping the queue and having it live by this time tomorrow.</p>
+    <div style="border:2px solid #14161A;margin-top:32px;background:#fff;max-width:640px">
+      <div style="background:#14161A;color:#fff;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>Work order</span><span>WC-RUSH</span></div>
+      <div style="padding:24px 20px">
+        <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>Design and build</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4A4F58">Included</span></div>
+        <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>Copy, photos, mobile</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4A4F58">Included</span></div>
+        <div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>Domain, SSL, launch</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4A4F58">Included</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid #14161A;margin-top:8px;padding-top:16px;font-family:'Archivo',sans-serif;font-weight:800;font-size:19px;gap:16px"><span>24-hour rush fee</span><span style="font-family:'JetBrains Mono',monospace;font-size:28px;color:#A83A1C;letter-spacing:-.03em">$497</span></div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#4A4F58;margin:16px 0 0;padding-top:16px;border-top:1px solid #D6D2C8;line-height:1.6">Not in a rush? <b style="color:#14161A">Standard build is 7 days with no rush fee</b> — same site, same plan, you just wait. Most people don't.</p>
+      </div>
+    </div>
+    <h3 style="margin:44px 0 6px;font-family:'Archivo',sans-serif;font-weight:700;font-size:21px">Then pick a plan.</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px;margin-top:20px">
+      <div style="border:2px solid #14161A;background:#fff;display:flex;flex-direction:column">
+        <div style="border-bottom:2px solid #14161A;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#4A4F58"><span>Plan A</span><span>WC-100</span></div>
+        <div style="padding:24px 20px;flex:1">
+          <div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em;margin-bottom:14px">Core</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:34px;letter-spacing:-.04em;line-height:1">$147<span style="font-size:14px;font-weight:400;color:#4A4F58;letter-spacing:0"> /month</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#A83A1C;font-weight:700;margin-top:8px">+ $497 rush fee (or wait 7 days)</div>
+          <div style="display:flex;flex-direction:column;margin-top:20px">
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Unlimited changes, 48h turnaround</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Hosting, SSL and domain handled</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Backups, security, uptime monitoring</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> You own the site and the domain</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Price locked for life</div>
+          </div>
+        </div>
+        <div style="padding:0 20px 22px"><a href="Funnel - Checkout.dc.html" style="display:block;text-align:center;font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;padding:15px 26px;background:transparent;border:2px solid #14161A;color:#14161A;transition:background .12s" style-hover="background:#14161A;color:#fff">Start with Core</a></div>
+      </div>
+      <div style="border:2px solid #A83A1C;box-shadow:6px 6px 0 #A83A1C;background:#fff;display:flex;flex-direction:column">
+        <div style="border-bottom:2px solid #A83A1C;background:#A83A1C;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase"><span>Plan B · Most picked</span><span>WC-200</span></div>
+        <div style="padding:24px 20px;flex:1">
+          <div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em;margin-bottom:14px">Growth</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:34px;letter-spacing:-.04em;line-height:1">$497<span style="font-size:14px;font-weight:400;color:#4A4F58;letter-spacing:0"> /month</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#A83A1C;font-weight:700;margin-top:8px">+ $497 rush fee (or wait 7 days)</div>
+          <div style="display:flex;flex-direction:column;margin-top:20px">
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Everything in Core</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Google Business Profile managed</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Local SEO for Calgary searches</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Review requests on autopilot</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Built to be found in AI search</div>
+            <div style="font-size:15px;padding:7px 0;color:#4A4F58;border-top:1px solid #D6D2C8"><span style="color:#F2B233;font-weight:700">→</span> Monthly report, plain English</div>
+          </div>
+        </div>
+        <div style="padding:0 20px 22px"><a href="Funnel - Checkout.dc.html" style="display:block;text-align:center;font-family:'Archivo',sans-serif;font-weight:700;font-size:15px;padding:15px 26px;background:#A83A1C;border:2px solid #A83A1C;color:#fff;box-shadow:4px 4px 0 #14161A;transition:transform .12s,box-shadow .12s" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #14161A;color:#fff">Start with Growth</a></div>
+      </div>
+    </div>
+    <div style="background:#14161A;color:#fff;padding:18px 22px;margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.6"><b style="color:#F2B233">The price lock:</b> whatever you sign up at today is what you pay in ten years. No annual increases, no renewal bumps, no "your plan has changed" emails.</div>
+  </div>
+</section>
+
+<section data-screen-label="Guarantee" style="padding:72px 0;background:#1E3A5C;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#F2B233;margin-bottom:18px">The guarantee</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem);color:#fff">Live in 24 hours,<br>or the rush fee comes back.</h2>
+    <p style="margin:0;color:#C3CFDD;max-width:56ch">Start before 2pm and your site is live by this time tomorrow. If we miss it, the $497 is refunded — and you still keep the website. Then take 30 days. If it isn't right, cancel and keep the site and the domain anyway.</p>
+    <p style="margin:16px 0 0;color:#C3CFDD;font-size:15px;max-width:56ch">Orders placed after 2pm MT start the next business day at 9am, live by 9am the day after. Weekend orders start Monday. You'll get your exact go-live time in writing the moment payment clears.</p>
+  </div>
+</section>
+
+<section id="start" data-screen-label="Start form" style="padding:72px 0;background:#14161A;color:#fff">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#F2B233;margin-bottom:18px">Start here</div>
+    <h2 style="margin:0 0 14px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem);color:#fff">Two ways to go.</h2>
+    <p style="margin:0;color:#A8AEB8;max-width:56ch">Pay the rush fee and we start now — or send the details and I'll call you back today.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:44px;margin-top:26px;align-items:start">
+      <form style="display:grid;gap:12px" action="#" method="POST">
+        <input type="text" name="name" placeholder="Your name" required="required" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <input type="text" name="business" placeholder="Business name" required="required" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <input type="tel" name="phone" placeholder="Phone (403 / 587)" required="required" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <input type="email" name="email" placeholder="Email" required="required" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <select name="plan" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0">
+          <option value="">Which plan are you leaning toward?</option>
+          <option value="core">Core — $147/mo</option>
+          <option value="growth">Growth — $497/mo</option>
+          <option value="unsure">Not sure yet</option>
+        </select>
+        <select name="speed" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0">
+          <option value="rush">Rush — live in 24 hours ($497)</option>
+          <option value="standard">Standard — 7 days, no rush fee</option>
+        </select>
+        <textarea name="notes" rows="3" placeholder="What does your business do?" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0;resize:vertical" style-focus="outline:2px solid #F2B233;outline-offset:1px"></textarea>
+        <button type="submit" style="background:#F2B233;color:#14161A;border:none;padding:16px;font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;cursor:pointer;transition:filter .12s" style-hover="filter:brightness(1.08)">Send it — call me back today</button>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#767D89;margin:6px 0 0">No card needed to start the conversation.</p>
+      </form>
+      <div style="border:1px solid #3A3F49;padding:22px">
+        <h3 style="margin:0 0 16px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px;color:#fff">Or skip the form.</h3>
+        <a href="tel:8887550507" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #3A3F49;color:#fff;font-size:15px" style-hover="color:#F2B233">Call (888) 755-0507 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2B233">Fastest</span></a>
+        <a href="sms:8887550507" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #3A3F49;color:#fff;font-size:15px" style-hover="color:#F2B233">Text me the details <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2B233">SMS</span></a>
+        <a href="mailto:hello@bowtiekreative.com" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #3A3F49;color:#fff;font-size:15px" style-hover="color:#F2B233">hello@bowtiekreative.com <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2B233">Email</span></a>
+        <a href="#" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;color:#fff;font-size:15px" style-hover="color:#F2B233">Book 15 minutes <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2B233">Calendar</span></a>
+        <div style="margin-top:18px">
+          <a href="Funnel - Checkout.dc.html" style="display:block;text-align:center;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;padding:15px 26px;background:#F2B233;border:2px solid #F2B233;color:#14161A;box-shadow:4px 4px 0 #A83A1C" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #A83A1C;color:#14161A">Pay the $497 rush fee →</a>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#767D89;margin:10px 0 0">Starts the 24-hour clock the moment it clears. Refunded in full if we miss it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="FAQ" style="padding:72px 0">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Questions</div>
+    <h2 style="margin:0 0 26px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.85rem,5vw,3rem)">Asked and answered.</h2>
+    <div style="display:flex;flex-direction:column">
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">Why a rush fee instead of a build fee?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">Because that's what you're actually buying. The build is handled. What costs us something is dropping everything and getting your site live by tomorrow instead of next week. If tomorrow doesn't matter to you, take the 7-day standard build and keep the $497.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">How is this live in 24 hours?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">Twenty years of doing this, plus we've automated the parts that used to take weeks. What's left is the part that needs a person: getting it right for your business, and putting it live properly.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">What does "unlimited changes" really mean?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">Unlimited requests, handled one at a time, most within 48 hours. New page, seasonal promo, updated photos, changed hours — send it and it gets done. No change fee, no hourly clock. A full rebrand or an online store is a bigger job and gets quoted separately.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">Who owns the website?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">You do. The site, the domain, the content. If you ever leave, it comes with you. Nothing is held hostage.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">Is there a contract?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">No. Month to month, cancel any time, no penalty. The only thing locked is your price — and that's locked in your favour.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">What if I already have a website?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">We replace it and keep what's worth keeping — your domain, your rankings, your content. Nothing goes dark during the switch.</p></details>
+      <details style="border-top:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">Why is this cheaper than an agency quote?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">You're not paying for a six-week project cycle, a sales team, or a downtown office. You're paying for a website and someone who keeps it running.</p></details>
+      <details style="border-top:1px solid #D6D2C8;border-bottom:1px solid #D6D2C8;padding:18px 0"><summary style="font-family:'Archivo',sans-serif;font-weight:700;font-size:17px;cursor:pointer">Do you work outside Calgary?</summary><p style="margin:10px 0 0;font-size:15px;color:#4A4F58;max-width:62ch">Airdrie, Okotoks, Cochrane, Chestermere and Strathmore, yes. Beyond that, ask.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#ECEAE4;border-top:1px solid #D6D2C8;padding:34px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;line-height:1.8">
+  <div style="max-width:1080px;margin:0 auto;padding:0 22px">
+    <strong style="color:#14161A">Website Calgary</strong> · Bow Tie Kreative · 2012 1st NW, Calgary AB · <a href="tel:8887550507" style="color:#14161A">(888) 755-0507</a> · <a href="mailto:hello@bowtiekreative.com" style="color:#14161A">hello@bowtiekreative.com</a><br>
+    Websites live in 24 hours. Unlimited changes. Price locked for life.<br>
+    <a href="#" style="color:#14161A">Terms</a> · <a href="#" style="color:#14161A">Privacy</a> · <a href="#" style="color:#14161A">Refund policy</a> · <a href="Home.dc.html" style="color:#A83A1C">All deliverables →</a>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { now: Date.now(), end: Date.now() + 24*3600*1000 };
+  componentDidMount() {
+    this._t = setInterval(() => this.setState({ now: Date.now() }), 1000);
+  }
+  componentWillUnmount() { clearInterval(this._t); }
+  renderVals() {
+    const pad = n => String(n).padStart(2, '0');
+    const d = Math.max(0, this.state.end - this.state.now);
+    const h = Math.floor(d/3.6e6), m = Math.floor(d%3.6e6/6e4), s = Math.floor(d%6e4/1000);
+    return {
+      clock: pad(h)+':'+pad(m)+':'+pad(s),
+      deadline: new Date(this.state.end).toLocaleString('en-CA',{weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}),
+      stamp: new Date(this.state.now).toLocaleDateString('en-CA')
+    };
+  }
+}
+</script>
+</body>
+</html>

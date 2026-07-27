@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#FAF7F2;color:#33291F;font-family:'Karla',system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:#8A5A2B;text-decoration:none}a:hover{color:#33291F}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#FAF7F2;border-bottom:1px solid #E7DFD3;position:sticky;top:0;z-index:50">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:78px;gap:16px">
+    <div style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:21px">Northmount <span style="color:#8A5A2B">Renovations</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:700;font-size:15px">
+      <a href="#projects" style="color:#33291F">Projects</a><a href="#process" style="color:#33291F">Process</a><a href="#reviews" style="color:#33291F">Reviews</a>
+      <a href="#consult" style="border:2px solid #33291F;color:#33291F;padding:11px 22px" style-hover="background:#33291F;color:#fff">Book a consult</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:84px 0 64px">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:52px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8A5A2B;font-weight:700;margin-bottom:18px">Kitchens · Basements · Whole homes — Calgary since 2010</div>
+      <h1 style="margin:0 0 20px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(2.1rem,5vw,3.3rem);line-height:1.2">The renovation that finishes on the date we said.</h1>
+      <p style="margin:0 0 30px;color:#6B5D4C;font-size:19px;max-width:48ch">Fixed-price contracts, a schedule you can see, and one project manager who answers the phone. Renovating shouldn't feel like a hostage situation.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#consult" style="background:#33291F;color:#fff;padding:16px 32px;font-weight:700;font-size:17px" style-hover="background:#8A5A2B;color:#fff">Book a free consult</a>
+        <a href="#projects" style="color:#8A5A2B;font-weight:700;font-size:17px;padding:16px 0;border-bottom:2px solid #8A5A2B">See finished projects</a>
+      </div>
+    </div>
+    <div style="border:2px dashed #D8CDBB;background:repeating-linear-gradient(45deg,#F0EAE0,#F0EAE0 22px,#EAE3D6 22px,#EAE3D6 44px);min-height:360px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#A6987F;line-height:1.8">photo: finished kitchen,<br>natural light, real project</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#33291F;color:#fff">
+  <div style="max-width:1100px;margin:0 auto;padding:22px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:15px">
+    <span>Fixed-price contracts</span><span>310+ projects completed</span><span>Licensed &amp; bonded</span><span>2-yr workmanship warranty</span><span>Weekly progress reports</span>
+  </div>
+</div>
+<section id="projects" data-screen-label="Projects" style="padding:72px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem)">What we take on</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border:1px solid #E7DFD3;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-size:18px">Kitchens</h3><p style="margin:0;font-size:15px;color:#6B5D4C">Full guts to cabinet refits. Typical range $45k–$120k, quoted to the dollar before demo day.</p></div>
+      <div style="background:#fff;border:1px solid #E7DFD3;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-size:18px">Basement developments</h3><p style="margin:0;font-size:15px;color:#6B5D4C">Legal suites, rec rooms, home offices. Permits, egress, soundproofing — done right.</p></div>
+      <div style="background:#fff;border:1px solid #E7DFD3;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-size:18px">Bathrooms</h3><p style="margin:0;font-size:15px;color:#6B5D4C">Ensuites, main baths, aging-in-place conversions. Waterproofed like it matters, because it does.</p></div>
+      <div style="background:#fff;border:1px solid #E7DFD3;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-size:18px">Whole-home &amp; additions</h3><p style="margin:0;font-size:15px;color:#6B5D4C">Main-floor reworks, second-storey additions, bungalow transformations in Calgary's older neighbourhoods.</p></div>
+    </div>
+  </div>
+</section>
+<section id="process" data-screen-label="Process" style="padding:72px 0;background:#fff;border-top:1px solid #E7DFD3;border-bottom:1px solid #E7DFD3">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem)">How we keep it sane</h2>
+    <p style="margin:0 0 36px;color:#6B5D4C;max-width:60ch">Every horror story you've heard comes from a missing step below.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px">
+      <div><div style="font-family:'Libre Baskerville',serif;font-size:30px;color:#8A5A2B;margin-bottom:10px">1.</div><b>Design &amp; fixed quote</b><p style="margin:6px 0 0;font-size:15px;color:#6B5D4C">Drawings, selections, and a contract price. Change orders in writing only — no drifting invoices.</p></div>
+      <div><div style="font-family:'Libre Baskerville',serif;font-size:30px;color:#8A5A2B;margin-bottom:10px">2.</div><b>Schedule you can see</b><p style="margin:6px 0 0;font-size:15px;color:#6B5D4C">A week-by-week plan before we start, updated every Friday with photos.</p></div>
+      <div><div style="font-family:'Libre Baskerville',serif;font-size:30px;color:#8A5A2B;margin-bottom:10px">3.</div><b>One project manager</b><p style="margin:6px 0 0;font-size:15px;color:#6B5D4C">One phone number, whole project. Trades are ours, not a rotating cast off a job board.</p></div>
+      <div><div style="font-family:'Libre Baskerville',serif;font-size:30px;color:#8A5A2B;margin-bottom:10px">4.</div><b>Holdback until you're happy</b><p style="margin:6px 0 0;font-size:15px;color:#6B5D4C">Final 10% only when the deficiency list is at zero. Your list, not ours.</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Featured project" style="padding:72px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+    <div style="border:2px dashed #D8CDBB;background:repeating-linear-gradient(45deg,#F0EAE0,#F0EAE0 22px,#EAE3D6 22px,#EAE3D6 44px);min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#A6987F;line-height:1.8">before/after slider:<br>Highland Park bungalow</span></div>
+    <div>
+      <div style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8A5A2B;font-weight:700;margin-bottom:14px">Featured project</div>
+      <h2 style="margin:0 0 14px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(1.6rem,3.5vw,2.2rem)">Highland Park bungalow, opened up.</h2>
+      <p style="margin:0 0 18px;color:#6B5D4C;font-size:16px">1958 bungalow: bearing wall out, kitchen relocated, basement suite added. Quoted $186,000 — invoiced $186,000, eleven days early.</p>
+      <div style="display:flex;gap:28px;flex-wrap:wrap">
+        <div><b style="font-family:'Libre Baskerville',serif;font-size:24px;color:#8A5A2B">14 wks</b><span style="display:block;font-size:13px;color:#6B5D4C">quoted &amp; delivered</span></div>
+        <div><b style="font-family:'Libre Baskerville',serif;font-size:24px;color:#8A5A2B">$0</b><span style="display:block;font-size:13px;color:#6B5D4C">surprise costs</span></div>
+        <div><b style="font-family:'Libre Baskerville',serif;font-size:24px;color:#8A5A2B">Legal</b><span style="display:block;font-size:13px;color:#6B5D4C">suite, permitted</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="reviews" data-screen-label="Reviews" style="padding:72px 0;background:#33291F;color:#fff">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem)">Clients, in their words</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#3F3326;padding:26px 24px"><p style="margin:0 0 14px;font-size:15px;color:#E4D9C8">"Our last renovation, with another company, ran five months over. This one finished early. I didn't know that was possible."</p><b style="font-size:14px;color:#B8A88E">Sarah &amp; Jim K. · Highland Park</b></div>
+      <div style="background:#3F3326;padding:26px 24px"><p style="margin:0 0 14px;font-size:15px;color:#E4D9C8">"The Friday email with photos and next week's plan was worth the price alone. We always knew exactly where the project stood."</p><b style="font-size:14px;color:#B8A88E">Devon A. · Capitol Hill</b></div>
+      <div style="background:#3F3326;padding:26px 24px"><p style="margin:0 0 14px;font-size:15px;color:#E4D9C8">"They found asbestos, handled abatement, and still hit the date. The change order was a signed document, not a shrug and a bigger bill."</p><b style="font-size:14px;color:#B8A88E">Priya &amp; Mat R. · Mount Pleasant</b></div>
+    </div>
+  </div>
+</section>
+<section id="consult" data-screen-label="Consult form" style="padding:72px 0">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem);text-align:center">Book a free consult</h2>
+    <p style="margin:0 0 28px;color:#6B5D4C;text-align:center">An hour at your place. You'll leave with a realistic range and a straight answer on feasibility.</p>
+    <form style="display:grid;gap:12px;background:#fff;border:1px solid #E7DFD3;padding:28px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:1px solid #D8CDBB;font-size:16px;font-family:'Karla',sans-serif;border-radius:0" style-focus="outline:2px solid #8A5A2B" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:1px solid #D8CDBB;font-size:16px;font-family:'Karla',sans-serif;border-radius:0" style-focus="outline:2px solid #8A5A2B" />
+      </div>
+      <select style="padding:14px;border:1px solid #D8CDBB;font-size:16px;font-family:'Karla',sans-serif;border-radius:0"><option>Project type</option><option>Kitchen</option><option>Basement development</option><option>Bathroom</option><option>Whole home / addition</option></select>
+      <textarea rows="3" placeholder="Tell us about the project and rough timeline" style="padding:14px;border:1px solid #D8CDBB;font-size:16px;font-family:'Karla',sans-serif;border-radius:0;resize:vertical" style-focus="outline:2px solid #8A5A2B"></textarea>
+      <button type="submit" style="background:#33291F;color:#fff;border:none;padding:16px;font-weight:700;font-size:17px;cursor:pointer;font-family:'Karla',sans-serif" style-hover="background:#8A5A2B">Request my consult</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#241C14;color:#A6987F;padding:36px 0;font-size:14px">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Libre Baskerville',serif;font-size:16px">Northmount Renovations</b><br>Calgary AB · <a href="tel:4035550138" style="color:#E4D9C8">(403) 555-0138</a> · Licensed, bonded, insured</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#C89858">Website by Website Calgary — live since 2019</a><br><a href="Home.dc.html" style="color:#E4D9C8">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

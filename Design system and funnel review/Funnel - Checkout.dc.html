@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECEAE4;color:#14161A;font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#A83A1C;text-decoration:none}a:hover{color:#14161A}
+</style>
+</helmet>
+<header style="border-bottom:1px solid #D6D2C8;background:#fff">
+  <div style="max-width:980px;margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px">
+    <a href="Funnel - Landing.dc.html" style="font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;color:#14161A">Website<span style="color:#A83A1C">Calgary</span></a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4A4F58">Secure checkout · <span style="color:#A83A1C">Step 1 of 1</span></span>
+  </div>
+</header>
+
+<div data-screen-label="Checkout" style="max-width:980px;margin:0 auto;padding:48px 22px 80px">
+  <h1 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(1.9rem,5vw,2.9rem)">Start the clock.</h1>
+  <p style="margin:0 0 34px;color:#4A4F58;max-width:56ch">Pay now and you'll have your exact go-live time in writing within the hour.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:28px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="border:2px solid #14161A;background:#fff">
+        <div style="background:#14161A;color:#fff;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>1 · Pick your plan</span><span>WC-100 / WC-200</span></div>
+        <div style="padding:18px;display:grid;gap:12px">
+          <label style="display:flex;gap:14px;align-items:flex-start;border:2px solid {{coreBorder}};padding:16px;cursor:pointer;background:{{coreBg}}">
+            <input type="radio" name="plan" checked="{{isCore}}" onChange="{{pickCore}}" style="margin-top:5px;accent-color:#A83A1C" />
+            <span style="flex:1"><b style="font-family:'Archivo',sans-serif;font-size:17px;display:block">Core — $147/mo</b><span style="font-size:14px;color:#4A4F58">Unlimited changes, hosting, security. You own everything. Price locked for life.</span></span>
+          </label>
+          <label style="display:flex;gap:14px;align-items:flex-start;border:2px solid {{growthBorder}};padding:16px;cursor:pointer;background:{{growthBg}}">
+            <input type="radio" name="plan" checked="{{isGrowth}}" onChange="{{pickGrowth}}" style="margin-top:5px;accent-color:#A83A1C" />
+            <span style="flex:1"><b style="font-family:'Archivo',sans-serif;font-size:17px;display:block">Growth — $497/mo <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:#A83A1C;text-transform:uppercase">· Most picked</span></b><span style="font-size:14px;color:#4A4F58">Core plus Google Business Profile, local SEO, review automation, AI-search visibility.</span></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="border:2px solid #14161A;background:#fff">
+        <div style="background:#14161A;color:#fff;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>2 · Speed</span><span>24h / 7d</span></div>
+        <div style="padding:18px;display:grid;gap:12px">
+          <label style="display:flex;gap:14px;align-items:flex-start;border:2px solid {{rushBorder}};padding:16px;cursor:pointer;background:{{rushBg}}">
+            <input type="radio" name="speed" checked="{{isRush}}" onChange="{{pickRush}}" style="margin-top:5px;accent-color:#A83A1C" />
+            <span style="flex:1"><b style="font-family:'Archivo',sans-serif;font-size:17px;display:block">Rush — live in 24 hours · $497</b><span style="font-size:14px;color:#4A4F58">Refunded in full if we miss the window. You keep the site.</span></span>
+          </label>
+          <label style="display:flex;gap:14px;align-items:flex-start;border:2px solid {{stdBorder}};padding:16px;cursor:pointer;background:{{stdBg}}">
+            <input type="radio" name="speed" checked="{{isStd}}" onChange="{{pickStd}}" style="margin-top:5px;accent-color:#A83A1C" />
+            <span style="flex:1"><b style="font-family:'Archivo',sans-serif;font-size:17px;display:block">Standard — 7 days · $0</b><span style="font-size:14px;color:#4A4F58">Same site, same plan, no rush fee. You just wait.</span></span>
+          </label>
+          <sc-if value="{{isRush}}" hint-placeholder-val="{{ true }}">
+            <label style="display:flex;gap:12px;align-items:center;padding:12px 16px;border:1px dashed #A83A1C;background:#FDF6E8;cursor:pointer;font-size:14px;color:#4A4F58">
+              <input type="checkbox" checked="{{split}}" onChange="{{toggleSplit}}" style="accent-color:#A83A1C" />
+              <span>Split the rush fee: <b style="color:#14161A">2 × $249</b> — second payment on day 30.</span>
+            </label>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="border:2px solid #F2B233;background:#FDF6E8;padding:18px;display:flex;gap:14px;align-items:flex-start">
+        <input type="checkbox" checked="{{bump}}" onChange="{{toggleBump}}" style="margin-top:5px;width:18px;height:18px;accent-color:#A83A1C" />
+        <div>
+          <b style="font-family:'Archivo',sans-serif;font-size:17px;display:block">Add Google Business Profile Rescue — $97</b>
+          <p style="margin:6px 0 0;font-size:14px;color:#4A4F58">Most Calgary businesses are losing calls to competitors with better-optimized map listings. We'll fix your categories, services, photos, hours and posting in the same 24 hours. One time, not monthly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="border:2px solid #14161A;background:#fff">
+        <div style="background:#A83A1C;color:#fff;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>Work order</span><span>{{serial}}</span></div>
+        <div style="padding:20px 18px">
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>{{planName}} plan</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700">{{planPrice}}/mo</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>{{speedLabel}}</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700">{{speedPrice}}</span></div>
+          <sc-if value="{{bump}}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #D6D2C8;font-size:15px;gap:16px"><span>GBP Rescue</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700">$97</span></div>
+          </sc-if>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid #14161A;margin-top:8px;padding-top:14px;font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;gap:16px"><span>Due today</span><span style="font-family:'JetBrains Mono',monospace;font-size:30px;color:#A83A1C;letter-spacing:-.03em">{{dueToday}}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#4A4F58;font-family:'JetBrains Mono',monospace;margin-top:6px"><span>Then monthly</span><span>{{planPrice}}/mo, locked for life</span></div>
+          <a href="Funnel - Thank You.dc.html" style="display:block;text-align:center;margin-top:18px;font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;padding:16px;background:#F2B233;border:2px solid #F2B233;color:#14161A;box-shadow:4px 4px 0 #A83A1C;transition:transform .12s,box-shadow .12s" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #A83A1C;color:#14161A">Pay {{dueToday}} — start the clock →</a>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin:12px 0 0;line-height:1.6">Live in 24 hours or the rush fee is refunded — you keep the site. 30 days to cancel and keep the site and domain anyway. No contract.</p>
+        </div>
+      </div>
+      <div style="border:1px solid #D6D2C8;background:#fff;padding:18px 20px">
+        <p style="margin:0;font-size:14px;color:#14161A;line-height:1.7">"Excellent service that was also on time and on budget. It has increased my business and given me new leads for additional work."</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin-top:10px"><b style="color:#14161A">Tony Masone</b> · law firm</div>
+      </div>
+      <div style="border:1px solid #D6D2C8;background:#fff;padding:18px 20px">
+        <b style="font-family:'Archivo',sans-serif;font-size:15px;display:block;margin-bottom:6px">Not ready to replace your site?</b>
+        <p style="margin:0 0 10px;font-size:14px;color:#4A4F58">Website Rescue — $297 one-time. Keep your site; we fix the five things costing you the most. Or Lights On at $97/mo with two changes a month.</p>
+        <a href="tel:8887550507" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#A83A1C">Call (888) 755-0507 to talk it through →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#fff;border-top:1px solid #D6D2C8;padding:30px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;line-height:1.8">
+  <div style="max-width:980px;margin:0 auto;padding:0 22px">
+    <strong style="color:#14161A">Website Calgary</strong> · Bow Tie Kreative · 2012 1st NW, Calgary AB · <a href="mailto:hello@bowtiekreative.com" style="color:#14161A">hello@bowtiekreative.com</a> · <a href="Home.dc.html" style="color:#A83A1C">All deliverables</a>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { plan: 'growth', speed: 'rush', bump: true, split: false };
+  renderVals() {
+    const { plan, speed, bump, split } = this.state;
+    const isCore = plan === 'core', isRush = speed === 'rush';
+    const rushDue = split ? 249 : 497;
+    const due = (isRush ? rushDue : 0) + (bump ? 97 : 0);
+    const fmt = n => '$' + n.toLocaleString('en-CA');
+    return {
+      isCore, isGrowth: !isCore, isRush, isStd: !isRush, bump, split,
+      pickCore: () => this.setState({ plan: 'core' }),
+      pickGrowth: () => this.setState({ plan: 'growth' }),
+      pickRush: () => this.setState({ speed: 'rush' }),
+      pickStd: () => this.setState({ speed: 'standard', split: false }),
+      toggleBump: () => this.setState(s => ({ bump: !s.bump })),
+      toggleSplit: () => this.setState(s => ({ split: !s.split })),
+      coreBorder: isCore ? '#A83A1C' : '#D6D2C8', coreBg: isCore ? '#FDF6E8' : '#fff',
+      growthBorder: !isCore ? '#A83A1C' : '#D6D2C8', growthBg: !isCore ? '#FDF6E8' : '#fff',
+      rushBorder: isRush ? '#A83A1C' : '#D6D2C8', rushBg: isRush ? '#FDF6E8' : '#fff',
+      stdBorder: !isRush ? '#A83A1C' : '#D6D2C8', stdBg: !isRush ? '#FDF6E8' : '#fff',
+      planName: isCore ? 'Core' : 'Growth',
+      planPrice: isCore ? '$147' : '$497',
+      serial: isCore ? 'WC-100' : 'WC-200',
+      speedLabel: isRush ? (split ? '24-hour rush (1 of 2 payments)' : '24-hour rush fee') : 'Standard build, 7 days',
+      speedPrice: isRush ? fmt(rushDue) : '$0',
+      dueToday: fmt(due)
+    };
+  }
+}
+</script>
+</body>
+</html>

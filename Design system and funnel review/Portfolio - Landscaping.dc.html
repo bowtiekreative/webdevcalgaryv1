@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#FBFAF6;color:#26301D;font-family:'DM Sans',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#3E5C2A;text-decoration:none}a:hover{color:#26301D}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#FBFAF6;border-bottom:1px solid #E3E0D3;position:sticky;top:0;z-index:50">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px">
+    <div style="font-family:'Lora',serif;font-weight:700;font-size:23px;color:#26301D">Prairie Edge <span style="color:#3E5C2A;font-style:italic">Landscaping</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:500;font-size:15px">
+      <a href="#summer" style="color:#26301D">Landscaping</a><a href="#winter" style="color:#26301D">Snow</a><a href="#work" style="color:#26301D">Our work</a>
+      <a href="#estimate" style="background:#3E5C2A;color:#fff;padding:12px 24px;border-radius:30px;font-weight:700" style-hover="background:#26301D;color:#fff">Free estimate</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:80px 0 64px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#3E5C2A;font-weight:700;margin-bottom:16px">Year-round property care · Calgary</div>
+      <h1 style="margin:0 0 18px;font-family:'Lora',serif;font-weight:700;font-size:clamp(2.3rem,5.5vw,3.7rem);line-height:1.12">Beautiful in July.<br>Plowed by 7am in January.</h1>
+      <p style="margin:0 0 28px;color:#5C6650;font-size:19px;max-width:50ch">Design, build and maintenance in the growing season — and the snow contract that means you never touch a shovel.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#estimate" style="background:#3E5C2A;color:#fff;padding:16px 32px;border-radius:30px;font-weight:700;font-size:17px" style-hover="background:#26301D;color:#fff">Get a free estimate</a>
+        <a href="#winter" style="border:2px solid #3E5C2A;color:#3E5C2A;padding:14px 30px;border-radius:30px;font-weight:700;font-size:17px" style-hover="background:#3E5C2A;color:#fff">Snow contracts</a>
+      </div>
+    </div>
+    <div style="border:2px dashed #CFCBB8;background:repeating-linear-gradient(45deg,#F0EEE3,#F0EEE3 22px,#EAE7DA 22px,#EAE7DA 44px);min-height:340px;border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#9A9682;line-height:1.8">photo: finished backyard,<br>paver patio + planting beds</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="background:#3E5C2A;color:#fff">
+  <div style="max-width:1120px;margin:0 auto;padding:20px 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:15px">
+    <span>Serving Calgary since 2015</span><span>4.9★ · 210 reviews</span><span>Design + build + maintain</span><span>Seasonal contracts from $189/mo</span>
+  </div>
+</div>
+<section id="summer" data-screen-label="Summer services" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem)">April to October</h2>
+    <p style="margin:0 0 34px;color:#5C6650;max-width:60ch">One crew, one point of contact, a yard that stays photo-ready.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Landscape design &amp; build</h3><p style="margin:0;font-size:15px;color:#5C6650">Patios, retaining walls, planting plans built for zone 4a — things that survive a chinook cycle.</p></div>
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Weekly maintenance</h3><p style="margin:0;font-size:15px;color:#5C6650">Mowing, edging, beds, pruning. Same crew, same day, every week.</p></div>
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Sod &amp; irrigation</h3><p style="margin:0;font-size:15px;color:#5C6650">New lawns, drip lines, smart controllers set for Calgary's watering schedule.</p></div>
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Spring &amp; fall cleanup</h3><p style="margin:0;font-size:15px;color:#5C6650">Power raking, aeration, gutter clearing, beds put to sleep properly.</p></div>
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Tree &amp; shrub care</h3><p style="margin:0;font-size:15px;color:#5C6650">Pruning, deep-root feeding, and honest advice on what won't make it.</p></div>
+      <div style="background:#fff;border:1px solid #E3E0D3;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:19px">Fences &amp; decks</h3><p style="margin:0;font-size:15px;color:#5C6650">Pressure-treated and composite builds, stained and sealed before handoff.</p></div>
+    </div>
+  </div>
+</section>
+<section id="winter" data-screen-label="Snow" style="padding:72px 0;background:#26301D;color:#fff">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+    <div>
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#AECB8E;font-weight:700;margin-bottom:14px">November to March</div>
+      <h2 style="margin:0 0 16px;font-family:'Lora',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem)">Snow contracts that mean it.</h2>
+      <p style="margin:0;color:#C4CDB6;font-size:17px;max-width:52ch">Cleared within 12 hours of snowfall end, every time — driveway, walks, and the city sidewalk so you don't get the bylaw letter. GPS-tracked trucks, photo proof on completion.</p>
+    </div>
+    <div style="background:#31401F;border-radius:16px;padding:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid #465633"><span>Residential season contract</span><b style="font-family:'Lora',serif;font-size:22px;color:#AECB8E">from $189/mo</b></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid #465633"><span>Seniors' rate</span><b style="font-family:'Lora',serif;font-size:22px;color:#AECB8E">from $149/mo</b></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0"><span>Commercial lots</span><b style="font-family:'Lora',serif;font-size:22px;color:#AECB8E">quoted</b></div>
+      <a href="#estimate" style="display:block;background:#AECB8E;color:#26301D;padding:14px;text-align:center;border-radius:30px;font-weight:700;margin-top:14px" style-hover="background:#fff;color:#26301D">Reserve for next season →</a>
+    </div>
+  </div>
+</section>
+<section id="work" data-screen-label="Our work" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Lora',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem)">Before and after</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <div><div style="border:2px dashed #CFCBB8;background:repeating-linear-gradient(45deg,#F0EEE3,#F0EEE3 22px,#EAE7DA 22px,#EAE7DA 44px);height:210px;border-radius:14px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#9A9682">before/after: backyard</span></div><p style="margin:10px 0 0;font-size:14px;color:#5C6650"><b style="color:#26301D">Full backyard rebuild</b> · Auburn Bay · patio, pergola, low-water beds</p></div>
+      <div><div style="border:2px dashed #CFCBB8;background:repeating-linear-gradient(45deg,#F0EEE3,#F0EEE3 22px,#EAE7DA 22px,#EAE7DA 44px);height:210px;border-radius:14px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#9A9682">before/after: front yard</span></div><p style="margin:10px 0 0;font-size:14px;color:#5C6650"><b style="color:#26301D">Front yard xeriscape</b> · Sunnyside · watering cut by 80%</p></div>
+      <div><div style="border:2px dashed #CFCBB8;background:repeating-linear-gradient(45deg,#F0EEE3,#F0EEE3 22px,#EAE7DA 22px,#EAE7DA 44px);height:210px;border-radius:14px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#9A9682">photo: retaining wall</span></div><p style="margin:10px 0 0;font-size:14px;color:#5C6650"><b style="color:#26301D">Retaining wall + steps</b> · Cougar Ridge · engineered, permitted</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Reviews" style="padding:72px 0;background:#fff;border-top:1px solid #E3E0D3;border-bottom:1px solid #E3E0D3">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Lora',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem)">From the neighbourhood</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#FBFAF6;border-radius:14px;padding:26px 24px"><div style="color:#3E5C2A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Three winters on the snow contract. It has snowed overnight and been cleared before I left for work every single time."</p><b style="font-size:14px;color:#5C6650">Marie L. · Brentwood</b></div>
+      <div style="background:#FBFAF6;border-radius:14px;padding:26px 24px"><div style="color:#3E5C2A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"They designed around what actually survives here instead of selling us a magazine yard that dies in February. Two years in, everything's alive."</p><b style="font-size:14px;color:#5C6650">Dan &amp; Sophie R. · Auburn Bay</b></div>
+      <div style="background:#FBFAF6;border-radius:14px;padding:26px 24px"><div style="color:#3E5C2A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Same two guys every Thursday all summer. They text when they're done and the gate is always latched. Dog appreciates that."</p><b style="font-size:14px;color:#5C6650">Kevin O. · Lakeview</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Area" style="padding:56px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-size:19px;color:#3E5C2A">Service area</h3><p style="margin:0;color:#5C6650;font-size:15px">Calgary NW &amp; SW focus · SE/NE for snow contracts · Cochrane</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-size:19px;color:#3E5C2A">Season booking</h3><p style="margin:0;color:#5C6650;font-size:15px">Summer 2027 design slots open now · Snow contracts close Oct 15</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Lora',serif;font-size:19px;color:#3E5C2A">Direct</h3><p style="margin:0;color:#5C6650;font-size:15px"><a href="tel:4035550156">(403) 555-0156</a> · hello@prairieedge.ca</p></div>
+  </div>
+</section>
+<section id="estimate" data-screen-label="Estimate form" style="padding:72px 0;background:#3E5C2A;color:#fff">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Lora',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);text-align:center">Free estimate</h2>
+    <p style="margin:0 0 28px;color:#D6E3C6;text-align:center">Tell us about the yard. We'll walk it with you within the week.</p>
+    <form style="display:grid;gap:12px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'DM Sans',sans-serif" style-focus="outline:3px solid #AECB8E" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'DM Sans',sans-serif" style-focus="outline:3px solid #AECB8E" />
+      </div>
+      <select style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'DM Sans',sans-serif"><option>What are you after?</option><option>Design &amp; build project</option><option>Weekly maintenance</option><option>Snow contract</option><option>Cleanup / one-time</option></select>
+      <textarea rows="3" placeholder="Tell us about the space" style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'DM Sans',sans-serif;resize:vertical" style-focus="outline:3px solid #AECB8E"></textarea>
+      <button type="submit" style="background:#AECB8E;color:#26301D;border:none;padding:16px;border-radius:30px;font-weight:700;font-size:17px;cursor:pointer;font-family:'DM Sans',sans-serif" style-hover="background:#fff">Request my estimate</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#1C2414;color:#8FA07C;padding:36px 0;font-size:14px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Lora',serif;font-size:16px">Prairie Edge Landscaping &amp; Snow</b><br>Calgary AB · <a href="tel:4035550156" style="color:#C4CDB6">(403) 555-0156</a> · Insured · WCB</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#AECB8E">Website by Website Calgary — live since 2022</a><br><a href="Home.dc.html" style="color:#C4CDB6">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#FDFDFC;color:#223234;font-family:'Nunito Sans',system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:#2C7A7B;text-decoration:none}a:hover{color:#223234}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#FDFDFC;border-bottom:1px solid #E6EBE9;position:sticky;top:0;z-index:50">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px">
+    <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:21px;color:#223234">Kensington <span style="color:#2C7A7B">Dental Studio</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#services" style="color:#223234">Services</a><a href="#new" style="color:#223234">New patients</a><a href="#team" style="color:#223234">Team</a>
+      <a href="#book" style="background:#2C7A7B;color:#fff;padding:12px 24px;border-radius:8px;font-weight:700" style-hover="background:#22563F;color:#fff">Book online</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:80px 0 64px;background:linear-gradient(180deg,#F0F7F6 0%,#FDFDFC 100%)">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+    <div>
+      <div style="display:inline-block;background:#DCEDEC;color:#2C7A7B;font-weight:700;font-size:13px;padding:7px 14px;border-radius:20px;margin-bottom:18px">Accepting new patients · Direct billing</div>
+      <h1 style="margin:0 0 18px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.15;letter-spacing:-.02em">Dentistry that doesn't feel like a sales pitch.</h1>
+      <p style="margin:0 0 28px;color:#5A6E70;font-size:19px;max-width:48ch">Gentle, judgment-free care in Kensington. We follow the Alberta fee guide, explain everything first, and never treatment-plan your wallet.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <a href="#book" style="background:#2C7A7B;color:#fff;padding:16px 32px;border-radius:8px;font-weight:700;font-size:17px" style-hover="background:#22563F;color:#fff">Book an appointment</a>
+        <a href="tel:4035550163" style="color:#2C7A7B;font-weight:700;font-size:17px">(403) 555-0163</a>
+      </div>
+    </div>
+    <div style="border:2px dashed #C8DAD8;background:repeating-linear-gradient(45deg,#EDF4F3,#EDF4F3 22px,#E6F0EF 22px,#E6F0EF 44px);min-height:340px;border-radius:20px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px"><span style="font-family:monospace;font-size:14px;color:#8FA5A3;line-height:1.8">photo: bright operatory,<br>10th St NW studio interior</span></div>
+  </div>
+</section>
+<div data-screen-label="Trust strip" style="border-bottom:1px solid #E6EBE9">
+  <div style="max-width:1100px;margin:0 auto;padding:22px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;text-align:center">
+    <div><b style="display:block;font-family:'Sora',sans-serif;font-size:22px;color:#2C7A7B">Fee guide</b><span style="font-size:14px;color:#5A6E70">Alberta rates, always</span></div>
+    <div><b style="display:block;font-family:'Sora',sans-serif;font-size:22px;color:#2C7A7B">Direct billing</b><span style="font-size:14px;color:#5A6E70">All major insurers</span></div>
+    <div><b style="display:block;font-family:'Sora',sans-serif;font-size:22px;color:#2C7A7B">Evenings + Sat</b><span style="font-size:14px;color:#5A6E70">Because you work too</span></div>
+    <div><b style="display:block;font-family:'Sora',sans-serif;font-size:22px;color:#2C7A7B">4.9★</b><span style="font-size:14px;color:#5A6E70">380 Google reviews</span></div>
+  </div>
+</div>
+<section id="services" data-screen-label="Services" style="padding:72px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.02em">Care for the whole family</h2>
+    <p style="margin:0 0 34px;color:#5A6E70;max-width:60ch">From two-year-olds to dentures — one clinic, one familiar team.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Checkups &amp; cleanings</h3><p style="margin:0;font-size:15px;color:#5A6E70">Gentle hygiene, digital X-rays, and honest recall intervals — not everyone needs every six months.</p></div>
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Children's dentistry</h3><p style="margin:0;font-size:15px;color:#5A6E70">First visits that end with a high-five, not tears. Happy-visit appointments free for under-3s.</p></div>
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Fillings &amp; crowns</h3><p style="margin:0;font-size:15px;color:#5A6E70">Tooth-coloured restorations, same-day crowns, and photos so you see what we see.</p></div>
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Invisalign</h3><p style="margin:0;font-size:15px;color:#5A6E70">Free consult and scan. If aligners won't work for you, we'll say so.</p></div>
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Emergency care</h3><p style="margin:0;font-size:15px;color:#5A6E70">Broken tooth, lost filling, toothache — same-day slots held every morning.</p></div>
+      <div style="background:#fff;border:1px solid #E6EBE9;border-radius:14px;padding:26px 24px"><h3 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:600;font-size:18px">Sedation options</h3><p style="margin:0;font-size:15px;color:#5A6E70">Nervous? Nitrous and oral sedation available. No judgment — a third of our patients use it.</p></div>
+    </div>
+  </div>
+</section>
+<section id="new" data-screen-label="New patients" style="padding:72px 0;background:#2C7A7B;color:#fff">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 16px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.02em">New here? Here's your first visit.</h2>
+      <p style="margin:0;color:#CFE5E4;font-size:17px;max-width:52ch">No lecture about how long it's been. A full exam, X-rays, a cleaning if there's time, and a plain-language rundown of what — if anything — needs doing, with fee-guide prices printed out.</p>
+    </div>
+    <div style="background:#236263;border-radius:16px;padding:28px">
+      <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #3A8788"><span>New patient exam + X-rays</span><b style="font-family:'Sora',sans-serif">$180 <span style="font-weight:400;font-size:13px;color:#A9CFCE">(fee guide)</span></b></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #3A8788"><span>Insurance billed</span><b style="font-family:'Sora',sans-serif">Directly, on the spot</b></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 0"><span>Time to book ahead</span><b style="font-family:'Sora',sans-serif">Usually under a week</b></div>
+      <a href="#book" style="display:block;background:#fff;color:#2C7A7B;padding:14px;text-align:center;border-radius:8px;font-weight:700;margin-top:14px" style-hover="background:#CFE5E4;color:#22563F">Book a first visit →</a>
+    </div>
+  </div>
+</section>
+<section id="team" data-screen-label="Team" style="padding:72px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.02em">The people behind the masks</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <div style="text-align:center"><div style="width:150px;height:150px;border-radius:50%;margin:0 auto 14px;border:2px dashed #C8DAD8;background:repeating-linear-gradient(45deg,#EDF4F3,#EDF4F3 16px,#E6F0EF 16px,#E6F0EF 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#8FA5A3">photo</span></div><b style="font-family:'Sora',sans-serif;font-size:17px">Dr. Leah Nguyen</b><p style="margin:4px 0 0;font-size:14px;color:#5A6E70">Dentist · U of A '11 · the calm one</p></div>
+      <div style="text-align:center"><div style="width:150px;height:150px;border-radius:50%;margin:0 auto 14px;border:2px dashed #C8DAD8;background:repeating-linear-gradient(45deg,#EDF4F3,#EDF4F3 16px,#E6F0EF 16px,#E6F0EF 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#8FA5A3">photo</span></div><b style="font-family:'Sora',sans-serif;font-size:17px">Dr. Marcus Oduya</b><p style="margin:4px 0 0;font-size:14px;color:#5A6E70">Dentist · kids' visits specialist</p></div>
+      <div style="text-align:center"><div style="width:150px;height:150px;border-radius:50%;margin:0 auto 14px;border:2px dashed #C8DAD8;background:repeating-linear-gradient(45deg,#EDF4F3,#EDF4F3 16px,#E6F0EF 16px,#E6F0EF 32px);display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:12px;color:#8FA5A3">photo</span></div><b style="font-family:'Sora',sans-serif;font-size:17px">Sam, Rhea &amp; Joelle</b><p style="margin:4px 0 0;font-size:14px;color:#5A6E70">Hygiene team · gentle, seriously</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Reviews" style="padding:72px 0;background:#F0F7F6">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);letter-spacing:-.02em">Patients say</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+      <div style="background:#fff;border-radius:14px;padding:26px 24px;border:1px solid #E6EBE9"><div style="color:#2C7A7B;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Hadn't been to a dentist in nine years. Nobody shamed me. Got a plan, fee-guide prices on paper, and did it over four visits at my pace."</p><b style="font-size:14px;color:#5A6E70">Chris B. · Hillhurst</b></div>
+      <div style="background:#fff;border-radius:14px;padding:26px 24px;border:1px solid #E6EBE9"><div style="color:#2C7A7B;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"They told me I *didn't* need the crown another clinic quoted. That's the whole review."</p><b style="font-size:14px;color:#5A6E70">Nadia F. · West Hillhurst</b></div>
+      <div style="background:#fff;border-radius:14px;padding:26px 24px;border:1px solid #E6EBE9"><div style="color:#2C7A7B;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"My 4-year-old asks when she gets to go back. To the dentist. I don't know what magic Dr. Oduya does and I don't ask."</p><b style="font-size:14px;color:#5A6E70">Melanie T. · Sunnyside</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Location + hours" style="padding:64px 0">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px">
+    <div>
+      <h3 style="margin:0 0 10px;font-family:'Sora',sans-serif;font-size:19px;color:#2C7A7B">Find us</h3>
+      <p style="margin:0;color:#5A6E70;font-size:15px;line-height:1.8">10th Street NW, Kensington — two blocks from the C-Train, bike racks out front, free patient parking behind the building.</p>
+    </div>
+    <div>
+      <h3 style="margin:0 0 10px;font-family:'Sora',sans-serif;font-size:19px;color:#2C7A7B">Hours</h3>
+      <p style="margin:0;color:#5A6E70;font-size:15px;line-height:1.8">Mon–Thu 8am–7pm · Fri 8am–4pm · Sat 9am–3pm<br>Emergencies: <a href="tel:4035550163" style="font-weight:700">(403) 555-0163</a></p>
+    </div>
+  </div>
+</section>
+<section id="book" data-screen-label="Booking" style="padding:72px 0;background:#22563F;color:#fff">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.5rem);text-align:center;letter-spacing:-.02em">Book an appointment</h2>
+    <p style="margin:0 0 28px;color:#BFD8CC;text-align:center">We'll confirm by text within business hours.</p>
+    <form style="display:grid;gap:12px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'Nunito Sans',sans-serif" style-focus="outline:3px solid #7FBFA5" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'Nunito Sans',sans-serif" style-focus="outline:3px solid #7FBFA5" />
+      </div>
+      <select style="padding:14px;border:none;border-radius:10px;font-size:16px;font-family:'Nunito Sans',sans-serif"><option>Reason for visit</option><option>New patient exam</option><option>Cleaning / checkup</option><option>Something hurts</option><option>Invisalign consult</option><option>Child's visit</option></select>
+      <button type="submit" style="background:#7FBFA5;color:#173A2B;border:none;padding:16px;border-radius:10px;font-weight:800;font-size:17px;cursor:pointer;font-family:'Nunito Sans',sans-serif" style-hover="background:#fff">Request my appointment</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#182E30;color:#8FA5A3;padding:36px 0;font-size:14px">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Sora',sans-serif;font-size:16px">Kensington Dental Studio</b><br>10th St NW, Calgary · <a href="tel:4035550163" style="color:#CFE5E4">(403) 555-0163</a> · General dentists, Alberta Dental Association</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#7FBFA5">Website by Website Calgary — live since 2021</a><br><a href="Home.dc.html" style="color:#CFE5E4">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

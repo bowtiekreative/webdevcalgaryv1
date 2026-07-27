@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#E9E7E2;color:#1F1F1D;font-family:'Inter Tight',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#D4622A;text-decoration:none}a:hover{color:#1F1F1D}
+</style>
+</helmet>
+<header data-screen-label="Nav" style="background:#1F1F1D;color:#fff;position:sticky;top:0;z-index:50">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px">
+    <div style="font-family:'Anton',sans-serif;font-size:24px;letter-spacing:.03em;text-transform:uppercase">Caliber <span style="color:#D4622A">Concrete</span></div>
+    <nav style="display:flex;gap:24px;align-items:center;font-weight:600;font-size:15px">
+      <a href="#services" style="color:#fff">Services</a><a href="#work" style="color:#fff">Work</a><a href="#quote" style="background:#D4622A;color:#fff;padding:12px 22px;font-family:'Anton',sans-serif;letter-spacing:.05em;text-transform:uppercase;font-size:15px" style-hover="background:#fff;color:#1F1F1D">Get a quote</a>
+    </nav>
+  </div>
+</header>
+<section data-screen-label="Hero" style="padding:80px 0 64px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <div style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#D4622A;font-weight:600;margin-bottom:16px">Flatwork · Foundations · Decorative — Calgary since 2014</div>
+    <h1 style="margin:0 0 22px;font-family:'Anton',sans-serif;font-size:clamp(2.8rem,8vw,5.5rem);line-height:.98;text-transform:uppercase;letter-spacing:.01em">Poured flat.<br>Cured right.<br><span style="color:#D4622A">Still level in ten years.</span></h1>
+    <p style="margin:0 0 30px;color:#54524C;font-size:19px;max-width:56ch">Driveways, garage pads, basements and patios. Proper base prep, proper rebar, proper cure — because Calgary's freeze-thaw eats shortcuts.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <a href="#quote" style="background:#1F1F1D;color:#fff;padding:16px 32px;font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.05em;text-transform:uppercase" style-hover="background:#D4622A;color:#fff">Get a quote</a>
+      <a href="tel:4035550191" style="border:2px solid #1F1F1D;color:#1F1F1D;padding:14px 30px;font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.05em;text-transform:uppercase" style-hover="background:#1F1F1D;color:#fff">(403) 555-0191</a>
+    </div>
+  </div>
+</section>
+<div data-screen-label="Photo band" style="border-top:3px solid #1F1F1D;border-bottom:3px solid #1F1F1D;background:repeating-linear-gradient(45deg,#DDDAD3,#DDDAD3 26px,#D4D1C9 26px,#D4D1C9 52px);height:280px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:14px;color:#8A877E">wide photo: fresh pour, crew screeding a driveway</span></div>
+<section id="services" data-screen-label="Services" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,3rem);text-transform:uppercase">What we pour</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:#1F1F1D;border:2px solid #1F1F1D">
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">01</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Driveways &amp; pads</h3><p style="margin:0;font-size:15px;color:#54524C">Tear-out and repour, garage pads, RV pads. Compacted base, rebar grid, saw-cut joints.</p></div>
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">02</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Patios &amp; walks</h3><p style="margin:0;font-size:15px;color:#54524C">Broom, exposed aggregate, or stamped. Sloped away from your foundation, always.</p></div>
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">03</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Basement floors</h3><p style="margin:0;font-size:15px;color:#54524C">New developments and repours, poly and insulation done to code.</p></div>
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">04</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Steps &amp; porches</h3><p style="margin:0;font-size:15px;color:#54524C">Rebuilt to riser code, finished clean, no more heaved front step.</p></div>
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">05</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Decorative</h3><p style="margin:0;font-size:15px;color:#54524C">Stamped and coloured concrete that doesn't look like a rubber mat.</p></div>
+      <div style="background:#E9E7E2;padding:26px 24px"><span style="font-family:'Anton',sans-serif;color:#D4622A;font-size:15px">06</span><h3 style="margin:8px 0;font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase">Removal &amp; haul</h3><p style="margin:0;font-size:15px;color:#54524C">Breakout, disposal, and grade prep. We leave the site pour-ready or planting-ready.</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="The difference" style="padding:72px 0;background:#1F1F1D;color:#fff">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 14px;font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,3rem);text-transform:uppercase">Why concrete fails in Calgary</h2>
+    <p style="margin:0 0 34px;color:#B5B2A9;max-width:60ch">Sixty freeze-thaw cycles a winter. Concrete fails here for three reasons — and all three are invisible on pour day.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div style="border-left:4px solid #D4622A;padding-left:20px"><b style="font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;display:block;margin-bottom:8px">Bad base</b><p style="margin:0;font-size:15px;color:#B5B2A9">We compact 6" of gravel in lifts and test it. Skipping this is why driveways sink at the apron.</p></div>
+      <div style="border-left:4px solid #D4622A;padding-left:20px"><b style="font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;display:block;margin-bottom:8px">Wrong mix</b><p style="margin:0;font-size:15px;color:#B5B2A9">32 MPa, air-entrained, every exterior pour. It costs more per metre. It's not optional.</p></div>
+      <div style="border-left:4px solid #D4622A;padding-left:20px"><b style="font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;display:block;margin-bottom:8px">Rushed cure</b><p style="margin:0;font-size:15px;color:#B5B2A9">Cure compound, sealed at 28 days, and we come back to do it. That return visit is in the quote.</p></div>
+    </div>
+  </div>
+</section>
+<section id="work" data-screen-label="Work" style="padding:72px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,3rem);text-transform:uppercase">Recent pours</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+      <div><div style="border:2px dashed #B5B2A9;background:repeating-linear-gradient(45deg,#DDDAD3,#DDDAD3 22px,#D4D1C9 22px,#D4D1C9 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8A877E">photo: exposed aggregate drive</span></div><p style="margin:10px 0 0;font-size:14px;color:#54524C"><b style="color:#1F1F1D">Exposed aggregate driveway</b> · Springbank Hill</p></div>
+      <div><div style="border:2px dashed #B5B2A9;background:repeating-linear-gradient(45deg,#DDDAD3,#DDDAD3 22px,#D4D1C9 22px,#D4D1C9 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8A877E">photo: stamped patio</span></div><p style="margin:10px 0 0;font-size:14px;color:#54524C"><b style="color:#1F1F1D">Stamped patio + fire pit pad</b> · Cranston</p></div>
+      <div><div style="border:2px dashed #B5B2A9;background:repeating-linear-gradient(45deg,#DDDAD3,#DDDAD3 22px,#D4D1C9 22px,#D4D1C9 44px);height:200px;display:flex;align-items:center;justify-content:center"><span style="font-family:monospace;font-size:13px;color:#8A877E">photo: garage pad</span></div><p style="margin:10px 0 0;font-size:14px;color:#54524C"><b style="color:#1F1F1D">Oversize garage pad</b> · Rocky View · 32 MPa, fibre + rebar</p></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Reviews" style="padding:72px 0;background:#fff;border-top:2px solid #1F1F1D;border-bottom:2px solid #1F1F1D">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 34px;font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,3rem);text-transform:uppercase">Word of mouth</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div style="border:2px solid #1F1F1D;padding:24px"><div style="color:#D4622A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Driveway poured in 2019. Neighbour's, done cheaper by someone else the same summer, is cracked and flaking. Mine looks day-one."</p><b style="font-size:14px;color:#54524C">Rob C. · Silverado</b></div>
+      <div style="border:2px solid #1F1F1D;padding:24px"><div style="color:#D4622A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"They came back at 28 days to seal it like the quote said. Nobody comes back. These guys came back."</p><b style="font-size:14px;color:#54524C">Angela P. · Legacy</b></div>
+      <div style="border:2px solid #1F1F1D;padding:24px"><div style="color:#D4622A;letter-spacing:2px;margin-bottom:10px">★★★★★</div><p style="margin:0 0 12px;font-size:15px">"Quoted the same number they invoiced. Showed me the rebar grid before the pour without me asking."</p><b style="font-size:14px;color:#54524C">Mike D. · Bowness</b></div>
+    </div>
+  </div>
+</section>
+<section data-screen-label="Season note" style="padding:56px 0">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div><h3 style="margin:0 0 8px;font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;color:#D4622A">Season</h3><p style="margin:0;color:#54524C;font-size:15px">May–October pours · Booking 3–4 weeks out in peak season</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;color:#D4622A">Area</h3><p style="margin:0;color:#54524C;font-size:15px">Calgary, Rocky View, Airdrie, Okotoks, Chestermere</p></div>
+    <div><h3 style="margin:0 0 8px;font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;color:#D4622A">Warranty</h3><p style="margin:0;color:#54524C;font-size:15px">3 years structural, in writing, transferable if you sell</p></div>
+  </div>
+</section>
+<section id="quote" data-screen-label="Quote form" style="padding:72px 0;background:#D4622A;color:#fff">
+  <div style="max-width:720px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 8px;font-family:'Anton',sans-serif;font-size:clamp(2rem,5vw,3rem);text-transform:uppercase;text-align:center">Get a quote</h2>
+    <p style="margin:0 0 28px;text-align:center;color:#F7DDCE">Rough dimensions get you a rough number same day. Site visit firms it up.</p>
+    <form style="display:grid;gap:12px" action="#" method="POST">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <input type="text" placeholder="Name" required="required" style="padding:14px;border:none;font-size:16px;font-family:'Inter Tight',sans-serif;border-radius:0" style-focus="outline:3px solid #1F1F1D" />
+        <input type="tel" placeholder="Phone" required="required" style="padding:14px;border:none;font-size:16px;font-family:'Inter Tight',sans-serif;border-radius:0" style-focus="outline:3px solid #1F1F1D" />
+      </div>
+      <textarea rows="3" placeholder="What's the job? Rough size helps (e.g. 20×24 pad)" style="padding:14px;border:none;font-size:16px;font-family:'Inter Tight',sans-serif;border-radius:0;resize:vertical" style-focus="outline:3px solid #1F1F1D"></textarea>
+      <button type="submit" style="background:#1F1F1D;color:#fff;border:none;padding:16px;font-family:'Anton',sans-serif;font-size:19px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer" style-hover="background:#000">Send it</button>
+    </form>
+  </div>
+</section>
+<footer style="background:#171715;color:#8A877E;padding:36px 0;font-size:14px">
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;line-height:1.9">
+    <span><b style="color:#fff;font-family:'Anton',sans-serif;text-transform:uppercase;font-size:16px">Caliber Concrete Works</b><br>Calgary AB · <a href="tel:4035550191" style="color:#D4D1C9">(403) 555-0191</a> · Insured · WCB</span>
+    <span style="text-align:right">Portfolio demonstration · <a href="Funnel - Landing.dc.html" style="color:#D4622A">Website by Website Calgary — live since 2020</a><br><a href="Home.dc.html" style="color:#D4D1C9">← All deliverables</a></span>
+  </div>
+</footer>
+
+</x-dc>
+</body>
+</html>

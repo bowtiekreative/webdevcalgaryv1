@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#14161A;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A83A1C;text-decoration:none}a:hover{color:#14161A;text-decoration:underline}
+</style>
+</helmet>
+<div style="max-width:1080px;margin:0 auto;padding:0 24px 96px">
+  <header style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #14161A;padding:40px 0 18px;gap:16px;flex-wrap:wrap">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:10px">Bow Tie Kreative · Design System v1</div>
+      <div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:44px;letter-spacing:-.025em;line-height:1">Website<span style="color:#A83A1C">Calgary</span></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;line-height:1.7;text-align:right">websitecalgary.com<br>Reference sheet · 2026</div>
+  </header>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">01 · Palette</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8">
+      <div style="background:#14161A;color:#fff;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Ink</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8D949F">#14161A · text, borders, dark sections</div></div>
+      <div style="background:#4A4F58;color:#fff;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Ink 2</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C9CDD3">#4A4F58 · body copy</div></div>
+      <div style="background:#FFFFFF;color:#14161A;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Paper</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">#FFFFFF · main background</div></div>
+      <div style="background:#ECEAE4;color:#14161A;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Concrete</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">#ECEAE4 · alternating sections</div></div>
+      <div style="background:#A83A1C;color:#fff;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Rust</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#F2C9BD">#A83A1C · primary accent, CTAs</div></div>
+      <div style="background:#F2B233;color:#14161A;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Hi-vis</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6B4E12">#F2B233 · clock, prices, key numbers</div></div>
+      <div style="background:#1E3A5C;color:#fff;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Chinook</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C3CFDD">#1E3A5C · guarantee section only</div></div>
+      <div style="background:#D6D2C8;color:#14161A;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between"><div style="font-family:'Archivo',sans-serif;font-weight:700">Line</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58">#D6D2C8 · rules and dividers</div></div>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin:14px 0 0;line-height:1.7">Sourced from the audience's world: truck primer + brick (rust), safety vest (hi-vis), salt-stained concrete, the chinook arch. Never: blue-teal gradients, purple, glassmorphism, soft shadows, rounded corners. Border radius is 0 throughout.</p>
+  </section>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">02 · Typography</div>
+    <div style="border:2px solid #14161A">
+      <div style="padding:26px 24px;border-bottom:1px solid #D6D2C8;display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap">
+        <div style="font-family:'Archivo',sans-serif;font-weight:800;font-size:52px;letter-spacing:-.025em;line-height:1.04">Your new website.<br><em style="font-style:normal;color:#A83A1C">Live tomorrow.</em></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;line-height:1.7;text-align:right">Display · Archivo 800<br>letter-spacing −0.025em · line-height 1.04</div>
+      </div>
+      <div style="padding:26px 24px;border-bottom:1px solid #D6D2C8;display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap">
+        <p style="margin:0;max-width:56ch;font-size:17px;line-height:1.6;color:#4A4F58">Built in 24 hours. Changed as often as you want, forever. Hosting, security and updates included — and the price never goes up.</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;line-height:1.7;text-align:right">Body · Inter 400/500/600<br>17px base · line-height 1.6</div>
+      </div>
+      <div style="padding:26px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C">Eyebrow label · WC-100</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:38px;letter-spacing:-.04em;color:#14161A">$147<span style="font-size:14px;font-weight:400;color:#4A4F58;letter-spacing:0"> /month</span></span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;line-height:1.7;text-align:right">Utility · JetBrains Mono 400/700<br>clock, prices, serials, eyebrows — the "work order" voice</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">03 · Buttons &amp; links</div>
+    <div style="border:2px solid #14161A;padding:28px 24px;display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+      <a href="#" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;text-decoration:none;padding:15px 26px;background:#A83A1C;border:2px solid #A83A1C;color:#fff;box-shadow:4px 4px 0 #14161A;transition:transform .12s ease,box-shadow .12s ease" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #14161A;color:#fff;text-decoration:none">Start my website</a>
+      <a href="#" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;text-decoration:none;padding:15px 26px;background:transparent;border:2px solid #14161A;color:#14161A;transition:background .12s" style-hover="background:#14161A;color:#fff;text-decoration:none">Call (888) 755-0507</a>
+      <a href="#" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:800;font-size:16px;text-decoration:none;padding:15px 26px;background:#F2B233;border:2px solid #F2B233;color:#14161A;box-shadow:4px 4px 0 #A83A1C" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #A83A1C;color:#14161A;text-decoration:none">Pay the $497 rush fee →</a>
+      <a href="#" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#14161A;text-decoration:none;border-bottom:2px solid #F2B233;padding-bottom:2px" style-hover="color:#A83A1C;text-decoration:none">Start →</a>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin:14px 0 0;line-height:1.7">Primary buttons carry the 4px offset "printed" shadow; hover translates −2px and grows it to 6px. No radius, no gradients, no soft shadows.</p>
+  </section>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">04 · Signature elements</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;align-items:start">
+      <div>
+        <div style="border:2px solid #14161A;background:#14161A;color:#fff;padding:20px 22px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#8D949F;margin-bottom:10px"><span><span style="color:#F2B233">●</span> Dispatch</span><span>2026-07-27</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:42px;letter-spacing:-.03em;color:#F2B233;line-height:1">23:41:07</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#B7BCC4;margin-top:12px;line-height:1.5">Live by <b style="color:#fff">Tue 2:00 p.m.</b> or <b style="color:#fff">the rush fee is refunded</b>.</div>
+        </div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin:12px 0 0;line-height:1.7">The dispatch panel — the one bold element. Live countdown, hi-vis on ink. Everything else stays quiet so this lands.</p>
+      </div>
+      <div>
+        <div style="border:2px solid #14161A;background:#fff">
+          <div style="background:#14161A;color:#fff;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>Work order</span><span>WC-RUSH</span></div>
+          <div style="padding:20px 18px">
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #D6D2C8;font-size:15px"><span>Design and build</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4A4F58">Included</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #D6D2C8;font-size:15px"><span>Domain, SSL, launch</span><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4A4F58">Included</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid #14161A;margin-top:8px;padding-top:14px;font-family:'Archivo',sans-serif;font-weight:800;font-size:18px"><span>24-hour rush fee</span><span style="font-family:'JetBrains Mono',monospace;font-size:26px;color:#A83A1C;letter-spacing:-.03em">$497</span></div>
+          </div>
+        </div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;margin:12px 0 0;line-height:1.7">The work-order motif — ruled rows, mono serials (WC-RUSH, WC-100, WC-200). Trades people recognize the form instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">05 · Cards, forms &amp; tables</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:start">
+      <div style="display:grid;grid-template-columns:1fr;gap:2px;background:#D6D2C8;border:1px solid #D6D2C8">
+        <div style="background:#fff;padding:24px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">01</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em">Content card</h3><p style="margin:0;font-size:15px;color:#4A4F58;line-height:1.6">1px hairline grid, mono index tick, no radius, no shadow. Cards sit in a 2px-gapped grid on the Line color.</p></div>
+      </div>
+      <div style="background:#14161A;padding:22px;display:grid;gap:12px">
+        <input type="text" placeholder="Your name" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <input type="tel" placeholder="Phone (403 / 587)" style="width:100%;box-sizing:border-box;padding:14px 15px;font-family:'Inter',sans-serif;font-size:16px;background:#1E2128;border:1px solid #3A3F49;color:#fff;border-radius:0" style-focus="outline:2px solid #F2B233;outline-offset:1px" />
+        <button style="background:#F2B233;color:#14161A;border:none;padding:16px;font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;cursor:pointer" style-hover="filter:brightness(1.08)">Send it — call me back today</button>
+      </div>
+      <div style="border:2px solid #14161A;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#fff">
+          <div style="background:#14161A;padding:12px 14px"></div><div style="background:#A83A1C;padding:12px 14px">Us</div><div style="background:#14161A;padding:12px 14px">Agency</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;font-size:14px;border-bottom:1px solid #D6D2C8"><div style="padding:12px 14px;font-weight:600">Live in</div><div style="padding:12px 14px;background:#FDF6E8;font-weight:600">24 hours</div><div style="padding:12px 14px;color:#4A4F58">6–12 weeks</div></div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;font-size:14px"><div style="padding:12px 14px;font-weight:600">Changes</div><div style="padding:12px 14px;background:#FDF6E8;font-weight:600">Unlimited</div><div style="padding:12px 14px;color:#4A4F58">Billed hourly</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:16px">06 · Voice &amp; rules</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8">
+      <div style="background:#fff;padding:24px 22px"><h3 style="margin:0 0 10px;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px">Say</h3><p style="margin:0;font-size:14px;color:#4A4F58;line-height:1.8">Plain, direct, short sentences. Contractions always. Say the number out loud. Name the objection first — the fine print, the lock-in, the ghosting. One restrained local nod at most.</p></div>
+      <div style="background:#fff;padding:24px 22px"><h3 style="margin:0 0 10px;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px">Never say</h3><p style="margin:0;font-size:14px;color:#4A4F58;line-height:1.8">"Solutions." "Leverage." "Elevate." "Digital presence." "Synergy." "Contact us for pricing." Heavy Stampede/cowboy theming.</p></div>
+      <div style="background:#fff;padding:24px 22px"><h3 style="margin:0 0 10px;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px">Never show</h3><p style="margin:0;font-size:14px;color:#4A4F58;line-height:1.8">Stock photos of smiling people in hardhats. Gradients. Rounded "friendly" corners. Authority proof standing alone — peer proof first, always.</p></div>
+    </div>
+  </section>
+
+  <footer style="margin-top:64px;border-top:1px solid #D6D2C8;padding-top:22px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#4A4F58;line-height:1.8;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <span><strong style="color:#14161A">Bow Tie Kreative</strong> · 2012 1st NW, Calgary AB · <a href="tel:8887550507">(888) 755-0507</a> · <a href="mailto:hello@bowtiekreative.com">hello@bowtiekreative.com</a></span>
+    <a href="Home.dc.html">← All deliverables</a>
+  </footer>
+</div>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#14161A;font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:#A83A1C;text-decoration:none}a:hover{color:#14161A}
+</style>
+</helmet>
+<header style="border-bottom:1px solid #D6D2C8;background:#fff">
+  <div style="max-width:920px;margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px">
+    <a href="Funnel - Landing.dc.html" style="font-family:'Archivo',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;color:#14161A">Website<span style="color:#A83A1C">Calgary</span></a>
+    <a href="tel:8887550507" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#14161A">(888) 755-0507</a>
+  </div>
+</header>
+
+<section data-screen-label="Confirmation" style="padding:56px 0 40px">
+  <div style="max-width:920px;margin:0 auto;padding:0 22px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A83A1C;margin-bottom:18px">Payment received · Order confirmed</div>
+    <h1 style="margin:0 0 22px;font-family:'Archivo',sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.025em;font-size:clamp(2.1rem,6.5vw,3.6rem)">The clock is running.<br><em style="font-style:normal;color:#A83A1C">We're already on it.</em></h1>
+    <div style="border:2px solid #14161A;background:#14161A;color:#fff;padding:20px 22px;max-width:520px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#8D949F;margin-bottom:10px"><span><span style="color:#F2B233">●</span> Dispatch · confirmed</span><span>{{stamp}}</span></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(1.9rem,7vw,2.7rem);letter-spacing:-.03em;color:#F2B233;line-height:1">{{clock}}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#B7BCC4;margin-top:12px;line-height:1.5">Your site goes live by <b style="color:#fff">{{deadline}}</b>. You'll get this exact time in writing by email within the hour.</div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Next steps" style="padding:52px 0;background:#ECEAE4;border-top:1px solid #D6D2C8;border-bottom:1px solid #D6D2C8">
+  <div style="max-width:920px;margin:0 auto;padding:0 22px">
+    <h2 style="margin:0 0 26px;font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:-.025em;font-size:clamp(1.6rem,4vw,2.3rem)">What happens next.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:#D6D2C8;border:1px solid #D6D2C8">
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">NOW → 1 HR</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">Check your inbox</h3><p style="margin:0;font-size:15px;color:#4A4F58">Your go-live time in writing, plus a short intake — business details, photos if you have them, and what matters most to you.</p></div>
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">TODAY</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">We build</h3><p style="margin:0;font-size:15px;color:#4A4F58">Copy, layout, photos, mobile, domain, SSL. You don't need to do anything except answer the intake.</p></div>
+      <div style="background:#fff;padding:26px 22px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A83A1C;font-weight:700;letter-spacing:.12em;display:block;margin-bottom:12px">TOMORROW</span><h3 style="margin:0 0 8px;font-family:'Archivo',sans-serif;font-weight:700;font-size:18px">You're live</h3><p style="margin:0;font-size:15px;color:#4A4F58">Site launches on your domain. From then on: send any change, it's done within 48 hours. Forever.</p></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Growth upsell" style="padding:64px 0">
+  <div style="max-width:920px;margin:0 auto;padding:0 22px">
+    <div style="border:2px solid #A83A1C;box-shadow:6px 6px 0 #A83A1C;background:#fff">
+      <div style="background:#A83A1C;color:#fff;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;display:flex;justify-content:space-between"><span>One thing worth deciding now</span><span>WC-200</span></div>
+      <div style="padding:28px 24px">
+        <h2 style="margin:0 0 12px;font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:-.025em;font-size:clamp(1.5rem,4vw,2.1rem)">The site's handled. Now — can people find it?</h2>
+        <p style="margin:0 0 18px;color:#4A4F58;max-width:60ch">Growth adds the part that brings the phone calls: your Google Business Profile managed, local SEO for Calgary searches, review requests on autopilot, and visibility in the AI assistants people ask for recommendations now. Plus a monthly report in plain English.</p>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <a href="#" style="display:inline-block;font-family:'Archivo',sans-serif;font-weight:700;font-size:16px;padding:15px 26px;background:#A83A1C;border:2px solid #A83A1C;color:#fff;box-shadow:4px 4px 0 #14161A;transition:transform .12s,box-shadow .12s" style-hover="transform:translate(-2px,-2px);box-shadow:6px 6px 0 #14161A;color:#fff">Upgrade to Growth — $497/mo</a>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58">Or later — the price is locked either way.</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin:26px 0 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;line-height:1.8">Questions before tomorrow? Call or text <a href="tel:8887550507" style="color:#A83A1C;font-weight:700">(888) 755-0507</a> — you'll get a person, not a queue.</p>
+  </div>
+</section>
+
+<footer style="background:#ECEAE4;border-top:1px solid #D6D2C8;padding:34px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#4A4F58;line-height:1.8">
+  <div style="max-width:920px;margin:0 auto;padding:0 22px">
+    <strong style="color:#14161A">Website Calgary</strong> · Bow Tie Kreative · 2012 1st NW, Calgary AB · <a href="mailto:hello@bowtiekreative.com" style="color:#14161A">hello@bowtiekreative.com</a> · <a href="Home.dc.html" style="color:#A83A1C">All deliverables</a>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { now: Date.now(), end: Date.now() + 24*3600*1000 };
+  componentDidMount() { this._t = setInterval(() => this.setState({ now: Date.now() }), 1000); }
+  componentWillUnmount() { clearInterval(this._t); }
+  renderVals() {
+    const pad = n => String(n).padStart(2, '0');
+    const d = Math.max(0, this.state.end - this.state.now);
+    return {
+      clock: pad(Math.floor(d/3.6e6))+':'+pad(Math.floor(d%3.6e6/6e4))+':'+pad(Math.floor(d%6e4/1000)),
+      deadline: new Date(this.state.end).toLocaleString('en-CA',{weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}),
+      stamp: new Date(this.state.now).toLocaleDateString('en-CA')
+    };
+  }
+}
+</script>
+</body>
+</html>
