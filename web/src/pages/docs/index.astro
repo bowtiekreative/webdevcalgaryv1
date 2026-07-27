@@ -1,0 +1,130 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { site } from '../../config';
+---
+
+<DocsLayout
+	title="Documentation"
+	description={`How ${site.name} is built, edited and extended.`}
+>
+	<p class="eyebrow">Docs</p>
+	<h1>Getting started</h1>
+	<p class="lede">
+		A static Astro front end on headless WordPress, with a signed-in dashboard for subscriptions and email
+		marketing.
+	</p>
+
+	<h2>How the pieces fit</h2>
+	<table>
+		<thead>
+			<tr><th>Piece</th><th>Job</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>WordPress + MySQL</td><td>Stores content and user accounts. Editors work here.</td></tr>
+			<tr><td>WPGraphQL</td><td>Read API the site builds from.</td></tr>
+			<tr><td>Meta Box</td><td>Custom fields on content.</td></tr>
+			<tr><td>Astro</td><td>Renders public pages as static HTML, plus the on-demand dashboard.</td></tr>
+			<tr><td>Stripe / PayPal</td><td>Subscriptions. No WooCommerce anywhere.</td></tr>
+			<tr><td>Emailit</td><td>Transactional email and campaigns.</td></tr>
+		</tbody>
+	</table>
+	<p>
+		WordPress is never public-facing: visiting it redirects here, and its admin "View" links point at this site.
+	</p>
+
+	<h2>Signing in</h2>
+	<p>
+		Go to <a href="/login">/login</a> and use the same credentials as WordPress — there is no separate sign-up
+		table. Roles come straight from WordPress.
+	</p>
+	<table>
+		<thead>
+			<tr><th>Role</th><th>Sees</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>Administrator</td><td>Everything, including Marketing, Users and Health</td></tr>
+			<tr><td>Subscriber / other</td><td>Overview, Billing, Account. Admin pages return 404.</td></tr>
+		</tbody>
+	</table>
+	<div class="callout">
+		<p>
+			Sessions store only your user id. Roles and subscription are re-read from WordPress on every request, so
+			changing a role in wp-admin takes effect on the next page load rather than whenever a session expires.
+		</p>
+	</div>
+
+	<h2>Editing content</h2>
+	<p>Everything public is built from WordPress:</p>
+	<table>
+		<thead>
+			<tr><th>In WordPress</th><th>On the site</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>Pages</td><td><code>/about</code> — nested pages keep their path</td></tr>
+			<tr><td>Posts</td><td><code>/blog/&lt;slug&gt;</code></td></tr>
+			<tr><td>Work → Projects</td><td><code>/work/&lt;slug&gt;</code></td></tr>
+			<tr><td>Services</td><td><code>/services/&lt;slug&gt;</code></td></tr>
+			<tr><td>Testimonials</td><td>Rendered inside other pages</td></tr>
+		</tbody>
+	</table>
+	<p>
+		The boxes below the editor — Project Details, Hero, SEO &amp; Social — are Meta Box fields, available over both
+		GraphQL and REST. See the <a href="/docs/api">API reference</a>.
+	</p>
+	<p>
+		In development the dev server picks up edits within about five seconds. In production, publishing fires a build
+		hook so the static site rebuilds.
+	</p>
+
+	<h2>Adding a field, end to end</h2>
+	<p>A custom field touches five places. Miss one and it fails loudly rather than silently:</p>
+	<table>
+		<thead>
+			<tr><th>#</th><th>File</th><th>Why</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>1</td><td><code>wordpress/mu-plugins/app-fields.php</code></td><td>Defines the field</td></tr>
+			<tr><td>2</td><td><code>web/src/lib/wp/queries.ts</code></td><td>Asks for it</td></tr>
+			<tr><td>3</td><td><code>web/src/lib/wp/schema.ts</code></td><td>Validates and normalises it</td></tr>
+			<tr><td>4</td><td><code>web/scripts/mock-wp.mjs</code></td><td>Keeps the offline mock honest</td></tr>
+			<tr><td>5</td><td><code>wordpress/tests/schema-contract.php</code></td><td>Asserts the names still line up</td></tr>
+		</tbody>
+	</table>
+	<p>Then check nothing drifted:</p>
+	<pre><code>php wordpress/tests/schema-contract.php
+cd web &amp;&amp; npm run mock:validate &amp;&amp; npm run check</code></pre>
+
+	<h2>Working without WordPress</h2>
+	<p>A mock GraphQL server serves the same schema from fixtures, so the front end runs with nothing else installed:</p>
+	<pre><code>cd web
+npm run mock        # terminal 1
+npm run dev:mock    # terminal 2</code></pre>
+
+	<h2>Coming soon &amp; maintenance</h2>
+	<p>
+		Set the mode in WordPress under <strong>Settings → App Settings</strong>: Live, Coming soon (HTTP 200, so it can
+		be indexed) or Maintenance (HTTP 503 with <code>Retry-After</code>, so search engines keep the existing listing).
+	</p>
+	<div class="callout">
+		<p>
+			<strong>Public pages are gated at build time, not instantly.</strong> Prerendered files are served straight
+			off disk and never reach the server's middleware, so the gate is applied when the site is <em>built</em>.
+			Saving the setting fires the build hook to trigger that rebuild. Dynamic routes — <code>/login</code>,
+			<code>/dashboard</code>, <code>/api</code> — gate immediately and stay reachable in every mode, so you can
+			always sign in and turn it off.
+		</p>
+	</div>
+	<p>
+		Setting <code>SITE_MODE</code> in <code>web/.env</code> overrides WordPress in either direction: use
+		<code>live</code> to keep working locally while production is gated, or <code>maintenance</code> to gate the site
+		when WordPress itself is down.
+	</p>
+
+	<h2>Health check</h2>
+	<p>
+		Administrators get a <a href="/dashboard/health">Health</a> tab that verifies the whole chain live: database
+		tables and row counts, each content type's mapping through GraphQL and REST to an Astro collection and route,
+		whether API keys and webhooks are registered, and whether real data is coming back. Start there when something
+		looks wrong.
+	</p>
+</DocsLayout>

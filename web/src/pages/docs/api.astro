@@ -1,0 +1,314 @@
+---
+/**
+ * Public API reference.
+ *
+ * Prerendered: it documents the shape of the API, which does not vary per
+ * request, and carries no configuration state. Anything that reveals what is
+ * actually configured lives in /dashboard/health instead.
+ */
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+// Read at build time. The GraphQL endpoint is public by nature, so naming it
+// here leaks nothing.
+const wpOrigin = (() => {
+	try {
+		return new URL(import.meta.env.WP_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql').origin;
+	} catch {
+		return 'http://localhost:8080';
+	}
+})();
+
+/** Content types and their REST/GraphQL names. */
+const types = [
+	{ label: 'Posts', rest: 'posts', gqlOne: 'post', gqlMany: 'posts', group: 'seo' },
+	{ label: 'Pages', rest: 'pages', gqlOne: 'page', gqlMany: 'pages', group: 'hero, seo' },
+	{ label: 'Projects', rest: 'projects', gqlOne: 'project', gqlMany: 'projects', group: 'projectDetails, seo' },
+	{ label: 'Services', rest: 'services', gqlOne: 'service', gqlMany: 'services', group: 'serviceDetails, seo' },
+	{ label: 'Testimonials', rest: 'testimonials', gqlOne: 'testimonial', gqlMany: 'testimonials', group: 'testimonialDetails' },
+];
+
+const appEndpoints = [
+	['POST', '/auth/login', '{ login, password } → user object. 401 on bad credentials, 429 when rate limited.'],
+	['GET', '/auth/user/{id}', 'One user, including their subscription.'],
+	['GET', '/auth/users', 'Paged user list. `page`, `per_page` (max 200), `search`.'],
+	['POST', '/auth/reset', '{ login } → always { ok: true }. Sends the WordPress reset email.'],
+	['GET', '/billing/{userId}', 'That user’s subscription.'],
+	['POST', '/billing/{userId}', 'Write subscription state. Partial — omitted keys are left alone.'],
+	['GET', '/billing/lookup', '?by=stripe_customer|subscription|email&value=… → { id, email }.'],
+	['GET', '/settings', 'All stored API keys. Used by the front end.'],
+	['GET', '/site-mode', 'Current coming-soon / maintenance state.'],
+];
+---
+
+<DocsLayout title="API reference" description="REST CRUD, GraphQL and the app endpoints.">
+	<p class="eyebrow">Docs</p>
+	<h1>API reference</h1>
+	<p class="lede">Three APIs, for different jobs. All of them run on WordPress.</p>
+
+	<nav class="callout" aria-label="Sections">
+		<p style="margin:0"><strong>Jump to:</strong>
+			<a href="#which">Which API</a> ·
+			<a href="#auth">Authentication</a> ·
+			<a href="#rest">REST CRUD</a> ·
+			<a href="#fields">Custom fields</a> ·
+			<a href="#graphql">GraphQL</a> ·
+			<a href="#app">App endpoints</a> ·
+			<a href="#webhooks">Webhooks</a> ·
+			<a href="#errors">Errors</a>
+		</p>
+	</nav>
+
+	<div class="doc-section" id="which">
+		<h2>Which API should I use?</h2>
+		<div>
+			<table>
+				<thead>
+					<tr><th>Job</th><th>Use</th><th>Why</th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Create / update / delete content</td>
+						<td><code>/wp-json/wp/v2/…</code></td>
+						<td>WPGraphQL mutations exist but REST is simpler and covers every field here.</td>
+					</tr>
+					<tr>
+						<td>Read content for a page</td>
+						<td><code>/graphql</code></td>
+						<td>One request for exactly the fields you need. This is what the site build uses.</td>
+					</tr>
+					<tr>
+						<td>Users, billing, settings</td>
+						<td><code>/wp-json/app/v1/…</code></td>
+						<td>This project's own endpoints, behind a shared secret.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="doc-section" id="auth">
+		<h2>Authentication</h2>
+
+		<h3 style="font-size:var(--step-0);margin:0 0 0.5rem">REST — application passwords</h3>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Create one at <a href={`${wpOrigin}/wp-admin/profile.php`} target="_blank" rel="noopener noreferrer">Users →
+			Profile → Application Passwords</a>, then send it as HTTP Basic. Reads of published content need no auth;
+			writes do.
+		</p>
+		<pre style="overflow-x:auto"><code>{`curl -u "admin:xxxx xxxx xxxx xxxx xxxx xxxx" \\
+  "${wpOrigin}/wp-json/wp/v2/projects"`}</code></pre>
+
+		<h3 style="font-size:var(--step-0);margin:1.25rem 0 0.5rem">app/v1 — shared secret</h3>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Header <code>X-App-Secret</code>, matching <code>APP_SHARED_SECRET</code> in wp-config. Server-to-server
+			only — never expose it to a browser. Every route 401s without it.
+		</p>
+		<pre style="overflow-x:auto"><code>{`curl -H "X-App-Secret: $WP_SHARED_SECRET" \\
+  "${wpOrigin}/wp-json/app/v1/auth/users"`}</code></pre>
+	</div>
+
+	<div class="doc-section" id="rest">
+		<h2>REST CRUD</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Base: <code>{wpOrigin}/wp-json/wp/v2</code>
+		</p>
+
+		<div>
+			<table>
+				<thead>
+					<tr><th>Operation</th><th>Request</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>List</td><td><code>GET /projects?per_page=20&amp;page=1</code></td></tr>
+					<tr><td>Read</td><td><code>GET /projects/&lt;id&gt;</code></td></tr>
+					<tr><td>Read by slug</td><td><code>GET /projects?slug=northside-coffee</code></td></tr>
+					<tr><td>Create</td><td><code>POST /projects</code></td></tr>
+					<tr><td>Update</td><td><code>POST /projects/&lt;id&gt;</code></td></tr>
+					<tr><td>Delete</td><td><code>DELETE /projects/&lt;id&gt;</code> (trash) · <code>?force=true</code> (permanent)</td></tr>
+				</tbody>
+			</table>
+		</div>
+
+		<h3 style="font-size:var(--step-0);margin:1.5rem 0 0.5rem">Endpoints by type</h3>
+		<div>
+			<table>
+				<thead>
+					<tr><th>Type</th><th>REST</th><th>GraphQL</th><th>Field group</th></tr>
+				</thead>
+				<tbody>
+					{
+						types.map((type) => (
+							<tr>
+								<td><strong>{type.label}</strong></td>
+								<td><code>/wp/v2/{type.rest}</code></td>
+								<td><code>{type.gqlMany}</code></td>
+								<td style="color:var(--ink-faint)">{type.group}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+		<p class="meta">
+			Taxonomies: <code>/wp/v2/app_capability</code> and <code>/wp/v2/app_industry</code>.
+		</p>
+
+		<h3 style="font-size:var(--step-0);margin:1.5rem 0 0.5rem">Create a project</h3>
+		<pre style="overflow-x:auto"><code>{`curl -X POST "${wpOrigin}/wp-json/wp/v2/projects" \\
+  -u "$WP_USER:$WP_APP_PASSWORD" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "title":   "Northside Coffee Rebrand",
+    "slug":    "northside-coffee",
+    "status":  "publish",
+    "content": "<p>A full identity refresh.</p>",
+    "meta": {
+      "app_project_client":       "Northside Coffee",
+      "app_project_year":         2026,
+      "app_project_featured":     true,
+      "app_project_deliverables": ["Logo system","Packaging"]
+    }
+  }'`}</code></pre>
+
+		<h3 style="font-size:var(--step-0);margin:1.5rem 0 0.5rem">Update just one field</h3>
+		<pre style="overflow-x:auto"><code>{`curl -X POST "${wpOrigin}/wp-json/wp/v2/projects/7" \\
+  -u "$WP_USER:$WP_APP_PASSWORD" \\
+  -H "Content-Type: application/json" \\
+  -d '{"meta":{"app_project_year":2027}}'`}</code></pre>
+		<p class="meta">
+			<code>meta</code> is merged, not replaced — keys you omit keep their value.
+		</p>
+	</div>
+
+	<div class="doc-section" id="fields">
+		<h2>Custom fields</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Meta Box fields are exposed under <code>meta</code> by
+			<code>app-rest-fields.php</code>. They use their raw ids there, unlike GraphQL where the shared prefix is
+			stripped — <code>app_project_client</code> in REST is <code>projectDetails.client</code> in GraphQL.
+		</p>
+		<div>
+			<table>
+				<thead>
+					<tr><th>Meta Box type</th><th>REST shape</th><th>Example</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>text, textarea, url, select</td><td>string</td><td><code>"Acme Co."</code></td></tr>
+					<tr><td>number (step 1)</td><td>integer</td><td><code>2026</code></td></tr>
+					<tr><td>checkbox, switch</td><td>boolean</td><td><code>true</code></td></tr>
+					<tr><td><code>clone: true</code></td><td>array of strings</td><td><code>["Logo","Packaging"]</code></td></tr>
+					<tr><td>single_image</td><td>integer (attachment ID)</td><td><code>42</code></td></tr>
+					<tr><td>image_advanced</td><td>array of integers</td><td><code>[42, 43]</code></td></tr>
+					<tr><td>group</td><td>not exposed</td><td>Use GraphQL</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="meta">
+			Images are attachment IDs. Upload first via <code>POST /wp/v2/media</code>, then write the returned id.
+			GraphQL resolves the same fields to full objects with url, alt and dimensions.
+		</p>
+	</div>
+
+	<div class="doc-section" id="graphql">
+		<h2>GraphQL</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			<code>POST {wpOrigin}/graphql</code> · explore it in
+			<a href={`${wpOrigin}/wp-admin/admin.php?page=graphiql-ide`} target="_blank" rel="noopener noreferrer">GraphiQL</a>.
+			Introspection is disabled for unauthenticated requests by default, which is why GraphiQL runs inside wp-admin.
+		</p>
+		<pre style="overflow-x:auto"><code>{`curl -X POST "${wpOrigin}/graphql" \\
+  -H "Content-Type: application/json" \\
+  -d '{"query":"{ project(id: \\"northside-coffee\\", idType: SLUG) {
+        title
+        frontendPath
+        projectDetails {
+          client
+          year
+          deliverables
+          gallery { url alt width height }
+        }
+      } }"}'`}</code></pre>
+		<p class="meta">
+			Meta Box groups appear as one object field each. Values resolve lazily, so a field you don't ask for costs
+			no database read. Cursor pagination: <code>projects(first: 100, after: $cursor)</code> — WPGraphQL caps
+			<code>first</code> at 100.
+		</p>
+	</div>
+
+	<div class="doc-section" id="app">
+		<h2>App endpoints</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Base: <code>{wpOrigin}/wp-json/app/v1</code> · all require <code>X-App-Secret</code>.
+		</p>
+		<div>
+			<table>
+				<thead>
+					<tr><th>Method</th><th>Path</th><th>Description</th></tr>
+				</thead>
+				<tbody>
+					{
+						appEndpoints.map(([method, path, description]) => (
+							<tr>
+								<td><code>{method}</code></td>
+								<td><code>{path}</code></td>
+								<td style="color:var(--ink-soft)">{description}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="doc-section" id="webhooks">
+		<h2>Webhooks this app receives</h2>
+		<div>
+			<table>
+				<thead>
+					<tr><th>Path</th><th>From</th><th>Verified by</th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code>/api/billing/stripe-webhook</code></td>
+						<td>Stripe</td>
+						<td>HMAC over the raw body (<code>STRIPE_WEBHOOK_SECRET</code>)</td>
+					</tr>
+					<tr>
+						<td><code>/api/billing/paypal-webhook</code></td>
+						<td>PayPal</td>
+						<td>PayPal's verify-webhook-signature API (<code>PAYPAL_WEBHOOK_ID</code>)</td>
+					</tr>
+					<tr>
+						<td><code>/_refresh</code></td>
+						<td>WordPress on save</td>
+						<td>Dev only — refreshes the content cache</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="meta">
+			Webhooks are the only thing that grants a subscription. Unverified events are rejected with 400; a handler
+			failure returns 500 so the provider retries.
+		</p>
+	</div>
+
+	<div class="doc-section" id="errors">
+		<h2>Status codes</h2>
+		<div>
+			<table>
+				<tbody>
+					<tr><td><code>400</code></td><td>Malformed body, or a webhook that failed verification.</td></tr>
+					<tr><td><code>401</code></td><td>Missing/wrong <code>X-App-Secret</code>, or bad credentials.</td></tr>
+					<tr><td><code>403</code></td><td>Authenticated but not allowed — includes Astro's cross-origin POST check.</td></tr>
+					<tr><td><code>404</code></td><td>Not found, <em>or</em> found but not yours to see (admin pages).</td></tr>
+					<tr><td><code>429</code></td><td>Too many failed logins, or Emailit's rate limit.</td></tr>
+					<tr><td><code>503</code></td><td>Maintenance mode, or the auth API with no shared secret configured.</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="meta">
+			WordPress errors come back as <code>{'{ code, message, data: { status } }'}</code>. Failed logins always say
+			the same thing regardless of whether the account exists.
+		</p>
+	</div>
+</DocsLayout>

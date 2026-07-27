@@ -1,0 +1,81 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ROLE_ADMIN } from '../../config';
+import { formatDate } from '../../lib/routes';
+
+const user = Astro.locals.user!;
+const isAdmin = user.roles.includes(ROLE_ADMIN);
+
+/**
+ * Profile edits go to wp-admin rather than being reimplemented here.
+ * WordPress already has the forms, the validation, the email-change
+ * confirmation flow and the password strength meter — duplicating that badly
+ * would be worse than linking to it.
+ */
+const wpProfileUrl = (() => {
+	const endpoint = import.meta.env.WP_GRAPHQL_ENDPOINT ?? 'http://localhost:8080/graphql';
+
+	try {
+		return `${new URL(endpoint).origin}/wp-admin/profile.php`;
+	} catch {
+		return '#';
+	}
+})();
+---
+
+<DashboardLayout title="Account" user={user}>
+	<header class="dash__head">
+		<h1>Account</h1>
+		<p>Your details, as WordPress holds them.</p>
+	</header>
+
+	<div class="panel">
+		<h2 class="panel__title">Profile</h2>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th scope="row">Display name</th>
+						<td>{user.displayName}</td>
+					</tr>
+					<tr>
+						<th scope="row">First name</th>
+						<td>{user.firstName || '—'}</td>
+					</tr>
+					<tr>
+						<th scope="row">Last name</th>
+						<td>{user.lastName || '—'}</td>
+					</tr>
+					<tr>
+						<th scope="row">Email</th>
+						<td>{user.email}</td>
+					</tr>
+					<tr>
+						<th scope="row">Username</th>
+						<td><code>{user.login}</code></td>
+					</tr>
+					<tr>
+						<th scope="row">Role</th>
+						<td>{isAdmin ? 'Administrator' : 'Member'}</td>
+					</tr>
+					<tr>
+						<th scope="row">Joined</th>
+						<td>{formatDate(user.registered) ?? '—'}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<p style="margin-top:1.25rem">
+			<a class="button button--ghost" href={wpProfileUrl} target="_blank" rel="noopener noreferrer">
+				Edit in WordPress
+			</a>
+		</p>
+		<p class="field__hint">
+			Names, email and password are edited in WordPress, which owns the account. Changes show up here on your next
+			page load.
+		</p>
+	</div>
+</DashboardLayout>

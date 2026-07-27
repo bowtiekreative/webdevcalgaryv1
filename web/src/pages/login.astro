@@ -1,0 +1,80 @@
+---
+export const prerender = false;
+
+import '../styles/global.css';
+import '../styles/dashboard.css';
+import { site } from '../config';
+import { csrfToken } from '../lib/auth/csrf';
+import { safeRedirect } from '../lib/auth/session';
+
+// Middleware already bounced signed-in visitors away from here.
+const csrf = await csrfToken(Astro);
+const params = Astro.url.searchParams;
+const error = params.get('error');
+const email = params.get('email') ?? '';
+const next = safeRedirect(params.get('next'));
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>Sign in — {site.name}</title>
+	</head>
+	<body>
+		<main class="login">
+			<div class="login__card">
+				<a class="login__brand" href="/">
+					<span aria-hidden="true">{site.mark}</span> {site.name}
+				</a>
+
+				<h1 style="font-size: var(--step-2)">Sign in</h1>
+				<p class="field__hint" style="margin-bottom:1.5rem">
+					Use the same credentials as the WordPress admin.
+				</p>
+
+				{error && <p class="alert alert--error">{error}</p>}
+
+				<form method="POST" action="/api/auth/login">
+					<input type="hidden" name="csrf" value={csrf} />
+					<input type="hidden" name="next" value={next} />
+
+					<div class="field">
+						<label for="email">Email or username</label>
+						<input
+							id="email"
+							name="email"
+							type="text"
+							value={email}
+							autocomplete="username"
+							required
+							autofocus
+						/>
+					</div>
+
+					<div class="field">
+						<label for="password">Password</label>
+						<input
+							id="password"
+							name="password"
+							type="password"
+							autocomplete="current-password"
+							required
+						/>
+					</div>
+
+					<button class="button" type="submit" style="width:100%;cursor:pointer;font:inherit">
+						Sign in
+					</button>
+				</form>
+
+				<p class="field__hint" style="margin-top:1.25rem">
+					Forgotten your password? Reset it from
+					<a href="/wp-login.php?action=lostpassword">WordPress</a>.
+				</p>
+			</div>
+		</main>
+	</body>
+</html>

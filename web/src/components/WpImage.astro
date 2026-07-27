@@ -1,0 +1,49 @@
+---
+/**
+ * Renders a Meta Box / WordPress image.
+ *
+ * This intentionally emits a plain <img> using the `srcset` WordPress already
+ * generated, rather than astro:assets <Image />. Two reasons:
+ *
+ *  1. Build resilience — optimising remote images means downloading every
+ *     upload at build time, so one 404 or a slow WordPress host breaks the
+ *     build. A content site should not be that fragile.
+ *  2. WordPress already produced responsive sizes on upload, so most of the
+ *     benefit is there for free.
+ *
+ * `image.domains` in astro.config.mjs is already set to the WordPress host, so
+ * if you want build-time optimisation for a specific spot (a hero, say) you can
+ * import { Image } from 'astro:assets' and use it directly with `media.url`.
+ */
+import type { Media } from '../lib/wp/schema';
+
+interface Props {
+	media: Media | null | undefined;
+	/** `sizes` attribute. Set this whenever the image is not full-width. */
+	sizes?: string;
+	/** Above-the-fold images should be eager and high priority. */
+	eager?: boolean;
+	class?: string;
+	/** Overrides the alt text from WordPress. Use "" for decorative images. */
+	alt?: string;
+}
+
+const { media, sizes = '100vw', eager = false, class: className, alt } = Astro.props;
+---
+
+{
+	media && (
+		<img
+			src={media.url}
+			srcset={media.srcset ?? undefined}
+			sizes={media.srcset ? sizes : undefined}
+			width={media.width ?? undefined}
+			height={media.height ?? undefined}
+			alt={alt ?? media.alt}
+			class={className}
+			loading={eager ? 'eager' : 'lazy'}
+			decoding={eager ? 'sync' : 'async'}
+			fetchpriority={eager ? 'high' : undefined}
+		/>
+	)
+}

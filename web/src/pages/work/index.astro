@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { byMenuOrderThenDate } from '../../lib/routes';
+
+const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
+---
+
+<BaseLayout title="Work" description="Selected projects from the studio.">
+	<section class="section">
+		<div class="wrap">
+			<p class="eyebrow">Portfolio</p>
+			<h1>Work</h1>
+			<p class="lede">Identity, web and campaign work for clients who care about the details.</p>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="wrap">
+			{
+				projects.length > 0 ? (
+					<div class="grid grid--3">
+						{projects.map((project, index) => (
+							<ProjectCard project={project} eager={index < 3} />
+						))}
+					</div>
+				) : (
+					<EmptyState what="projects" adminPath="Work → Add New Project" />
+				)
+			}
+		</div>
+	</section>
+</BaseLayout>

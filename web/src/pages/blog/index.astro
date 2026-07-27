@@ -1,0 +1,115 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import WpImage from '../../components/WpImage.astro';
+import { byDateDesc, formatDate, isoDate } from '../../lib/routes';
+
+const posts = (await getCollection('posts')).sort(byDateDesc);
+---
+
+<BaseLayout title="Journal" description="Notes on brand, design and building for the web.">
+	<section class="section">
+		<div class="wrap">
+			<p class="eyebrow">Journal</p>
+			<h1>Notes &amp; thinking</h1>
+			<p class="lede">Occasional writing about design, type and the web.</p>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="wrap">
+			{
+				posts.length > 0 ? (
+					<ul class="post-list">
+						{posts.map((post, index) => (
+							<li class="post-list__item">
+								<a class="post" href={post.data.path}>
+									{post.data.featuredImage && (
+										<div class="post__media">
+											<WpImage
+												media={post.data.featuredImage}
+												eager={index === 0}
+												sizes="(min-width: 48rem) 14rem, 100vw"
+												alt=""
+											/>
+										</div>
+									)}
+
+									<div class="post__text">
+										{formatDate(post.data.date) && (
+											<time class="meta" datetime={isoDate(post.data.date)}>
+												{formatDate(post.data.date)}
+											</time>
+										)}
+										<h2 class="post__title">{post.data.title}</h2>
+										{post.data.summary && <p class="post__summary">{post.data.summary}</p>}
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				) : (
+					<EmptyState what="posts" adminPath="Posts → Add New" />
+				)
+			}
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.post-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0;
+	}
+
+	.post-list__item + .post-list__item {
+		border-top: 1px solid var(--line);
+	}
+
+	.post {
+		display: grid;
+		gap: 1.25rem;
+		padding-block: clamp(1.5rem, 4vw, 2.25rem);
+		text-decoration: none;
+		color: inherit;
+	}
+
+	@media (min-width: 48rem) {
+		.post {
+			grid-template-columns: 14rem minmax(0, 1fr);
+			align-items: start;
+		}
+	}
+
+	.post__media {
+		overflow: hidden;
+		border-radius: var(--radius);
+		aspect-ratio: 3 / 2;
+		background: var(--paper);
+	}
+
+	.post__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.post__title {
+		font-size: var(--step-2);
+		margin: 0.35rem 0 0.5rem;
+	}
+
+	.post:hover .post__title {
+		color: var(--accent);
+	}
+
+	.post__summary {
+		margin: 0;
+		color: var(--ink-soft);
+		max-width: var(--measure);
+	}
+</style>

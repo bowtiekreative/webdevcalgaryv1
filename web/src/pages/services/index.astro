@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { byMenuOrderThenDate } from '../../lib/routes';
+
+const services = (await getCollection('services')).sort(byMenuOrderThenDate);
+---
+
+<BaseLayout title="Services" description="How we can help.">
+	<section class="section">
+		<div class="wrap">
+			<p class="eyebrow">Capabilities</p>
+			<h1>Services</h1>
+			<p class="lede">A studio-sized team, so you deal with the people doing the work.</p>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="wrap">
+			{
+				services.length > 0 ? (
+					<div class="grid grid--3">
+						{services.map((service) => (
+							<ServiceCard service={service} />
+						))}
+					</div>
+				) : (
+					<EmptyState what="services" adminPath="Services → Add New Service" />
+				)
+			}
+		</div>
+	</section>
+</BaseLayout>

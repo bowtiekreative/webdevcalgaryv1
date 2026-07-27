@@ -1,0 +1,105 @@
+---
+import { getPrimaryNav } from '../lib/wp/site';
+import { site } from '../config';
+
+const nav = await getPrimaryNav();
+const current = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+function isCurrent(href: string): boolean {
+	if (href === '/') {
+		return current === '/';
+	}
+
+	return current === href || current.startsWith(`${href}/`);
+}
+---
+
+<header class="site-header">
+	<div class="wrap site-header__inner">
+		<a class="brand" href="/">
+			<span class="brand__mark" aria-hidden="true">{site.mark}</span>
+			<span class="brand__name">{site.name}</span>
+		</a>
+
+		<nav aria-label="Primary">
+			<ul class="nav">
+				{
+					nav.map((item) => (
+						<li>
+							<a
+								href={item.href}
+								aria-current={isCurrent(item.href) ? 'page' : undefined}
+								target={item.external ? '_blank' : undefined}
+								rel={item.external ? 'noopener noreferrer' : undefined}
+							>
+								{item.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header {
+		border-bottom: 1px solid var(--line);
+		background: color-mix(in oklab, var(--paper) 88%, transparent);
+		backdrop-filter: blur(8px);
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.site-header__inner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-block: 1rem;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-family: var(--font-serif);
+		font-size: var(--step-1);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		text-decoration: none;
+	}
+
+	.brand__mark {
+		color: var(--accent);
+	}
+
+	.nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: clamp(0.75rem, 2.5vw, 1.75rem);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-size: var(--step--1);
+		letter-spacing: 0.02em;
+	}
+
+	.nav a {
+		text-decoration: none;
+		color: var(--ink-soft);
+		padding-block: 0.25rem;
+		border-bottom: 2px solid transparent;
+	}
+
+	.nav a:hover {
+		color: var(--ink);
+	}
+
+	.nav a[aria-current='page'] {
+		color: var(--ink);
+		border-bottom-color: var(--accent);
+	}
+</style>

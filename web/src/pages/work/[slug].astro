@@ -1,0 +1,326 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WpImage from '../../components/WpImage.astro';
+import TestimonialCard from '../../components/TestimonialCard.astro';
+import { byMenuOrderThenDate } from '../../lib/routes';
+
+// getStaticPaths cannot infer prop types for Astro.props, so declare them.
+interface Props {
+	project: CollectionEntry<'projects'>;
+	previous: CollectionEntry<'projects'> | null;
+	next: CollectionEntry<'projects'> | null;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
+
+	return projects.map((project, index) => ({
+		params: { slug: project.id },
+		props: {
+			project,
+			// Prev/next come from the same ordering the index page uses, so
+			// "next" means what a visitor just saw below it in the grid.
+			previous: projects[index - 1] ?? null,
+			next: projects[index + 1] ?? null,
+		},
+	}));
+};
+
+const { project, previous, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+
+const testimonials = (await getCollection('testimonials')).filter(
+	(testimonial) => testimonial.data.project?.slug === project.id,
+);
+
+const facts = [
+	data.client ? { label: 'Client', value: data.client } : null,
+	data.year !== null ? { label: 'Year', value: String(data.year) } : null,
+	data.role ? { label: 'Role', value: data.role } : null,
+	data.industries.length > 0 ? { label: 'Industry', value: data.industries.map((t) => t.name).join(', ') } : null,
+].filter((fact): fact is { label: string; value: string } => fact !== null);
+---
+
+<BaseLayout
+	title={data.title}
+	description={data.summary}
+	seo={data.seo}
+	type="article"
+	publishedTime={data.date}
+	modifiedTime={data.modified}
+>
+	<article>
+		<header class="section project-head">
+			<div class="wrap">
+				{data.client && <p class="eyebrow">{data.client}</p>}
+				<h1>{data.title}</h1>
+				{data.summary && <p class="lede">{data.summary}</p>}
+
+				{
+					data.capabilities.length > 0 && (
+						<ul class="tag-list project-head__tags">
+							{data.capabilities.map((capability) => (
+								<li class="tag">{capability.name}</li>
+							))}
+						</ul>
+					)
+				}
+			</div>
+		</header>
+
+		{
+			data.hero && (
+				<div class="wrap project-hero">
+					<WpImage media={data.hero} eager sizes="(min-width: 72rem) 68rem, 100vw" />
+				</div>
+			)
+		}
+
+		<div class="section">
+			<div class="wrap project-body">
+				<div class="prose">
+					<Content />
+				</div>
+
+				<aside class="project-aside">
+					{
+						facts.length > 0 && (
+							<dl class="facts">
+								{facts.map((fact) => (
+									<div class="facts__row">
+										<dt>{fact.label}</dt>
+										<dd>{fact.value}</dd>
+									</div>
+								))}
+							</dl>
+						)
+					}
+
+					{
+						data.deliverables.length > 0 && (
+							<div class="aside-block">
+								<h2 class="aside-block__title">Deliverables</h2>
+								<ul class="aside-list">
+									{data.deliverables.map((item) => (
+										<li>{item}</li>
+									))}
+								</ul>
+							</div>
+						)
+					}
+
+					{
+						data.externalUrl && (
+							<p>
+								<a class="button button--ghost" href={data.externalUrl} target="_blank" rel="noopener noreferrer">
+									Visit the site
+								</a>
+							</p>
+						)
+					}
+				</aside>
+			</div>
+		</div>
+
+		{
+			data.gallery.length > 0 && (
+				<section class="section section--alt">
+					<div class="wrap">
+						<h2 class="visually-hidden">Gallery</h2>
+						<div class="gallery">
+							{data.gallery.map((image) => (
+								<figure class="gallery__item">
+									<WpImage media={image} sizes="(min-width: 60rem) 50vw, 100vw" />
+									{image.caption && <figcaption>{image.caption}</figcaption>}
+								</figure>
+							))}
+						</div>
+					</div>
+				</section>
+			)
+		}
+
+		{
+			testimonials.length > 0 && (
+				<section class="section">
+					<div class="wrap wrap--narrow">
+						{testimonials.map((testimonial) => (
+							<TestimonialCard testimonial={testimonial} />
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			(previous || next) && (
+				<nav class="section pager" aria-label="More projects">
+					<div class="wrap pager__inner">
+						{previous ? (
+							<a class="pager__link" href={previous.data.path}>
+								<span class="meta">Previous</span>
+								<span>{previous.data.title}</span>
+							</a>
+						) : (
+							<span />
+						)}
+
+						{next && (
+							<a class="pager__link pager__link--next" href={next.data.path}>
+								<span class="meta">Next</span>
+								<span>{next.data.title}</span>
+							</a>
+						)}
+					</div>
+				</nav>
+			)
+		}
+	</article>
+</BaseLayout>
+
+<style>
+	.project-head {
+		padding-bottom: 0;
+	}
+
+	.project-head__tags {
+		margin-top: 1.25rem;
+	}
+
+	.project-hero {
+		margin-top: clamp(2rem, 5vw, 3rem);
+	}
+
+	.project-hero img {
+		width: 100%;
+		border-radius: var(--radius);
+	}
+
+	.project-body {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: start;
+	}
+
+	@media (min-width: 60rem) {
+		.project-body {
+			grid-template-columns: minmax(0, 1fr) 16rem;
+		}
+
+		.project-aside {
+			position: sticky;
+			top: 6rem;
+		}
+	}
+
+	.facts {
+		margin: 0 0 2rem;
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.facts__row {
+		display: grid;
+		gap: 0.1rem;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.facts dt {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-faint);
+	}
+
+	.facts dd {
+		margin: 0;
+	}
+
+	.aside-block {
+		margin-bottom: 2rem;
+	}
+
+	.aside-block__title {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-faint);
+		margin-bottom: 0.5rem;
+	}
+
+	.aside-list {
+		margin: 0;
+		padding-left: 1.1rem;
+		font-size: var(--step--1);
+	}
+
+	.aside-list li + li {
+		margin-top: 0.25rem;
+	}
+
+	.gallery {
+		display: grid;
+		gap: clamp(1rem, 3vw, 2rem);
+	}
+
+	@media (min-width: 48rem) {
+		.gallery {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		/* Let every third image run full width so the rhythm is not monotonous. */
+		.gallery__item:nth-child(3n + 1) {
+			grid-column: 1 / -1;
+		}
+	}
+
+	.gallery__item {
+		margin: 0;
+	}
+
+	.gallery__item img {
+		width: 100%;
+		border-radius: var(--radius);
+	}
+
+	.gallery__item figcaption {
+		margin-top: 0.5rem;
+		font-size: var(--step--1);
+		color: var(--ink-faint);
+	}
+
+	.pager {
+		border-top: 1px solid var(--line);
+	}
+
+	.pager__inner {
+		display: flex;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.pager__link {
+		display: grid;
+		gap: 0.2rem;
+		text-decoration: none;
+		font-family: var(--font-serif);
+		font-size: var(--step-1);
+		max-width: 20rem;
+	}
+
+	.pager__link--next {
+		text-align: right;
+		margin-left: auto;
+	}
+
+	.pager__link:hover {
+		color: var(--accent);
+	}
+</style>

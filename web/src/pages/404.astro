@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="That page has moved or never existed.">
+	<section class="section notfound">
+		<div class="wrap wrap--narrow">
+			<p class="eyebrow">404</p>
+			<h1>We can't find that page.</h1>
+			<p class="lede">It may have been renamed in WordPress, or the link that brought you here is out of date.</p>
+			<p>
+				<a class="button" href="/">Back to the home page</a>
+			</p>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.notfound {
+		padding-block: clamp(4rem, 12vw, 9rem);
+	}
+</style>

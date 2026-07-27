@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
+import type { Seo as SeoData } from '../lib/wp/schema';
+import { site } from '../config';
+
+interface Props {
+	title: string;
+	description?: string | null;
+	seo?: SeoData | null;
+	type?: 'website' | 'article';
+	publishedTime?: string | null;
+	modifiedTime?: string | null;
+}
+
+const { title, description, seo, type, publishedTime, modifiedTime } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="alternate" type="application/rss+xml" title={`${site.name} — Journal`} href="/rss.xml" />
+		<Seo
+			title={title}
+			description={description}
+			seo={seo}
+			type={type}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<Header />
+		<main id="main">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		z-index: 100;
+		padding: 0.75rem 1rem;
+		background: var(--ink);
+		color: var(--paper);
+	}
+
+	.skip-link:focus {
+		left: 0;
+	}
+</style>

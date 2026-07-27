@@ -1,0 +1,104 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { findPlan, ROLE_ADMIN } from '../../config';
+import { formatDate } from '../../lib/routes';
+
+// Guaranteed by src/middleware.ts, which redirects when there is no user.
+const user = Astro.locals.user!;
+const subscription = user.subscription;
+const plan = findPlan(subscription.plan);
+const isAdmin = user.roles.includes(ROLE_ADMIN);
+
+const statusClass = subscription.isActive
+	? 'badge--active'
+	: subscription.status === 'past_due'
+		? 'badge--warn'
+		: 'badge--none';
+---
+
+<DashboardLayout title="Overview" user={user}>
+	<header class="dash__head">
+		<h1>Hello, {user.firstName || user.displayName}</h1>
+		<p>Here's where your account stands.</p>
+	</header>
+
+	<div class="stat-row">
+		<div class="stat">
+			<p class="stat__label">Plan</p>
+			<p class="stat__value">{plan?.name ?? 'Free'}</p>
+		</div>
+
+		<div class="stat">
+			<p class="stat__label">Status</p>
+			<p class="stat__value">
+				<span class={`badge ${statusClass}`}>
+					{subscription.status === 'none' ? 'No subscription' : subscription.status}
+				</span>
+			</p>
+		</div>
+
+		<div class="stat">
+			<p class="stat__label">{subscription.status === 'canceled' ? 'Ends' : 'Renews'}</p>
+			<p class="stat__value">{formatDate(subscription.renewsAt) ?? '—'}</p>
+		</div>
+
+		<div class="stat">
+			<p class="stat__label">Member since</p>
+			<p class="stat__value">{formatDate(user.registered) ?? '—'}</p>
+		</div>
+	</div>
+
+	{
+		!subscription.isActive && (
+			<div class="panel">
+				<h2 class="panel__title">Choose a plan</h2>
+				<p style="color:var(--ink-soft)">
+					You're on the free tier. Subscribe to unlock campaign sending and the rest of the paid features.
+				</p>
+				<p style="margin-top:1rem">
+					<a class="button" href="/dashboard/billing">See plans</a>
+				</p>
+			</div>
+		)
+	}
+
+	{
+		subscription.status === 'past_due' && (
+			<div class="alert alert--error">
+				Your last payment failed. Update your card from the billing page to keep access.
+			</div>
+		)
+	}
+
+	<div class="panel">
+		<h2 class="panel__title">Account</h2>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th scope="row">Name</th>
+						<td>{user.displayName}</td>
+					</tr>
+					<tr>
+						<th scope="row">Email</th>
+						<td>{user.email}</td>
+					</tr>
+					<tr>
+						<th scope="row">Role</th>
+						<td>{isAdmin ? 'Administrator' : 'Member'}</td>
+					</tr>
+					{
+						subscription.provider && (
+							<tr>
+								<th scope="row">Billed via</th>
+								<td style="text-transform:capitalize">{subscription.provider}</td>
+							</tr>
+						)
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</DashboardLayout>

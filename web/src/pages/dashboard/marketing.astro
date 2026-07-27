@@ -1,0 +1,114 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { csrfToken } from '../../lib/auth/csrf';
+import { isAdmin } from '../../lib/auth/session';
+import { emailitConfigured, listAudiences, type Audience } from '../../lib/emailit/client';
+
+const user = Astro.locals.user!;
+
+// Middleware guards /dashboard/users but not this page, so check here.
+if (!isAdmin(user)) {
+	return new Response('Not found', { status: 404 });
+}
+
+const csrf = await csrfToken(Astro);
+const params = Astro.url.searchParams;
+const error = params.get('error');
+const notice = params.get('notice');
+
+const configured = await emailitConfigured();
+
+let audiences: Audience[] = [];
+let loadError: string | null = null;
+
+if (configured) {
+	try {
+		audiences = await listAudiences();
+	} catch (loadingError) {
+		loadError = loadingError instanceof Error ? loadingError.message : String(loadingError);
+	}
+}
+---
+
+<DashboardLayout title="Marketing" user={user}>
+	<header class="dash__head">
+		<h1>Email marketing</h1>
+		<p>Send a campaign to an Emailit audience.</p>
+	</header>
+
+	{error && <p class="alert alert--error">{error}</p>}
+	{notice && <p class="alert alert--ok">{notice}</p>}
+
+	{
+		!configured && (
+			<p class="alert alert--error">
+				<code>EMAILIT_API_KEY</code> is not set in <code>web/.env</code>, so audiences cannot be loaded. Create a
+				key in your Emailit workspace settings.
+			</p>
+		)
+	}
+
+	{loadError && <p class="alert alert--error">Could not load audiences: {loadError}</p>}
+
+	{
+		configured && !loadError && (
+			<div class="panel">
+				<h2 class="panel__title">New campaign</h2>
+
+				{audiences.length === 0 ? (
+					<p style="color:var(--ink-soft)">
+						No audiences yet. Create one in your Emailit workspace, add subscribers, then come back.
+					</p>
+				) : (
+					<form method="POST" action="/api/marketing/campaign">
+						<input type="hidden" name="csrf" value={csrf} />
+
+						<div class="field">
+							<label for="audience">Audience</label>
+							<select id="audience" name="audience" required>
+								{audiences.map((audience) => (
+									<option value={audience.id}>
+										{audience.name}
+										{typeof audience.subscriber_count === 'number'
+											? ` (${audience.subscriber_count} subscribers)`
+											: ''}
+									</option>
+								))}
+							</select>
+						</div>
+
+						<div class="field">
+							<label for="subject">Subject</label>
+							<input id="subject" name="subject" type="text" maxlength="150" required />
+						</div>
+
+						<div class="field">
+							<label for="html">Body (HTML)</label>
+							<textarea id="html" name="html" required>{`<p>Hi {{name}},</p>\n<p></p>`}</textarea>
+							<p class="field__hint">
+								<code>{'{{name}}'}</code> and <code>{'{{email}}'}</code> are replaced per recipient.
+							</p>
+						</div>
+
+						<button class="button" type="submit" style="cursor:pointer;font:inherit">Send campaign</button>
+					</form>
+				)}
+			</div>
+		)
+	}
+
+	<div class="panel">
+		<h2 class="panel__title">Before you send a big list</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Emailit starts new workspaces at <strong>2 messages per second</strong> and <strong>5,000 per day</strong>.
+			Sending happens inline with this request, throttled to that rate, so a 500-person list holds the request open
+			for roughly four minutes. That is why sends above 500 recipients are refused rather than silently truncated.
+		</p>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			For larger lists, move the send into a background worker and have it report progress — the throttling logic
+			in <code>src/lib/emailit/client.ts</code> is already separate from this page for that reason.
+		</p>
+	</div>
+</DashboardLayout>
