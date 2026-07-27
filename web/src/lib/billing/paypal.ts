@@ -11,23 +11,19 @@
  * webhook writes subscription state.
  */
 
-function env(key: string): string {
-	const value =
-		(import.meta.env as Record<string, string | undefined>)[key] ??
-		(typeof process !== 'undefined' ? process.env?.[key] : undefined);
+import { setting } from '../settings';
 
-	return value ?? '';
-}
-
-/** Live unless PAYPAL_ENV says otherwise, so a typo cannot silently bill real cards. */
-function apiBase(): string {
-	return env('PAYPAL_ENV') === 'live'
+/** Live unless PAYPAL_ENV says exactly 'live', so a typo cannot bill real cards. */
+async function apiBase(): Promise<string> {
+	return (await setting('PAYPAL_ENV')) === 'live'
 		? 'https://api-m.paypal.com'
 		: 'https://api-m.sandbox.paypal.com';
 }
 
-export function paypalConfigured(): boolean {
-	return env('PAYPAL_CLIENT_ID').length > 0 && env('PAYPAL_CLIENT_SECRET').length > 0;
+export async function paypalConfigured(): Promise<boolean> {
+	const [id, secret] = await Promise.all([setting('PAYPAL_CLIENT_ID'), setting('PAYPAL_CLIENT_SECRET')]);
+
+	return id.length > 0 && secret.length > 0;
 }
 
 interface TokenCache {
@@ -43,14 +39,15 @@ async function accessToken(): Promise<string> {
 		return tokenCache.token;
 	}
 
-	const id = env('PAYPAL_CLIENT_ID');
-	const secret = env('PAYPAL_CLIENT_SECRET');
+	const [id, secret] = await Promise.all([setting('PAYPAL_CLIENT_ID'), setting('PAYPAL_CLIENT_SECRET')]);
 
 	if (!id || !secret) {
-		throw new Error('PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET are not set in web/.env.');
+		throw new Error(
+			'No PayPal credentials. Set PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET in web/.env, or add them under Settings -> App Settings.',
+		);
 	}
 
-	const response = await fetch(`${apiBase()}/v1/oauth2/token`, {
+	const response = await fetch(`${await apiBase()}/v1/oauth2/token`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Basic ${Buffer.from(`${id}:${secret}`, 'utf8').toString('base64')}`,
@@ -76,7 +73,7 @@ async function accessToken(): Promise<string> {
 }
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
-	const response = await fetch(`${apiBase()}${path}`, {
+	const response = await fetch(`${await apiBase()}${path}`, {
 		...init,
 		headers: {
 			Authorization: `Bearer ${await accessToken()}`,
@@ -171,10 +168,12 @@ export async function verifyWebhook(options: {
 	headers: Headers;
 	rawBody: string;
 }): Promise<boolean> {
-	const webhookId = env('PAYPAL_WEBHOOK_ID');
+	const webhookId = await setting('PAYPAL_WEBHOOK_ID');
 
 	if (!webhookId) {
-		throw new Error('PAYPAL_WEBHOOK_ID is not set in web/.env.');
+		throw new Error(
+			'No PayPal webhook id. Set PAYPAL_WEBHOOK_ID in web/.env, or add it under Settings -> App Settings.',
+		);
 	}
 
 	const required = [

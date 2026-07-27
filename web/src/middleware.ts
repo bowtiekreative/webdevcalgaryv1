@@ -10,6 +10,8 @@
 
 import { defineMiddleware } from 'astro:middleware';
 import { currentUser, isAdmin } from './lib/auth/session';
+import { siteMode } from './lib/settings';
+import { renderSiteModePage } from './lib/site-mode-page';
 
 /** Prefixes that require a signed-in user. */
 const PROTECTED = ['/dashboard'];
@@ -27,8 +29,50 @@ function matches(pathname: string, prefixes: string[]): boolean {
 	return prefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 }
 
+/**
+ * Paths that stay reachable while the site is in coming-soon or maintenance
+ * mode, so an administrator can still sign in and turn it back off, and so
+ * payment providers can still deliver webhooks.
+ */
+const ALWAYS_OPEN = ['/login', '/dashboard', '/api', '/_refresh'];
+
 export const onRequest = defineMiddleware(async (context, next) => {
 	const { pathname } = context.url;
+
+	/*
+	 * Maintenance gate.
+	 *
+	 * Two different moments, and the difference matters:
+	 *
+	 *  - At BUILD time Astro runs middleware while prerendering, so a build
+	 *    started while the mode is not "live" bakes the gate into every static
+	 *    page. That is the mechanism that gates the public site, and it works on
+	 *    any host, including a pure CDN with no server.
+	 *  - At RUNTIME it only covers on-demand routes (/login, /dashboard, /api).
+	 *    Prerendered pages are served straight off disk by the adapter and never
+	 *    reach middleware, so flipping the toggle does not change them until the
+	 *    next build. app-settings.php fires the build hook on change for exactly
+	 *    that reason.
+	 *
+	 * The admin bypass below therefore only ever fires for on-demand routes.
+	 * Prerendered routes carry no session at all — verified, and true in `astro
+	 * dev` as well as in production — so there is no signed-in user to
+	 * recognise there. Use SITE_MODE=live in web/.env to work locally while
+	 * production is gated.
+	 */
+	if (!matches(pathname, ALWAYS_OPEN) && !pathname.startsWith('/_astro/')) {
+		const mode = await siteMode();
+
+		if (mode.mode !== 'live') {
+			// Signed-in admins keep browsing, so the site can be checked before
+			// it goes public.
+			const viewer = await currentUser(context);
+
+			if (!isAdmin(viewer)) {
+				return renderSiteModePage(mode);
+			}
+		}
+	}
 
 	// Static routes have no session; skip the work entirely.
 	if (!matches(pathname, PROTECTED) && pathname !== '/login') {

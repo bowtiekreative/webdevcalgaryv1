@@ -8,7 +8,7 @@
 import type { APIRoute } from 'astro';
 import { currentUser } from '../../../lib/auth/session';
 import { verifyCsrf } from '../../../lib/auth/csrf';
-import { findPlan } from '../../../config';
+import { findPlan, planProviderIds } from '../../../config';
 import { createSubscription, paypalConfigured } from '../../../lib/billing/paypal';
 
 export const prerender = false;
@@ -33,7 +33,7 @@ export const POST: APIRoute = async (context) => {
 		return fail('Your session expired. Please try again.');
 	}
 
-	if (!paypalConfigured()) {
+	if (!(await paypalConfigured())) {
 		return fail('PayPal is not configured on this server.');
 	}
 
@@ -43,14 +43,16 @@ export const POST: APIRoute = async (context) => {
 		return fail('Unknown plan.');
 	}
 
-	if (!plan.paypalPlanId) {
+	const { paypalPlanId } = await planProviderIds(plan);
+
+	if (!paypalPlanId) {
 		return fail(`No PayPal plan is configured for the ${plan.name} plan.`);
 	}
 
 	try {
 		const origin = context.url.origin;
 		const { approveUrl } = await createSubscription({
-			planId: plan.paypalPlanId,
+			planId: paypalPlanId,
 			wpUserId: user.id,
 			internalPlanId: plan.id,
 			email: user.email,

@@ -41,10 +41,11 @@ export const fallbackNav = [
 /**
  * Subscription plans offered in the dashboard.
  *
- * `stripePriceId` and `paypalPlanId` come from the respective dashboards and are
- * read from env so the same build works against test and live credentials. A
- * plan with neither id set is shown but cannot be checked out, and
- * /dashboard/billing says so rather than failing at the Checkout call.
+ * Provider ids are referenced by *key name* rather than value, because they can
+ * come from either web/.env or Settings → App Settings in wp-admin. Resolve
+ * them with `planProviderIds()`, which applies that precedence. A plan whose
+ * ids are unset is still shown, with its buttons disabled and an explanation —
+ * it does not fail at the Checkout call.
  */
 export interface Plan {
 	/** Stable internal key, stored on the WordPress user. */
@@ -55,8 +56,10 @@ export interface Plan {
 	interval: 'month' | 'year';
 	description: string;
 	features: string[];
-	stripePriceId: string | null;
-	paypalPlanId: string | null;
+	/** Setting key holding the Stripe price id, e.g. STRIPE_PRICE_STARTER. */
+	stripePriceKey: string;
+	/** Setting key holding the PayPal plan id. */
+	paypalPlanKey: string;
 	/** Highlighted in the pricing table. */
 	featured?: boolean;
 }
@@ -69,8 +72,8 @@ export const plans: Plan[] = [
 		interval: 'month',
 		description: 'For a single brand and one sender domain.',
 		features: ['1 brand workspace', '2,500 emails / month', 'Email support'],
-		stripePriceId: env('STRIPE_PRICE_STARTER', '') || null,
-		paypalPlanId: env('PAYPAL_PLAN_STARTER', '') || null,
+		stripePriceKey: 'STRIPE_PRICE_STARTER',
+		paypalPlanKey: 'PAYPAL_PLAN_STARTER',
 	},
 	{
 		id: 'studio',
@@ -79,11 +82,34 @@ export const plans: Plan[] = [
 		interval: 'month',
 		description: 'For agencies running campaigns for several clients.',
 		features: ['5 brand workspaces', '25,000 emails / month', 'Campaign scheduling', 'Priority support'],
-		stripePriceId: env('STRIPE_PRICE_STUDIO', '') || null,
-		paypalPlanId: env('PAYPAL_PLAN_STUDIO', '') || null,
+		stripePriceKey: 'STRIPE_PRICE_STUDIO',
+		paypalPlanKey: 'PAYPAL_PLAN_STUDIO',
 		featured: true,
 	},
 ];
+
+/**
+ * Resolve a plan's provider ids from env or WordPress.
+ *
+ * Imported lazily to keep this module free of server-only code — config.ts is
+ * also read by prerendered marketing pages.
+ */
+export async function planProviderIds(plan: Plan): Promise<{
+	stripePriceId: string | null;
+	paypalPlanId: string | null;
+}> {
+	const { setting } = await import('./lib/settings');
+
+	const [stripePriceId, paypalPlanId] = await Promise.all([
+		setting(plan.stripePriceKey),
+		setting(plan.paypalPlanKey),
+	]);
+
+	return {
+		stripePriceId: stripePriceId || null,
+		paypalPlanId: paypalPlanId || null,
+	};
+}
 
 export function findPlan(id: string | null | undefined): Plan | null {
 	return plans.find((plan) => plan.id === id) ?? null;

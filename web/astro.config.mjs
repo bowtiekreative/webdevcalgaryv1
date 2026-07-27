@@ -42,7 +42,15 @@ export default defineConfig({
 
 	// wpDevRefresh only registers an astro:server:setup hook, so it does nothing
 	// during a production build.
-	integrations: [sitemap(), wpDevRefresh()],
+	integrations: [
+		sitemap(),
+		wpDevRefresh({
+			endpoint: wpEndpoint,
+			secret: env.WP_SHARED_SECRET,
+			// loadEnv always yields strings; the integration wants a number.
+			pollMs: env.WP_DEV_POLL_MS ? Number(env.WP_DEV_POLL_MS) : undefined,
+		}),
+	],
 
 	image: {
 		// WordPress media stays on the WordPress host; this lets <Image /> and

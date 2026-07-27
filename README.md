@@ -182,6 +182,53 @@ The Astro *server* talks to WordPress over a shared secret
 calls those endpoints. Without it the auth API refuses every request, so the
 dashboard fails closed rather than open.
 
+### In-app documentation
+
+`/dashboard/docs` is a live guide — how to sign in, what each role sees, how to
+test payments, and a **status panel that reads the running server** rather than
+listing what ought to be configured. `/dashboard/docs/api` is the full API
+reference: REST CRUD, GraphQL, the `app/v1` endpoints, webhooks and status codes.
+
+### API keys without a redeploy
+
+Keys can live in **either** [web/.env](web/.env.example) **or** Settings → App
+Settings in wp-admin. The environment always wins.
+
+Env is the right place for production secrets — not in the database, not in
+backups, not readable by anyone who gets a WordPress admin session. The admin
+screen exists so a key can be added or rotated without a redeploy; stored
+secrets are shown masked and saving an unchanged mask leaves them untouched.
+Changes are picked up within 30 seconds, no restart.
+
+### Coming soon & maintenance
+
+Set the mode in Settings → App Settings: **Live**, **Coming soon** (200, so it
+can be indexed) or **Maintenance** (503 + `Retry-After`, so search engines keep
+the existing listing).
+
+How it applies is worth understanding, because it follows from prerendering:
+
+| Route type | When the gate applies |
+| --- | --- |
+| `/login`, `/dashboard`, `/api` | Immediately, at runtime |
+| Public prerendered pages | At **build** time |
+
+Prerendered files are served straight off disk and never reach middleware — this
+was measured, not assumed. So the public site is gated by *building* while the
+mode is set, which also means it works on a pure CDN with no server at all.
+Saving the setting fires the build hook to trigger that rebuild, and a build
+started while gated prints a loud warning, since the gate it bakes in persists
+until the next build.
+
+There is no admin bypass on public pages, for the same reason: a prerendered
+route carries no session, so there is no signed-in user to recognise. To keep
+working locally while production is gated, put `SITE_MODE=live` in `web/.env` —
+the environment overrides WordPress. `SITE_MODE=maintenance` does the reverse,
+which is how you gate the site when WordPress itself is down.
+
+`/login`, `/dashboard` and `/api` stay reachable in every mode, so you can always
+sign in and turn it off, and so payment webhooks keep arriving.
+
 ### Rendering modes
 
 Adding `@astrojs/node` did not make the marketing site dynamic. `output: 'static'`
@@ -236,6 +283,39 @@ sends above 500 are refused rather than silently truncated. For bigger lists,
 move `sendCampaign()` into a background worker; the throttling in
 [client.ts](web/src/lib/emailit/client.ts) is already separate from the route
 for exactly that reason.
+
+## CRUD over the API
+
+Full reference at `/dashboard/docs/api` in the running app. In short:
+
+| Job | Use |
+| --- | --- |
+| Create / update / delete content | `/wp-json/wp/v2/…` with an application password |
+| Read content for a page | `/graphql` |
+| Users, billing, settings | `/wp-json/app/v1/…` with `X-App-Secret` |
+
+```bash
+curl -X POST "http://localhost:8080/wp-json/wp/v2/projects" \
+  -u "$WP_USER:$WP_APP_PASSWORD" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"New Project","status":"publish",
+       "meta":{"app_project_client":"Acme","app_project_year":2026,
+               "app_project_deliverables":["Logo","Packaging"]}}'
+```
+
+`show_in_rest` on a post type only exposes *core* fields — Meta Box fields are
+post meta, and post meta is invisible to REST until registered.
+[app-rest-fields.php](wordpress/mu-plugins/app-rest-fields.php) registers each
+one with the right type (`year` as an integer, `featured` as a boolean, cloned
+fields as arrays, images as attachment IDs), reading the same
+`rwmb_meta_boxes` filter the GraphQL bridge uses so the two cannot drift.
+Writes require `edit_post` on that specific post; `meta` is merged, so omitted
+keys keep their values.
+
+One gotcha worth knowing: WordPress refuses application passwords over plain
+HTTP unless it knows the environment is local, which is why
+`WP_ENVIRONMENT_TYPE=local` is set for the Docker stack. Over HTTPS in
+production they work without it.
 
 ## Content model
 

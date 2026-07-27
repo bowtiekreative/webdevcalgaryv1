@@ -2,7 +2,7 @@
 export const prerender = false;
 
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { plans, findPlan } from '../../config';
+import { plans, findPlan, planProviderIds } from '../../config';
 import { csrfToken } from '../../lib/auth/csrf';
 import { formatDate } from '../../lib/routes';
 import { stripeConfigured } from '../../lib/billing/stripe';
@@ -17,8 +17,13 @@ const params = Astro.url.searchParams;
 const error = params.get('error');
 const checkout = params.get('checkout');
 
-const hasStripe = stripeConfigured();
-const hasPayPal = paypalConfigured();
+const [hasStripe, hasPayPal] = await Promise.all([stripeConfigured(), paypalConfigured()]);
+
+// Provider ids can come from env or wp-admin, so resolve them per plan up front
+// rather than inside the template.
+const planRows = await Promise.all(
+	plans.map(async (plan) => ({ plan, ids: await planProviderIds(plan) })),
+);
 ---
 
 <DashboardLayout title="Billing" user={user}>
@@ -95,10 +100,10 @@ const hasPayPal = paypalConfigured();
 
 		<div class="plans">
 			{
-				plans.map((plan) => {
+				planRows.map(({ plan, ids }) => {
 					const isCurrent = subscription.isActive && subscription.plan === plan.id;
-					const stripeReady = hasStripe && Boolean(plan.stripePriceId);
-					const paypalReady = hasPayPal && Boolean(plan.paypalPlanId);
+					const stripeReady = hasStripe && Boolean(ids.stripePriceId);
+					const paypalReady = hasPayPal && Boolean(ids.paypalPlanId);
 
 					return (
 						<div

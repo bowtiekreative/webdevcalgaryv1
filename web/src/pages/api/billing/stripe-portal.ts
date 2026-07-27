@@ -33,7 +33,7 @@ export const POST: APIRoute = async (context) => {
 		return fail('Your session expired. Please try again.');
 	}
 
-	if (!stripeConfigured()) {
+	if (!(await stripeConfigured())) {
 		return fail('Stripe is not configured on this server.');
 	}
 

@@ -44,7 +44,7 @@ export const POST: APIRoute = async (context) => {
 		return redirect({ error: 'Your session expired. Please try again.' });
 	}
 
-	if (!emailitConfigured()) {
+	if (!(await emailitConfigured())) {
 		return redirect({ error: 'EMAILIT_API_KEY is not set on this server.' });
 	}
 

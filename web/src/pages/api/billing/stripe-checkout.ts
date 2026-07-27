@@ -9,7 +9,7 @@
 import type { APIRoute } from 'astro';
 import { currentUser } from '../../../lib/auth/session';
 import { verifyCsrf } from '../../../lib/auth/csrf';
-import { findPlan } from '../../../config';
+import { findPlan, planProviderIds } from '../../../config';
 import { createCheckoutSession, ensureCustomer, stripeConfigured } from '../../../lib/billing/stripe';
 import { setSubscription } from '../../../lib/auth/wp';
 
@@ -35,7 +35,7 @@ export const POST: APIRoute = async (context) => {
 		return fail('Your session expired. Please try again.');
 	}
 
-	if (!stripeConfigured()) {
+	if (!(await stripeConfigured())) {
 		return fail('Stripe is not configured on this server.');
 	}
 
@@ -45,7 +45,9 @@ export const POST: APIRoute = async (context) => {
 		return fail('Unknown plan.');
 	}
 
-	if (!plan.stripePriceId) {
+	const { stripePriceId } = await planProviderIds(plan);
+
+	if (!stripePriceId) {
 		return fail(`No Stripe price is configured for the ${plan.name} plan.`);
 	}
 
@@ -67,7 +69,7 @@ export const POST: APIRoute = async (context) => {
 		const origin = context.url.origin;
 		const url = await createCheckoutSession({
 			customerId,
-			priceId: plan.stripePriceId,
+			priceId: stripePriceId,
 			wpUserId: user.id,
 			planId: plan.id,
 			successUrl: `${origin}/dashboard/billing?checkout=success`,

@@ -12,33 +12,35 @@
  */
 
 import Stripe from 'stripe';
+import { setting } from '../settings';
 
-let cached: Stripe | null = null;
+let cached: { key: string; client: Stripe } | null = null;
 
-function env(key: string): string {
-	const value =
-		(import.meta.env as Record<string, string | undefined>)[key] ??
-		(typeof process !== 'undefined' ? process.env?.[key] : undefined);
-
-	return value ?? '';
+export async function stripeConfigured(): Promise<boolean> {
+	return (await setting('STRIPE_SECRET_KEY')).length > 0;
 }
 
-export function stripeConfigured(): boolean {
-	return env('STRIPE_SECRET_KEY').length > 0;
-}
+/**
+ * The Stripe client.
+ *
+ * Async because the key may come from wp-admin rather than the environment.
+ * The client is cached against the key it was built with, so rotating the key
+ * in wp-admin swaps the client on the next call instead of needing a restart.
+ */
+export async function stripe(): Promise<Stripe> {
+	const key = await setting('STRIPE_SECRET_KEY');
 
-export function stripe(): Stripe {
-	if (!cached) {
-		const key = env('STRIPE_SECRET_KEY');
-
-		if (!key) {
-			throw new Error('STRIPE_SECRET_KEY is not set in web/.env.');
-		}
-
-		cached = new Stripe(key);
+	if (!key) {
+		throw new Error(
+			'No Stripe secret key. Set STRIPE_SECRET_KEY in web/.env, or add it under Settings -> App Settings in wp-admin.',
+		);
 	}
 
-	return cached;
+	if (!cached || cached.key !== key) {
+		cached = { key, client: new Stripe(key) };
+	}
+
+	return cached.client;
 }
 
 /**
@@ -53,7 +55,7 @@ export async function ensureCustomer(options: {
 	name?: string;
 	existingCustomerId?: string;
 }): Promise<string> {
-	const client = stripe();
+	const client = await stripe();
 
 	if (options.existingCustomerId) {
 		try {
@@ -85,7 +87,7 @@ export async function createCheckoutSession(options: {
 	successUrl: string;
 	cancelUrl: string;
 }): Promise<string> {
-	const session = await stripe().checkout.sessions.create({
+	const session = await (await stripe()).checkout.sessions.create({
 		mode: 'subscription',
 		customer: options.customerId,
 		line_items: [{ price: options.priceId, quantity: 1 }],
@@ -109,7 +111,7 @@ export async function createCheckoutSession(options: {
 
 /** Billing Portal session, where the user manages or cancels the subscription. */
 export async function createPortalSession(customerId: string, returnUrl: string): Promise<string> {
-	const session = await stripe().billingPortal.sessions.create({
+	const session = await (await stripe()).billingPortal.sessions.create({
 		customer: customerId,
 		return_url: returnUrl,
 	});
@@ -123,14 +125,16 @@ export async function createPortalSession(customerId: string, returnUrl: string)
  * Must be given the *raw* request body: Stripe signs the exact bytes, so
  * anything that re-serialises the JSON invalidates the signature.
  */
-export function constructWebhookEvent(payload: string, signature: string): Stripe.Event {
-	const secret = env('STRIPE_WEBHOOK_SECRET');
+export async function constructWebhookEvent(payload: string, signature: string): Promise<Stripe.Event> {
+	const secret = await setting('STRIPE_WEBHOOK_SECRET');
 
 	if (!secret) {
-		throw new Error('STRIPE_WEBHOOK_SECRET is not set in web/.env.');
+		throw new Error(
+			'No Stripe webhook secret. Set STRIPE_WEBHOOK_SECRET in web/.env, or add it under Settings -> App Settings.',
+		);
 	}
 
-	return stripe().webhooks.constructEvent(payload, signature, secret);
+	return (await stripe()).webhooks.constructEvent(payload, signature, secret);
 }
 
 /** Map a Stripe subscription status onto what we store. */

@@ -52,7 +52,7 @@ async function resolveUserId(subscription: Stripe.Subscription): Promise<number 
 	}
 
 	try {
-		const customer = await stripe().customers.retrieve(customerId);
+		const customer = await (await stripe()).customers.retrieve(customerId);
 
 		if (!customer.deleted && customer.email) {
 			const byEmail = await lookupUser('email', customer.email);
@@ -144,7 +144,7 @@ export const POST: APIRoute = async ({ request }) => {
 	let event: Stripe.Event;
 
 	try {
-		event = constructWebhookEvent(rawBody, signature);
+		event = await constructWebhookEvent(rawBody, signature);
 	} catch (error) {
 		console.warn('[stripe] signature verification failed:', error);
 
@@ -167,7 +167,7 @@ export const POST: APIRoute = async ({ request }) => {
 					typeof session.subscription === 'string' ? session.subscription : session.subscription?.id;
 
 				if (subscriptionId) {
-					await applySubscription(await stripe().subscriptions.retrieve(subscriptionId));
+					await applySubscription(await (await stripe()).subscriptions.retrieve(subscriptionId));
 				}
 
 				break;
@@ -177,7 +177,7 @@ export const POST: APIRoute = async ({ request }) => {
 				const subscriptionId = subscriptionIdFromInvoice(event.data.object);
 
 				if (subscriptionId) {
-					await applySubscription(await stripe().subscriptions.retrieve(subscriptionId));
+					await applySubscription(await (await stripe()).subscriptions.retrieve(subscriptionId));
 				}
 
 				break;

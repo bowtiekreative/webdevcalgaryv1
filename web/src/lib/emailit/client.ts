@@ -11,18 +11,12 @@
  * many were actually delivered.
  */
 
-function env(key: string): string {
-	const value =
-		(import.meta.env as Record<string, string | undefined>)[key] ??
-		(typeof process !== 'undefined' ? process.env?.[key] : undefined);
-
-	return value ?? '';
-}
+import { setting } from '../settings';
 
 const API_BASE = 'https://api.emailit.com/v2';
 
-export function emailitConfigured(): boolean {
-	return env('EMAILIT_API_KEY').length > 0;
+export async function emailitConfigured(): Promise<boolean> {
+	return (await setting('EMAILIT_API_KEY')).length > 0;
 }
 
 export class EmailitError extends Error {
@@ -36,10 +30,13 @@ export class EmailitError extends Error {
 }
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
-	const key = env('EMAILIT_API_KEY');
+	const key = await setting('EMAILIT_API_KEY');
 
 	if (!key) {
-		throw new EmailitError('EMAILIT_API_KEY is not set in web/.env.', 500);
+		throw new EmailitError(
+			'No Emailit API key. Set EMAILIT_API_KEY in web/.env, or add it under Settings -> App Settings.',
+			500,
+		);
 	}
 
 	const response = await fetch(`${API_BASE}${path}`, {
@@ -82,7 +79,7 @@ export async function sendEmail(options: SendOptions): Promise<void> {
 	await api('/emails/send', {
 		method: 'POST',
 		body: JSON.stringify({
-			from: options.from || env('EMAILIT_FROM') || 'no-reply@example.com',
+			from: options.from || (await setting('EMAILIT_FROM')) || 'no-reply@example.com',
 			to: options.to,
 			subject: options.subject,
 			...(options.html ? { html: options.html } : {}),
@@ -159,8 +156,8 @@ export async function addSubscriber(
  * Messages per second. Emailit's documented floor for a new workspace is 2/s;
  * raise EMAILIT_RATE_LIMIT once your workspace limit is lifted.
  */
-function ratePerSecond(): number {
-	const configured = Number(env('EMAILIT_RATE_LIMIT') || 2);
+async function ratePerSecond(): Promise<number> {
+	const configured = Number((await setting('EMAILIT_RATE_LIMIT')) || 2);
 
 	return Number.isFinite(configured) && configured > 0 ? configured : 2;
 }
@@ -194,7 +191,7 @@ export async function sendCampaign(options: {
 	/** Called after each attempt, for progress reporting. */
 	onProgress?: (sent: number, total: number) => void;
 }): Promise<CampaignResult> {
-	const delayMs = Math.ceil(1000 / ratePerSecond());
+	const delayMs = Math.ceil(1000 / (await ratePerSecond()));
 	const result: CampaignResult = {
 		attempted: 0,
 		sent: 0,

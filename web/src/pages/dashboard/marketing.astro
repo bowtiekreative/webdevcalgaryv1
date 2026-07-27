@@ -18,7 +18,7 @@ const params = Astro.url.searchParams;
 const error = params.get('error');
 const notice = params.get('notice');
 
-const configured = emailitConfigured();
+const configured = await emailitConfigured();
 
 let audiences: Audience[] = [];
 let loadError: string | null = null;

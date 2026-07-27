@@ -34,7 +34,17 @@ const API_BASE = 'https://api.emailit.com/v2';
  * @return string
  */
 function api_key(): string {
-	return defined( 'APP_EMAILIT_API_KEY' ) ? trim( (string) APP_EMAILIT_API_KEY ) : '';
+	$key = defined( 'APP_EMAILIT_API_KEY' ) ? trim( (string) APP_EMAILIT_API_KEY ) : '';
+
+	/**
+	 * Filter the Emailit API key.
+	 *
+	 * app-settings.php hooks this so a key entered in wp-admin is used when the
+	 * wp-config constant is absent. The constant always wins.
+	 *
+	 * @param string $key Key from the constant, possibly empty.
+	 */
+	return (string) apply_filters( 'app_emailit_api_key', $key );
 }
 
 /**
@@ -43,8 +53,13 @@ function api_key(): string {
  * @return string
  */
 function from_address(): string {
-	if ( defined( 'APP_EMAILIT_FROM' ) && '' !== trim( (string) APP_EMAILIT_FROM ) ) {
-		return (string) APP_EMAILIT_FROM;
+	$configured = defined( 'APP_EMAILIT_FROM' ) ? trim( (string) APP_EMAILIT_FROM ) : '';
+
+	/** @see api_key() — same constant-wins-over-admin precedence. */
+	$configured = (string) apply_filters( 'app_emailit_from', $configured );
+
+	if ( '' !== $configured ) {
+		return $configured;
 	}
 
 	// Same shape as WordPress's own default, minus the "wordpress@" local part

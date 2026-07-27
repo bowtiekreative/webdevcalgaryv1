@@ -92,15 +92,71 @@ async function fetchFingerprint(endpoint) {
 	}
 }
 
-/** @returns {import('astro').AstroIntegration} */
-export default function wpDevRefresh() {
+/**
+ * Ask WordPress for the current site mode.
+ *
+ * @param {string} endpoint GraphQL endpoint, used to derive the REST origin.
+ * @param {string} secret   Shared secret.
+ * @returns {Promise<string|null>} Mode, or null if it could not be determined.
+ */
+async function fetchSiteMode(endpoint, secret) {
+	if (!secret) {
+		return null;
+	}
+
+	try {
+		const origin = new URL(endpoint).origin;
+		const response = await fetch(`${origin}/wp-json/app/v1/site-mode`, {
+			headers: { Accept: 'application/json', 'X-App-Secret': secret },
+			signal: AbortSignal.timeout(8_000),
+		});
+
+		if (!response.ok) {
+			return null;
+		}
+
+		const payload = await response.json();
+
+		return typeof payload.mode === 'string' ? payload.mode : null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * @param {{endpoint?: string, secret?: string, pollMs?: number}} [options]
+ *   Passed in from astro.config, which is the only place that has read .env.
+ *   Astro loads .env into import.meta.env for application code, not into
+ *   process.env, so an integration cannot read it directly.
+ * @returns {import('astro').AstroIntegration}
+ */
+export default function wpDevRefresh(options = {}) {
+	const endpoint = options.endpoint || 'http://localhost:8080/graphql';
+	const secret = options.secret || '';
+	const pollMs = Number(options.pollMs ?? 5000);
+
 	return {
 		name: 'app:wp-dev-refresh',
 		hooks: {
-			'astro:server:setup': ({ server, refreshContent, logger }) => {
-				const endpoint = process.env.WP_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
-				const pollMs = Number(process.env.WP_DEV_POLL_MS ?? 5000);
+			/*
+			 * Building while the site is gated bakes the coming-soon page into
+			 * every prerendered file. That is intended — it is how the public
+			 * site gets gated on a static host — but it is very easy to do by
+			 * accident and then wonder why the site is blank, so say it loudly.
+			 */
+			'astro:build:start': async ({ logger }) => {
+				const mode = await fetchSiteMode(endpoint, secret);
 
+				if (mode && mode !== 'live') {
+					logger.warn('');
+					logger.warn(`  Site mode is "${mode}" — every prerendered page in this build will be`);
+					logger.warn('  the gate page, not the real site. Set it back to Live in');
+					logger.warn('  Settings -> App Settings and rebuild before deploying.');
+					logger.warn('');
+				}
+			},
+
+			'astro:server:setup': ({ server, refreshContent, logger }) => {
 				// Guards against a refresh triggered while one is already running.
 				let refreshing = false;
 				let fingerprint = null;

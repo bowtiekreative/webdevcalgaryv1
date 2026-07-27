@@ -59,6 +59,11 @@ services:
         /* Emailit, used for WordPress's own transactional mail. */
         define( 'APP_EMAILIT_API_KEY', '${EMAILIT_API_KEY:-}' );
         define( 'APP_EMAILIT_FROM', '${EMAILIT_FROM:-}' );
+        /* Application passwords are disabled over plain HTTP unless WordPress
+           knows this is a local environment, which would make the documented
+           REST CRUD fail with rest_cannot_create. Set this to 'production' on a
+           real host, where HTTPS enables them anyway. */
+        define( 'WP_ENVIRONMENT_TYPE', '${WP_ENVIRONMENT_TYPE:-local}' );
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
         define( 'DISALLOW_FILE_EDIT', true );
