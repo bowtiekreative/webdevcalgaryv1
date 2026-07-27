@@ -1,0 +1,597 @@
+---
+/**
+ * The order page.
+ *
+ * Plan, speed, the split-pay downsell and the GBP order bump, with a live
+ * work-order total. Prerendered — every choice is client state, and the price
+ * the browser shows is only ever cosmetic: /api/billing/paypal-order reprices
+ * the cart from src/config.ts before it charges anything.
+ *
+ * The monthly plan is *not* charged here. The rush fee starts the clock; the
+ * subscription is set up once the site is live and the customer has an
+ * account. That is how the offer is written, and it keeps a failed
+ * subscription from blocking a paid build.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact, offers, plans, STANDARD_BUILD_DAYS } from '../config';
+import { fallbackTestimonials } from '../funnel';
+
+const [core, growth] = plans;
+const { rush, gbp } = offers;
+const split = offers['rush-split'];
+const proof = fallbackTestimonials[1];
+---
+
+<BaseLayout
+	title="Start the clock"
+	description="Pick your plan and speed. Pay the rush fee and your site is live within 24 hours — or it's refunded and you keep it anyway."
+	narrow
+	sticky={false}
+>
+	<div class="wrap wrap--narrow checkout">
+		<h1 class="checkout__title">Start the clock.</h1>
+		<p class="lede checkout__lede">
+			Pay now and you’ll have your exact go-live time in writing within the hour.
+		</p>
+
+		<div class="alert" data-alert hidden></div>
+
+		<form class="cols" data-checkout>
+			<div class="stack">
+				<!-- 1 · Plan -->
+				<fieldset class="panel">
+					<legend class="panel__bar">
+						<span>1 · Pick your plan</span>
+						<span>{core.serial} / {growth.serial}</span>
+					</legend>
+					<div class="panel__body options">
+						{
+							plans.map((plan) => (
+								<label class="option">
+									<input type="radio" name="plan" value={plan.id} checked={plan.featured} />
+									<span>
+										<b>
+											{plan.name} — {plan.price}/mo
+											{plan.featured && <em> · Most picked</em>}
+										</b>
+										<span class="option__note">{plan.description}</span>
+									</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<!-- 2 · Speed -->
+				<fieldset class="panel">
+					<legend class="panel__bar">
+						<span>2 · Speed</span>
+						<span>24h / {STANDARD_BUILD_DAYS}d</span>
+					</legend>
+					<div class="panel__body options">
+						<label class="option">
+							<input type="radio" name="speed" value="rush" checked />
+							<span>
+								<b>Rush — live in 24 hours · ${rush.amount}</b>
+								<span class="option__note">
+									Refunded in full if we miss the window. You keep the site.
+								</span>
+							</span>
+						</label>
+						<label class="option">
+							<input type="radio" name="speed" value="standard" />
+							<span>
+								<b>Standard — {STANDARD_BUILD_DAYS} days · $0</b>
+								<span class="option__note">Same site, same plan, no rush fee. You just wait.</span>
+							</span>
+						</label>
+						<label class="option option--split" data-split-row>
+							<input type="checkbox" name="split" />
+							<span>
+								Split the rush fee: <b>2 × ${split.amount}</b> — second payment on day 30.
+							</span>
+						</label>
+					</div>
+				</fieldset>
+
+				<!-- Order bump -->
+				<label class="bump">
+					<input type="checkbox" name="bump" checked />
+					<span>
+						<b>Add {gbp.name} — ${gbp.amount}</b>
+						<span class="option__note">
+							Most Calgary businesses are losing calls to competitors with better-optimized map
+							listings. We’ll fix your categories, services, photos, hours and posting in the same 24
+							hours. One time, not monthly.
+						</span>
+					</span>
+				</label>
+
+				<!-- 3 · Details -->
+				<fieldset class="panel">
+					<legend class="panel__bar">
+						<span>3 · Where to reach you</span>
+						<span>Intake</span>
+					</legend>
+					<div class="panel__body form form--light details">
+						<input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+						<input
+							type="text"
+							name="business"
+							placeholder="Business name"
+							required
+							autocomplete="organization"
+						/>
+						<input type="email" name="email" placeholder="Email" required autocomplete="email" />
+						<input type="tel" name="phone" placeholder="Phone (403 / 587)" required autocomplete="tel" />
+						<input type="url" name="website" placeholder="Current website (if you have one)" />
+						<textarea name="notes" rows="3" placeholder="What does your business do?"></textarea>
+					</div>
+				</fieldset>
+			</div>
+
+			<!-- Summary -->
+			<div class="stack">
+				<div class="panel summary">
+					<div class="panel__bar panel__bar--rust">
+						<span>Work order</span>
+						<span data-serial>{growth.serial}</span>
+					</div>
+					<div class="panel__body">
+						<div class="row">
+							<span><span data-plan-name>{growth.name}</span> plan</span>
+							<span class="row__value"><span data-plan-price>{growth.price}</span>/mo</span>
+						</div>
+						<div class="row">
+							<span data-speed-label>24-hour rush fee</span>
+							<span class="row__value" data-speed-price>${rush.amount}</span>
+						</div>
+						<div class="row" data-bump-row>
+							<span>{gbp.name}</span>
+							<span class="row__value">${gbp.amount}</span>
+						</div>
+						<div class="row row--total">
+							<span>Due today</span>
+							<span class="row__value" data-total>$594</span>
+						</div>
+						<div class="row row--after">
+							<span>Then monthly</span>
+							<span><span data-plan-price>{growth.price}</span>/mo, locked for life</span>
+						</div>
+
+						<button class="btn btn--hivis btn--block pay" type="submit" data-pay>
+							Pay <span data-total>$594</span> — start the clock →
+						</button>
+
+						<p class="panel__note">
+							Live in 24 hours or the rush fee is refunded — you keep the site. 30 days to cancel and
+							keep the site and domain anyway. No contract.
+						</p>
+					</div>
+				</div>
+
+				<figure class="aside">
+					<blockquote>{proof.quote}</blockquote>
+					<figcaption><b>{proof.author}</b> · {proof.company}</figcaption>
+				</figure>
+
+				<div class="aside">
+					<b class="aside__title">Not ready to replace your site?</b>
+					<p>
+						{offers.rescue.name} — ${offers.rescue.amount} one-time. Keep your site; we fix the five
+						things costing you the most.
+					</p>
+					<a class="mono strong" href={`tel:${contact.phoneRaw}`}>
+						Call {contact.phone} to talk it through →
+					</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</BaseLayout>
+
+<style>
+	.checkout {
+		padding: 48px 0 80px;
+	}
+
+	.checkout__title {
+		font-size: clamp(1.9rem, 5vw, 2.9rem);
+		margin-bottom: 8px;
+	}
+
+	.checkout__lede {
+		margin-bottom: 34px;
+	}
+
+	.cols {
+		--col: 340px;
+	}
+
+	fieldset.panel {
+		margin: 0;
+		padding: 0;
+		border: 2px solid var(--ink);
+		max-width: none;
+	}
+
+	legend.panel__bar {
+		/* A legend is not a flex container in every engine; float it into the
+		   bar's place with the same padding instead. */
+		display: block;
+		width: 100%;
+		margin: 0;
+		padding: 12px 18px;
+	}
+
+	legend.panel__bar span:last-child {
+		float: right;
+	}
+
+	.options {
+		display: grid;
+		gap: 12px;
+	}
+
+	.option {
+		display: flex;
+		gap: 14px;
+		align-items: flex-start;
+		border: 2px solid var(--line);
+		padding: 16px;
+		cursor: pointer;
+	}
+
+	.option:has(input:checked) {
+		border-color: var(--rust);
+		background: var(--cream);
+	}
+
+	.option:has(input:focus-visible) {
+		outline: 2px solid var(--hivis);
+		outline-offset: 2px;
+	}
+
+	.option input {
+		margin-top: 5px;
+		accent-color: var(--rust);
+		flex: none;
+	}
+
+	.option > span {
+		flex: 1;
+	}
+
+	.option b {
+		font-family: var(--font-display);
+		font-size: 17px;
+		display: block;
+	}
+
+	.option b em {
+		font-style: normal;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.1em;
+		color: var(--rust);
+		text-transform: uppercase;
+	}
+
+	.option__note {
+		display: block;
+		font-size: 14px;
+		color: var(--ink-2);
+		font-family: var(--font-body);
+	}
+
+	.option--split {
+		align-items: center;
+		border: 1px dashed var(--rust);
+		background: var(--cream);
+		padding: 12px 16px;
+		font-size: 14px;
+		color: var(--ink-2);
+	}
+
+	.option--split:has(input:checked) {
+		border-style: dashed;
+	}
+
+	.bump {
+		display: flex;
+		gap: 14px;
+		align-items: flex-start;
+		border: 2px solid var(--hivis);
+		background: var(--cream);
+		padding: 18px;
+		cursor: pointer;
+	}
+
+	.bump input {
+		margin-top: 5px;
+		width: 18px;
+		height: 18px;
+		accent-color: var(--rust);
+		flex: none;
+	}
+
+	.bump b {
+		font-family: var(--font-display);
+		font-size: 17px;
+		display: block;
+		margin-bottom: 6px;
+	}
+
+	.details {
+		gap: 12px;
+	}
+
+	.summary {
+		max-width: none;
+	}
+
+	.row--after {
+		border-bottom: 0;
+		padding-top: 6px;
+		font-size: 13px;
+		color: var(--ink-2);
+		font-family: var(--font-mono);
+	}
+
+	.pay {
+		margin-top: 18px;
+		font-size: 17px;
+		padding: 16px;
+	}
+
+	.aside {
+		border: 1px solid var(--line);
+		background: var(--paper);
+		padding: 18px 20px;
+		margin: 0;
+	}
+
+	.aside blockquote {
+		margin: 0;
+		font-size: 14px;
+		color: var(--ink);
+		line-height: 1.7;
+	}
+
+	.aside figcaption {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--ink-2);
+		margin-top: 10px;
+	}
+
+	.aside figcaption b,
+	.aside__title {
+		color: var(--ink);
+	}
+
+	.aside__title {
+		font-family: var(--font-display);
+		font-size: 15px;
+		display: block;
+		margin-bottom: 6px;
+	}
+
+	.aside p {
+		margin: 0 0 10px;
+		font-size: 14px;
+		color: var(--ink-2);
+	}
+
+	.strong {
+		font-weight: 700;
+		color: var(--rust);
+	}
+
+	.alert {
+		border: 2px solid var(--rust);
+		background: var(--cream);
+		padding: 16px 18px;
+		margin-bottom: 24px;
+		font-size: 15px;
+	}
+
+	.alert b {
+		font-family: var(--font-display);
+		display: block;
+		margin-bottom: 4px;
+	}
+
+	body {
+		background: var(--concrete);
+	}
+</style>
+
+<script>
+	import { offers, plans } from '../config';
+
+	const form = document.querySelector<HTMLFormElement>('[data-checkout]');
+
+	if (form) {
+		const RUSH = offers.rush.amount;
+		const SPLIT = offers['rush-split'].amount;
+		const BUMP = offers.gbp.amount;
+
+		const splitRow = form.querySelector<HTMLElement>('[data-split-row]');
+		const splitInput = form.querySelector<HTMLInputElement>('input[name="split"]');
+		const bumpRow = form.querySelector<HTMLElement>('[data-bump-row]');
+		const payButton = form.querySelector<HTMLButtonElement>('[data-pay]');
+		const alert = document.querySelector<HTMLElement>('[data-alert]');
+
+		const money = (value: number) => `$${value.toLocaleString('en-CA')}`;
+		const checked = (name: string) =>
+			form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value ?? '';
+		const setAll = (selector: string, value: string) => {
+			form.querySelectorAll<HTMLElement>(selector).forEach((node) => {
+				node.textContent = value;
+			});
+		};
+
+		function state() {
+			const plan = plans.find((candidate) => candidate.id === checked('plan')) ?? plans[0];
+			const isRush = checked('speed') === 'rush';
+			const isSplit = isRush && Boolean(splitInput?.checked);
+			const wantsBump = Boolean(form!.querySelector<HTMLInputElement>('input[name="bump"]')?.checked);
+
+			const cart: string[] = [];
+
+			if (isRush) {
+				cart.push(isSplit ? 'rush-split' : 'rush');
+			}
+
+			if (wantsBump) {
+				cart.push('gbp');
+			}
+
+			const total = (isRush ? (isSplit ? SPLIT : RUSH) : 0) + (wantsBump ? BUMP : 0);
+
+			return { plan, isRush, isSplit, wantsBump, cart, total };
+		}
+
+		function render() {
+			const { plan, isRush, isSplit, wantsBump, total } = state();
+
+			setAll('[data-plan-name]', plan.name);
+			setAll('[data-plan-price]', plan.price);
+			setAll('[data-serial]', plan.serial);
+
+			setAll(
+				'[data-speed-label]',
+				isRush
+					? isSplit
+						? '24-hour rush (1 of 2 payments)'
+						: '24-hour rush fee'
+					: 'Standard build, 7 days',
+			);
+			setAll('[data-speed-price]', isRush ? money(isSplit ? SPLIT : RUSH) : '$0');
+			setAll('[data-total]', money(total));
+
+			if (splitRow) {
+				splitRow.hidden = !isRush;
+			}
+
+			// Standard build has no fee to split.
+			if (!isRush && splitInput?.checked) {
+				splitInput.checked = false;
+			}
+
+			if (bumpRow) {
+				bumpRow.hidden = !wantsBump;
+			}
+
+			// A standard build with no bump costs nothing today. That is
+			// still a real order — the monthly plan applies — but there is no
+			// card step, so point them at a person instead of a dead button.
+			if (payButton) {
+				payButton.disabled = total <= 0;
+				payButton.textContent =
+					total > 0
+						? `Pay ${money(total)} — start the clock →`
+						: 'Nothing due today — call us to book it';
+			}
+		}
+
+		form.addEventListener('change', render);
+		render();
+
+		// ?plan=core deep-links from the pricing table.
+		const wanted = new URLSearchParams(window.location.search).get('plan');
+		const preselect = form.querySelector<HTMLInputElement>(`input[name="plan"][value="${wanted}"]`);
+
+		if (preselect) {
+			preselect.checked = true;
+			render();
+		}
+
+		// Surface what came back from a cancelled or failed PayPal round trip.
+		const params = new URLSearchParams(window.location.search);
+		const messages: Record<string, string> = {
+			cancelled: 'Checkout cancelled — nothing was charged. Your choices are still here.',
+			capture:
+				'Something went wrong finishing that payment. Do not pay again — call us and we will check whether it went through.',
+			'missing-order': 'That checkout link had expired. Start again below.',
+			pending:
+				'PayPal is reviewing that payment. We will email you the moment it clears — nothing more to do.',
+		};
+
+		const key = params.get('error') || (params.get('cancelled') ? 'cancelled' : '') || (params.get('pending') ? 'pending' : '');
+		const message = key ? messages[key] : '';
+
+		if (alert && message) {
+			// textContent, not innerHTML: `key` comes from the URL.
+			const heading = document.createElement('b');
+			heading.textContent = 'Heads up';
+			alert.replaceChildren(heading, document.createTextNode(message));
+			alert.hidden = false;
+		}
+
+		form.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			if (!form.reportValidity()) {
+				return;
+			}
+
+			const { cart, plan } = state();
+
+			if (cart.length === 0) {
+				return;
+			}
+
+			const data = new FormData(form);
+			const original = payButton?.innerHTML ?? '';
+
+			if (payButton) {
+				payButton.disabled = true;
+				payButton.textContent = 'Opening PayPal…';
+			}
+
+			try {
+				const response = await fetch('/api/billing/paypal-order', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						offers: cart,
+						plan: plan.id,
+						speed: checked('speed'),
+						name: data.get('name'),
+						business: data.get('business'),
+						email: data.get('email'),
+						phone: data.get('phone'),
+						website: data.get('website'),
+						notes: data.get('notes'),
+					}),
+				});
+
+				const payload = (await response.json()) as { approveUrl?: string; error?: string };
+
+				if (!response.ok || !payload.approveUrl) {
+					throw new Error(payload.error || 'Could not start checkout.');
+				}
+
+				window.location.href = payload.approveUrl;
+			} catch (error) {
+				if (alert) {
+					const heading = document.createElement('b');
+					heading.textContent = 'Couldn’t start checkout';
+					alert.replaceChildren(
+						heading,
+						document.createTextNode(error instanceof Error ? error.message : String(error)),
+					);
+					alert.hidden = false;
+					alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+
+				if (payButton) {
+					payButton.disabled = false;
+					payButton.innerHTML = original;
+				}
+			}
+		});
+	}
+</script>

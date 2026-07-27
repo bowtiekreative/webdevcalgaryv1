@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Astro — check and build
+    runs-on: ubuntu-latest
+
+    # The build queries WordPress for content. There is no WordPress in CI, so
+    # it runs against scripts/mock-wp.mjs, which serves the same schema from
+    # fixtures. That makes this a real test of the queries and the components,
+    # not just of TypeScript.
+    env:
+      WP_GRAPHQL_ENDPOINT: http://localhost:8099/graphql
+      SITE_URL: https://webdevcalgary.com
+      WP_FAIL_ON_ERROR: '1'
+
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Validate GraphQL documents against the schema
+        # Catches a typo'd field here rather than as a build failure against
+        # real WordPress, where the error is much further from the cause.
+        run: npm run mock:validate
+
+      - name: Start the mock WordPress server
+        run: |
+          node scripts/mock-wp.mjs &
+          for _ in $(seq 1 30); do
+            if curl -sf -X POST http://localhost:8099/graphql \
+              -H 'Content-Type: application/json' \
+              -d '{"query":"{__typename}"}' >/dev/null; then
+              echo "mock-wp is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "mock-wp did not start" >&2
+          exit 1
+
+      - name: Type-check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build output
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astro-build-logs
+          path: web/dist
+          retention-days: 3
+
+  wordpress:
+    name: WordPress — lint and schema contract
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Lint every mu-plugin
+        run: |
+          status=0
+          while IFS= read -r file; do
+            php -l "$file" || status=1
+          done < <(find wordpress -name '*.php' -type f)
+          exit $status
+
+      - name: Schema contract
+        # Fails loudly when the PHP content model and the GraphQL queries the
+        # front end sends have drifted apart — the failure mode that otherwise
+        # shows up as silently missing fields in production.
+        run: php wordpress/tests/schema-contract.php
+
+  shell:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y shellcheck
+          shellcheck --severity=error scripts/*.sh

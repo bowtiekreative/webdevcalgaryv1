@@ -1,0 +1,137 @@
+---
+/**
+ * The "call me back today" lead form.
+ *
+ * A plain POST to /api/leads/start, so it works with JavaScript off — the
+ * audience reads this on a phone on LTE and a fetch-only form is one more way
+ * to lose the lead. The script only adds a submitting state and surfaces the
+ * error inline instead of navigating.
+ */
+import { plans, STANDARD_BUILD_DAYS, offers } from '../config';
+---
+
+<form class="form" method="POST" action="/api/leads/start" data-start-form>
+	<input type="hidden" name="source" value={Astro.url.pathname} />
+	<!-- Honeypot: bots fill it, people never see it. -->
+	<input type="text" name="company_website" tabindex="-1" autocomplete="off" class="trap" aria-hidden="true" />
+
+	<label class="sr-only" for="lead-name">Your name</label>
+	<input id="lead-name" type="text" name="name" placeholder="Your name" required autocomplete="name" />
+
+	<label class="sr-only" for="lead-business">Business name</label>
+	<input
+		id="lead-business"
+		type="text"
+		name="business"
+		placeholder="Business name"
+		required
+		autocomplete="organization"
+	/>
+
+	<label class="sr-only" for="lead-phone">Phone</label>
+	<input
+		id="lead-phone"
+		type="tel"
+		name="phone"
+		placeholder="Phone (403 / 587)"
+		required
+		autocomplete="tel"
+	/>
+
+	<label class="sr-only" for="lead-email">Email</label>
+	<input id="lead-email" type="email" name="email" placeholder="Email" required autocomplete="email" />
+
+	<label class="sr-only" for="lead-plan">Plan</label>
+	<select id="lead-plan" name="plan">
+		<option value="">Which plan are you leaning toward?</option>
+		{plans.map((plan) => <option value={plan.id}>{plan.name} — {plan.price}/mo</option>)}
+		<option value="unsure">Not sure yet</option>
+	</select>
+
+	<label class="sr-only" for="lead-speed">Speed</label>
+	<select id="lead-speed" name="speed">
+		<option value="rush">Rush — live in 24 hours (${offers.rush.amount})</option>
+		<option value="standard">Standard — {STANDARD_BUILD_DAYS} days, no rush fee</option>
+	</select>
+
+	<label class="sr-only" for="lead-notes">What does your business do?</label>
+	<textarea id="lead-notes" name="notes" rows="3" placeholder="What does your business do?"></textarea>
+
+	<p class="form__error" data-error hidden></p>
+
+	<button type="submit">Send it — call me back today</button>
+	<p class="form__note">No card needed to start the conversation.</p>
+</form>
+
+<style>
+	.trap {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLFormElement>('[data-start-form]').forEach((form) => {
+		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		const error = form.querySelector<HTMLElement>('[data-error]');
+
+		form.addEventListener('submit', async (event) => {
+			if (!form.reportValidity()) {
+				return;
+			}
+
+			event.preventDefault();
+
+			const original = button?.textContent ?? '';
+
+			if (button) {
+				button.disabled = true;
+				button.textContent = 'Sending…';
+			}
+
+			if (error) {
+				error.hidden = true;
+			}
+
+			try {
+				const response = await fetch(form.action, {
+					method: 'POST',
+					headers: { Accept: 'application/json' },
+					body: new FormData(form),
+				});
+
+				const payload = (await response.json()) as { ok?: boolean; error?: string; redirect?: string };
+
+				if (!response.ok || !payload.ok) {
+					throw new Error(payload.error || 'Something went wrong. Call us instead — we always pick up.');
+				}
+
+				window.location.href = payload.redirect ?? '/thank-you?lead=1';
+			} catch (cause) {
+				if (error) {
+					error.textContent = cause instanceof Error ? cause.message : String(cause);
+					error.hidden = false;
+				}
+
+				if (button) {
+					button.disabled = false;
+					button.textContent = original;
+				}
+			}
+		});
+	});
+</script>

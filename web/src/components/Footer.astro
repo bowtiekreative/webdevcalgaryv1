@@ -1,62 +1,62 @@
 ---
-import { getSiteMeta } from '../lib/wp/site';
+/**
+ * Mono footer on concrete. Address, phone, email, the one-line promise.
+ */
+import { contact, site } from '../config';
 
-const meta = await getSiteMeta();
+interface Props {
+	narrow?: boolean;
+}
+
+const { narrow = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-	<div class="wrap site-footer__inner">
-		<p class="site-footer__blurb">{meta.description}</p>
-
-		<ul class="site-footer__links">
-			<li><a href="/work">Work</a></li>
-			<li><a href="/services">Services</a></li>
-			<li><a href="/blog">Journal</a></li>
-			<li><a href="/rss.xml">RSS</a></li>
-		</ul>
-
-		<p class="meta">© {year} {meta.title}. Built with Astro and headless WordPress.</p>
+	<div class={narrow ? 'wrap wrap--narrow' : 'wrap'}>
+		<p>
+			<strong>{site.name}</strong> · {contact.company} · {contact.address} ·{' '}
+			<a href={`tel:${contact.phoneRaw}`}>{contact.phone}</a> ·{' '}
+			<a href={`mailto:${contact.email}`}>{contact.email}</a>
+		</p>
+		<p>Websites live in 24 hours. Unlimited changes. Price locked for life.</p>
+		<p>
+			<a href="/work">Portfolio</a> · <a href="/teardown">$47 teardown</a> ·{' '}
+			<a href="/blog">Journal</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> ·{' '}
+			<a href="/refund-policy">Refund policy</a>
+			<span class="year"> · © {year}</span>
+		</p>
 	</div>
 </footer>
 
 <style>
 	.site-footer {
-		margin-top: auto;
+		background: var(--concrete);
 		border-top: 1px solid var(--line);
-		background: var(--paper-alt);
-		padding-block: clamp(2rem, 5vw, 3.5rem);
+		padding: 34px 0;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--ink-2);
+		line-height: 1.8;
 	}
 
-	.site-footer__inner {
-		display: grid;
-		gap: 1rem;
-	}
-
-	.site-footer__blurb {
-		font-family: var(--font-serif);
-		font-size: var(--step-1);
-		max-width: 34ch;
+	.site-footer p {
 		margin: 0;
 	}
 
-	.site-footer__links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1.25rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		font-size: var(--step--1);
-	}
-
-	.site-footer__links a {
-		color: var(--ink-soft);
-		text-decoration: none;
-	}
-
-	.site-footer__links a:hover {
+	.site-footer strong {
 		color: var(--ink);
-		text-decoration: underline;
+	}
+
+	.site-footer a {
+		color: var(--ink);
+	}
+
+	.site-footer a:hover {
+		color: var(--rust);
+	}
+
+	.year {
+		color: var(--ink-2);
 	}
 </style>

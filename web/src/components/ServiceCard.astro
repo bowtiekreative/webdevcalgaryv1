@@ -1,109 +1,65 @@
 ---
+/**
+ * A service, in the hairline card grid. Used by /services.
+ */
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
 	service: CollectionEntry<'services'>;
+	index?: number;
 }
 
-const { service } = Astro.props;
-const { data } = service;
-
-/** Icon keys come from the Meta Box select field in app-fields.php. */
-const GLYPHS: Record<string, string> = {
-	brand: '◈',
-	web: '⌘',
-	print: '❖',
-	video: '▶',
-	social: '❁',
-	strategy: '◎',
-};
-
-const glyph = data.icon ? (GLYPHS[data.icon] ?? '✦') : '✦';
+const { service, index } = Astro.props;
+const { title, path, tagline, summary, bullets, startingPrice } = service.data;
 ---
 
-<article class="service">
-	<p class="service__glyph" aria-hidden="true">{glyph}</p>
-
-	<h3 class="service__title">
-		<a href={data.path}>{data.title}</a>
-	</h3>
-
-	{data.tagline && <p class="service__tagline">{data.tagline}</p>}
-	{!data.tagline && data.summary && <p class="service__tagline">{data.summary}</p>}
-
+<a class="card service" href={path}>
+	<span class="card__index">{index === undefined ? '·' : String(index + 1).padStart(2, '0')}</span>
+	<h3>{title}</h3>
+	<p>{tagline ?? summary}</p>
 	{
-		data.bullets.length > 0 && (
-			<ul class="service__bullets">
-				{data.bullets.map((bullet) => (
-					<li>{bullet}</li>
+		bullets.length > 0 && (
+			<ul>
+				{bullets.slice(0, 4).map((bullet) => (
+					<li>
+						<span aria-hidden="true">→</span> {bullet}
+					</li>
 				))}
 			</ul>
 		)
 	}
-
-	{
-		data.startingPrice && (
-			<p class="service__price">
-				<span class="visually-hidden">Starting price:</span>
-				{data.startingPrice}
-			</p>
-		)
-	}
-</article>
+	{startingPrice && <span class="service__price">{startingPrice}</span>}
+</a>
 
 <style>
-	.service {
-		display: grid;
-		gap: 0.5rem;
-		align-content: start;
-		padding: clamp(1.25rem, 3vw, 2rem);
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		background: var(--paper);
-		transition: border-color 150ms ease;
+	.service h3 {
+		margin: 0 0 8px;
 	}
 
-	.service:hover {
-		border-color: var(--accent);
+	ul {
+		list-style: none;
+		margin: 16px 0 0;
+		padding: 0;
 	}
 
-	.service__glyph {
-		font-size: var(--step-2);
-		color: var(--accent);
-		margin: 0;
-		line-height: 1;
+	li {
+		font-size: 14px;
+		color: var(--ink-2);
+		padding: 6px 0;
+		border-top: 1px solid var(--line);
 	}
 
-	.service__title {
-		font-size: var(--step-1);
-		margin: 0;
-	}
-
-	.service__title a {
-		text-decoration: none;
-	}
-
-	.service__tagline {
-		margin: 0;
-		color: var(--ink-soft);
-		font-size: var(--step--1);
-	}
-
-	.service__bullets {
-		margin: 0.5rem 0 0;
-		padding-left: 1.1rem;
-		font-size: var(--step--1);
-		color: var(--ink-soft);
-	}
-
-	.service__bullets li + li {
-		margin-top: 0.2rem;
+	li span {
+		color: var(--hivis);
+		font-weight: 700;
 	}
 
 	.service__price {
-		margin: 0.75rem 0 0;
+		display: block;
+		margin-top: 16px;
 		font-family: var(--font-mono);
-		font-size: var(--step--1);
-		color: var(--ink);
+		font-weight: 700;
+		font-size: 15px;
+		color: var(--rust);
 	}
 </style>

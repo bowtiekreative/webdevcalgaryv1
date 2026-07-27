@@ -2,6 +2,9 @@
 .env
 web/.env
 web/.env.production
+# Backups a tool wrote next to an .env — these have leaked before.
+*.env.bak*
+.env.bak*
 
 # Editor / tooling state that is specific to one machine
 .claude/settings.local.json

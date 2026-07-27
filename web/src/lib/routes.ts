@@ -12,7 +12,21 @@ import type { CollectionEntry } from 'astro:content';
  * break the build — it would just silently drop the WordPress page. Excluding
  * them explicitly keeps that from being a mystery.
  */
-export const RESERVED_SLUGS = new Set(['work', 'services', 'blog', 'rss.xml', '404']);
+export const RESERVED_SLUGS = new Set([
+	'work',
+	'services',
+	'blog',
+	'rss.xml',
+	'404',
+	// The funnel's own routes. A WordPress page at any of these slugs would be
+	// silently dropped, which is a bad way to find out you had a collision.
+	'checkout',
+	'teardown',
+	'thank-you',
+	'login',
+	'dashboard',
+	'docs',
+]);
 
 /**
  * menu_order first (that's what the drag handles in wp-admin set), then newest.

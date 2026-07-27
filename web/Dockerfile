@@ -20,11 +20,22 @@ ARG SITE_NAME
 ARG SITE_TAGLINE
 ARG WP_FAIL_ON_ERROR=1
 
+# The phone number and email are baked into every prerendered page — header,
+# footer, sticky bar, structured data — so they are build-time, not runtime.
+# PayPal and Emailit credentials are the opposite: only the on-demand routes
+# touch them, so they stay out of the image and are set on the container.
+ARG SITE_PHONE
+ARG SITE_PHONE_RAW
+ARG SITE_EMAIL
+
 ENV WP_GRAPHQL_ENDPOINT=$WP_GRAPHQL_ENDPOINT \
     WP_SHARED_SECRET=$WP_SHARED_SECRET \
     SITE_URL=$SITE_URL \
     SITE_NAME=$SITE_NAME \
     SITE_TAGLINE=$SITE_TAGLINE \
+    SITE_PHONE=$SITE_PHONE \
+    SITE_PHONE_RAW=$SITE_PHONE_RAW \
+    SITE_EMAIL=$SITE_EMAIL \
     WP_FAIL_ON_ERROR=$WP_FAIL_ON_ERROR
 
 # Dependencies first, so a content-only change reuses this layer.

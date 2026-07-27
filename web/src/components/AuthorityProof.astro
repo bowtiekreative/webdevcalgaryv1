@@ -1,0 +1,75 @@
+---
+/**
+ * Authority proof — the video endorsements.
+ *
+ * From the design brief, and the reason this is its own component rather than
+ * a bigger testimonial: authority proof "reassures but does not close." If it
+ * dominates, a contractor reads "expensive, not for me" and leaves. So it is
+ * visually smaller than the peer proof and is never rendered on its own.
+ */
+
+const names = ['Norman Seeff', 'Renée Taylor', 'Jully Black'];
+---
+
+<div class="authority">
+	<p>
+		<b>The work has put me in some remarkable rooms.</b> Video endorsements from Norman Seeff, Renée
+		Taylor and Jully Black — same attention goes into a Calgary contractor's site.
+	</p>
+	<ul>
+		{
+			names.map((name) => (
+				<li>
+					<span aria-hidden="true">▶</span> {name}
+				</li>
+			))
+		}
+	</ul>
+</div>
+
+<style>
+	.authority {
+		border: 2px solid var(--ink);
+		background: var(--paper);
+		margin-top: 24px;
+		padding: 20px 24px;
+		display: flex;
+		gap: 20px;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	p {
+		margin: 0;
+		font-size: 15px;
+		color: var(--ink-2);
+		max-width: 58ch;
+	}
+
+	b {
+		color: var(--ink);
+		font-family: var(--font-display);
+	}
+
+	ul {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		border: 1px solid var(--line);
+		padding: 10px 14px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--ink-2);
+	}
+
+	li span {
+		color: var(--hivis);
+	}
+</style>

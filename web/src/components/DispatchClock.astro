@@ -1,0 +1,149 @@
+---
+/**
+ * The signature element: a live countdown to the go-live deadline, hi-vis
+ * amber on ink.
+ *
+ * From the design brief — "the one thing the page should be remembered by. It
+ * turns the core promise from a claim into a moving object on the screen."
+ * Everything else on the page stays quiet so this lands.
+ *
+ * The markup is prerendered with a static 24:00:00, then a custom element
+ * takes over on the client and counts down from the visitor's own clock.
+ * `prefers-reduced-motion` is respected by the stylesheet: the digits still
+ * update (that is the information, not decoration), nothing else animates.
+ */
+import { RUSH_WINDOW_HOURS } from '../config';
+
+interface Props {
+	/** "Dispatch" before payment, "Dispatch · confirmed" after. */
+	label?: string;
+	/** Copy under the digits. `{deadline}` is replaced with the go-live time. */
+	children?: unknown;
+	hours?: number;
+}
+
+const { label = 'Dispatch', hours = RUSH_WINDOW_HOURS } = Astro.props;
+
+const initial = `${String(hours).padStart(2, '0')}:00:00`;
+---
+
+<dispatch-clock class="dispatch" data-hours={hours}>
+	<div class="dispatch__bar">
+		<span><span class="dot">●</span> {label}</span>
+		<span data-stamp></span>
+	</div>
+	<div class="dispatch__digits" data-clock role="timer" aria-live="off">{initial}</div>
+	<div class="dispatch__note"><slot /></div>
+</dispatch-clock>
+
+<style>
+	.dispatch {
+		display: block;
+		border: 2px solid var(--ink);
+		background: var(--ink);
+		color: var(--paper);
+		padding: 20px 22px;
+		max-width: 520px;
+	}
+
+	.dispatch__bar {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 14px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+		color: var(--ink-3);
+		margin-bottom: 10px;
+	}
+
+	.dot {
+		color: var(--hivis);
+	}
+
+	.dispatch__digits {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: clamp(1.9rem, 7vw, 2.7rem);
+		letter-spacing: -0.03em;
+		color: var(--hivis);
+		line-height: 1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.dispatch__note {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: #b7bcc4;
+		margin-top: 12px;
+		line-height: 1.5;
+	}
+
+	.dispatch__note :global(b) {
+		color: var(--paper);
+	}
+</style>
+
+<script>
+	class DispatchClock extends HTMLElement {
+		#timer: number | undefined;
+		#end = 0;
+
+		connectedCallback() {
+			const hours = Number(this.dataset.hours) || 24;
+
+			this.#end = Date.now() + hours * 3_600_000;
+
+			const deadline = new Date(this.#end).toLocaleString('en-CA', {
+				weekday: 'short',
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: true,
+			});
+
+			// The copy is written with a {deadline} placeholder so the same
+			// component serves the landing page and the thank-you page.
+			const note = this.querySelector('.dispatch__note');
+
+			if (note) {
+				note.innerHTML = note.innerHTML.replace('{deadline}', `<b>${deadline}</b>`);
+			}
+
+			const stamp = this.querySelector('[data-stamp]');
+
+			if (stamp) {
+				stamp.textContent = new Date().toLocaleDateString('en-CA');
+			}
+
+			this.#tick();
+			this.#timer = window.setInterval(() => this.#tick(), 1000);
+		}
+
+		disconnectedCallback() {
+			window.clearInterval(this.#timer);
+		}
+
+		#tick() {
+			const target = this.querySelector('[data-clock]');
+
+			if (!target) {
+				return;
+			}
+
+			const pad = (n: number) => String(n).padStart(2, '0');
+			const left = Math.max(0, this.#end - Date.now());
+
+			target.textContent = [
+				pad(Math.floor(left / 3.6e6)),
+				pad(Math.floor((left % 3.6e6) / 6e4)),
+				pad(Math.floor((left % 6e4) / 1000)),
+			].join(':');
+		}
+	}
+
+	if (!customElements.get('dispatch-clock')) {
+		customElements.define('dispatch-clock', DispatchClock);
+	}
+</script>

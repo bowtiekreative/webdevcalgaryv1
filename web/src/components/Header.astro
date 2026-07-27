@@ -1,105 +1,99 @@
 ---
-import { getPrimaryNav } from '../lib/wp/site';
-import { site } from '../config';
+/**
+ * Sticky funnel header. Two things only: the phone number and "Start →".
+ *
+ * The nav from WordPress is deliberately not rendered on funnel pages — every
+ * extra link is another way to leave without starting. Pass `nav` to show it
+ * (the portfolio index does).
+ */
+import Wordmark from './Wordmark.astro';
+import { contact, fallbackNav } from '../config';
 
-const nav = await getPrimaryNav();
-const current = Astro.url.pathname.replace(/\/+$/, '') || '/';
-
-function isCurrent(href: string): boolean {
-	if (href === '/') {
-		return current === '/';
-	}
-
-	return current === href || current.startsWith(`${href}/`);
+interface Props {
+	/** Show the site nav alongside the phone/Start pair. */
+	nav?: boolean;
+	/** Where "Start →" points. */
+	startHref?: string;
+	narrow?: boolean;
 }
+
+const { nav = false, startHref = '/#start', narrow = false } = Astro.props;
 ---
 
 <header class="site-header">
-	<div class="wrap site-header__inner">
-		<a class="brand" href="/">
-			<span class="brand__mark" aria-hidden="true">{site.mark}</span>
-			<span class="brand__name">{site.name}</span>
-		</a>
-
-		<nav aria-label="Primary">
-			<ul class="nav">
-				{
-					nav.map((item) => (
-						<li>
-							<a
-								href={item.href}
-								aria-current={isCurrent(item.href) ? 'page' : undefined}
-								target={item.external ? '_blank' : undefined}
-								rel={item.external ? 'noopener noreferrer' : undefined}
-							>
-								{item.label}
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</nav>
+	<div class={narrow ? 'wrap wrap--narrow bar' : 'wrap bar'}>
+		<Wordmark />
+		<div class="bar__right">
+			{
+				nav && (
+					<nav class="bar__nav">
+						{fallbackNav.map((item) => (
+							<a href={item.href}>{item.label}</a>
+						))}
+					</nav>
+				)
+			}
+			<a class="phone" href={`tel:${contact.phoneRaw}`}>{contact.phone}</a>
+			<a class="tick" href={startHref}>Start →</a>
+		</div>
 	</div>
 </header>
 
 <style>
 	.site-header {
 		border-bottom: 1px solid var(--line);
-		background: color-mix(in oklab, var(--paper) 88%, transparent);
-		backdrop-filter: blur(8px);
 		position: sticky;
 		top: 0;
-		z-index: 10;
+		background: rgba(255, 255, 255, 0.94);
+		backdrop-filter: blur(8px);
+		z-index: 50;
 	}
 
-	.site-header__inner {
+	.bar {
 		display: flex;
-		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-		padding-block: 1rem;
+		height: 62px;
+		gap: 14px;
 	}
 
-	.brand {
-		display: inline-flex;
-		align-items: baseline;
-		gap: 0.5rem;
-		font-family: var(--font-serif);
-		font-size: var(--step-1);
-		font-weight: 600;
-		letter-spacing: -0.01em;
-		text-decoration: none;
-	}
-
-	.brand__mark {
-		color: var(--accent);
-	}
-
-	.nav {
+	.bar__right {
 		display: flex;
-		flex-wrap: wrap;
-		gap: clamp(0.75rem, 2.5vw, 1.75rem);
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		font-size: var(--step--1);
-		letter-spacing: 0.02em;
+		align-items: center;
+		gap: 18px;
 	}
 
-	.nav a {
-		text-decoration: none;
-		color: var(--ink-soft);
-		padding-block: 0.25rem;
-		border-bottom: 2px solid transparent;
+	.bar__nav {
+		display: flex;
+		gap: 18px;
 	}
 
-	.nav a:hover {
+	.bar__nav a {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 700;
+		color: var(--ink-2);
+	}
+
+	.bar__nav a:hover {
+		color: var(--rust);
+	}
+
+	.phone {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 700;
 		color: var(--ink);
 	}
 
-	.nav a[aria-current='page'] {
-		color: var(--ink);
-		border-bottom-color: var(--accent);
+	.phone:hover {
+		color: var(--rust);
+	}
+
+	@media (max-width: 620px) {
+		.bar__nav,
+		.phone {
+			display: none;
+		}
 	}
 </style>

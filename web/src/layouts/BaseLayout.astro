@@ -1,7 +1,16 @@
 ---
+/**
+ * Public page shell for the WebDevCalgary funnel.
+ *
+ * Fonts are the three faces the design system names: Archivo (display), Inter
+ * (body), JetBrains Mono (utility — the clock, prices, serials, eyebrows). The
+ * mono face is doing real work here; it encodes the work-order/dispatch idea
+ * the whole page is built on, so it is not interchangeable with another sans.
+ */
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import StickyBar from '../components/StickyBar.astro';
 import Seo from '../components/Seo.astro';
 import type { Seo as SeoData } from '../lib/wp/schema';
 import { site } from '../config';
@@ -13,9 +22,30 @@ interface Props {
 	type?: 'website' | 'article';
 	publishedTime?: string | null;
 	modifiedTime?: string | null;
+	/** Narrow measure (920px) — checkout, teardown, thank-you. */
+	narrow?: boolean;
+	/** Show the nav links in the header. */
+	nav?: boolean;
+	/** Where the header and sticky-bar CTAs point. */
+	startHref?: string;
+	startLabel?: string;
+	/** Post-purchase pages have nothing left to sell. */
+	sticky?: boolean;
 }
 
-const { title, description, seo, type, publishedTime, modifiedTime } = Astro.props;
+const {
+	title,
+	description,
+	seo,
+	type,
+	publishedTime,
+	modifiedTime,
+	narrow = false,
+	nav = false,
+	startHref = '/#start',
+	startLabel,
+	sticky = true,
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -25,6 +55,13 @@ const { title, description, seo, type, publishedTime, modifiedTime } = Astro.pro
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="theme-color" content="#14161A" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap"
+		/>
 		<link rel="alternate" type="application/rss+xml" title={`${site.name} — Journal`} href="/rss.xml" />
 		<Seo
 			title={title}
@@ -34,29 +71,15 @@ const { title, description, seo, type, publishedTime, modifiedTime } = Astro.pro
 			publishedTime={publishedTime}
 			modifiedTime={modifiedTime}
 		/>
+		<slot name="head" />
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
-		<Header />
+		<Header nav={nav} startHref={startHref} narrow={narrow} />
 		<main id="main">
 			<slot />
 		</main>
-		<Footer />
+		<Footer narrow={narrow} />
+		{sticky && <StickyBar startHref={startHref} startLabel={startLabel} />}
 	</body>
 </html>
-
-<style>
-	.skip-link {
-		position: absolute;
-		left: -9999px;
-		top: 0;
-		z-index: 100;
-		padding: 0.75rem 1rem;
-		background: var(--ink);
-		color: var(--paper);
-	}
-
-	.skip-link:focus {
-		left: 0;
-	}
-</style>

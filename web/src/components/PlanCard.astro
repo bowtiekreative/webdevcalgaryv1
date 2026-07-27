@@ -1,0 +1,104 @@
+---
+/**
+ * A recurring plan, shaped like the work order rather than a SaaS pricing card.
+ */
+import type { Plan } from '../config';
+import { offers } from '../config';
+
+interface Props {
+	plan: Plan;
+	href: string;
+	/** Overrides "Start with {name}". */
+	ctaLabel?: string;
+}
+
+const { plan, href, ctaLabel } = Astro.props;
+const rush = offers.rush;
+---
+
+<div class:list={['panel', 'plan', { 'panel--featured': plan.featured }]}>
+	<div class="panel__bar">
+		<span>{plan.featured ? 'Plan B · Most picked' : 'Plan A'}</span>
+		<span>{plan.serial}</span>
+	</div>
+	<div class="plan__body">
+		<div class="plan__name">{plan.name}</div>
+		<div class="price plan__price">
+			{plan.price}<small> /{plan.interval}</small>
+		</div>
+		<div class="plan__rush">
+			+ ${rush.amount} rush fee (or wait 7 days)
+		</div>
+		<ul class="plan__features">
+			{
+				plan.features.map((feature) => (
+					<li>
+						<span aria-hidden="true">→</span> {feature}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+	<div class="plan__cta">
+		<a class:list={['btn', 'btn--block', { 'btn--primary': plan.featured }]} href={href}>
+			{ctaLabel ?? `Start with ${plan.name}`}
+		</a>
+	</div>
+</div>
+
+<style>
+	.plan {
+		display: flex;
+		flex-direction: column;
+		max-width: none;
+	}
+
+	.plan__body {
+		padding: 24px 20px;
+		flex: 1;
+	}
+
+	.plan__name {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 21px;
+		letter-spacing: -0.02em;
+		margin-bottom: 14px;
+	}
+
+	.plan__price {
+		font-size: 34px;
+	}
+
+	.plan__rush {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--rust);
+		font-weight: 700;
+		margin-top: 8px;
+	}
+
+	.plan__features {
+		list-style: none;
+		margin: 20px 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.plan__features li {
+		font-size: 15px;
+		padding: 7px 0;
+		color: var(--ink-2);
+		border-top: 1px solid var(--line);
+	}
+
+	.plan__features span {
+		color: var(--hivis);
+		font-weight: 700;
+	}
+
+	.plan__cta {
+		padding: 0 20px 22px;
+	}
+</style>

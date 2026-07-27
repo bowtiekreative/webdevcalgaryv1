@@ -1,66 +1,63 @@
 ---
-import WpImage from './WpImage.astro';
+/**
+ * A portfolio entry — one Calgary industry, one live site.
+ *
+ * "These are live right now. Click any of them — that's the whole point." The
+ * card links out to the real site when `externalUrl` is set, and to the case
+ * study otherwise.
+ */
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
-	/** Hero cards load eagerly; grid cards should not. */
-	eager?: boolean;
+	/** Link straight out to the live site instead of the case study. */
+	external?: boolean;
 }
 
-const { project, eager = false } = Astro.props;
-const { data } = project;
-const image = data.hero ?? data.featuredImage;
+const { project, external = false } = Astro.props;
+const { title, path, client, year, externalUrl, industries } = project.data;
+
+const trade = industries[0]?.name ?? null;
+const href = external && externalUrl ? externalUrl : path;
+const isExternal = href === externalUrl;
+const since = year ? `live since ${year}` : null;
+const note = [trade, since].filter(Boolean).join(' · ');
 ---
 
-<a class="card" href={data.path}>
-	{
-		image && (
-			<div class="card__media">
-				<WpImage media={image} eager={eager} sizes="(min-width: 60rem) 33vw, (min-width: 40rem) 50vw, 100vw" alt="" />
-			</div>
-		)
-	}
-
-	<div class="card__body">
-		{data.client && <p class="card__client">{data.client}</p>}
-		<h3 class="card__title">{data.title}</h3>
-		{data.summary && <p class="card__summary">{data.summary}</p>}
-
-		{
-			data.capabilities.length > 0 && (
-				<ul class="tag-list">
-					{data.capabilities.slice(0, 3).map((capability) => (
-						<li class="tag">{capability.name}</li>
-					))}
-				</ul>
-			)
-		}
-	</div>
+<a
+	class="card project"
+	href={href}
+	rel={isExternal ? 'noopener' : undefined}
+	target={isExternal ? '_blank' : undefined}
+>
+	{trade && <span class="card__index">{trade}</span>}
+	<strong>{client ?? title}</strong>
+	<span class="project__note">{note || project.data.summary}{' '}<em aria-hidden="true">↗</em></span>
 </a>
 
 <style>
-	.card__body {
-		display: grid;
-		gap: 0.4rem;
+	.project {
+		padding: 22px;
 	}
 
-	.card__client {
+	strong {
+		display: block;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 17px;
+		color: var(--ink);
+		margin-bottom: 4px;
+	}
+
+	.project__note {
 		font-family: var(--font-mono);
-		font-size: var(--step--1);
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--accent);
-		margin: 0;
+		font-size: 12px;
+		color: var(--ink-2);
+		display: block;
 	}
 
-	.card__summary {
-		margin: 0;
-		color: var(--ink-soft);
-		font-size: var(--step--1);
-	}
-
-	.tag-list {
-		margin-top: 0.35rem;
+	em {
+		font-style: normal;
+		color: var(--rust);
 	}
 </style>

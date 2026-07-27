@@ -1,0 +1,36 @@
+---
+/**
+ * "WebDev<accent>Calgary</accent>" — Archivo 800, tight tracking, no radius.
+ */
+import { site } from '../config';
+
+interface Props {
+	href?: string;
+	size?: string;
+}
+
+const { href = '/', size = '17px' } = Astro.props;
+---
+
+<a class="wordmark" href={href} style={`--size:${size}`}>
+	{site.wordmark.lead}<span>{site.wordmark.accent}</span>
+</a>
+
+<style>
+	.wordmark {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--size);
+		letter-spacing: -0.02em;
+		line-height: 1;
+		color: var(--ink);
+	}
+
+	.wordmark:hover {
+		color: var(--ink);
+	}
+
+	.wordmark span {
+		color: var(--rust);
+	}
+</style>

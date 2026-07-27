@@ -1,22 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../config';
 ---
 
-<BaseLayout title="Page not found" description="That page has moved or never existed.">
-	<section class="section notfound">
-		<div class="wrap wrap--narrow">
+<BaseLayout title="Page not found" description="That page isn't here." nav>
+	<section class="section">
+		<div class="wrap">
 			<p class="eyebrow">404</p>
-			<h1>We can't find that page.</h1>
-			<p class="lede">It may have been renamed in WordPress, or the link that brought you here is out of date.</p>
-			<p>
-				<a class="button" href="/">Back to the home page</a>
+			<h1>That page isn’t here.</h1>
+			<p class="lede">
+				It moved, or it never existed. Either way, nothing here is worth a dead end — the phone works.
 			</p>
+			<div class="cta-row cta">
+				<a class="btn btn--primary" href="/">Back to the start</a>
+				<a class="btn" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
+			</div>
 		</div>
 	</section>
 </BaseLayout>
 
 <style>
-	.notfound {
-		padding-block: clamp(4rem, 12vw, 9rem);
+	.cta {
+		margin-top: 26px;
 	}
 </style>

@@ -1,35 +1,78 @@
 ---
+/**
+ * Services index.
+ *
+ * Secondary to the funnel — the landing page sells the offer. This exists for
+ * search traffic and for the things that get quoted separately (rebrands,
+ * online stores, the Brand Story Film).
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
+import { contact } from '../../config';
 
 const services = (await getCollection('services')).sort(byMenuOrderThenDate);
 ---
 
-<BaseLayout title="Services" description="How we can help.">
-	<section class="section">
+<BaseLayout
+	title="Services"
+	description="What's included in the monthly plan, and what gets quoted separately."
+	nav
+>
+	<section class="section hero">
 		<div class="wrap">
-			<p class="eyebrow">Capabilities</p>
-			<h1>Services</h1>
-			<p class="lede">A studio-sized team, so you deal with the people doing the work.</p>
+			<p class="eyebrow">What we do</p>
+			<h1>Everything the site needs,<br /><em class="accent">handled.</em></h1>
+			<p class="lede">
+				Most of this is included in the monthly plan. The bigger jobs — a full rebrand, an online
+				store, a brand film — get quoted separately, in plain numbers, before anything starts.
+			</p>
 		</div>
 	</section>
 
-	<section class="section section--alt">
+	<section class="section listing">
 		<div class="wrap">
 			{
 				services.length > 0 ? (
-					<div class="grid grid--3">
-						{services.map((service) => (
-							<ServiceCard service={service} />
+					<div class="grid" style="--col:280px">
+						{services.map((service, index) => (
+							<ServiceCard service={service} index={index} />
 						))}
 					</div>
 				) : (
-					<EmptyState what="services" adminPath="Services → Add New Service" />
+					<EmptyState what="services" adminPath="Services" />
 				)
 			}
 		</div>
 	</section>
+
+	<section class="section section--ink">
+		<div class="wrap">
+			<h2>Not sure which of these you need?</h2>
+			<p class="lede">
+				Call and describe the business. I’ll tell you what I’d do and what it costs — no quote
+				process, no discovery call.
+			</p>
+			<div class="cta-row cta">
+				<a class="btn btn--hivis" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
+				<a class="btn" href="/#start">Send the details instead</a>
+			</div>
+		</div>
+	</section>
 </BaseLayout>
+
+<style>
+	.hero {
+		padding: 56px 0 32px;
+	}
+
+	.listing {
+		padding-top: 0;
+	}
+
+	.cta {
+		margin-top: 26px;
+	}
+</style>

@@ -1,18 +1,20 @@
 ---
+/**
+ * A single service.
+ */
 import type { GetStaticPaths } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
+import { contact } from '../../config';
 
-// getStaticPaths cannot infer prop types for Astro.props, so declare them.
 interface Props {
 	service: CollectionEntry<'services'>;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const services = await getCollection('services');
+	const services = (await getCollection('services')).sort(byMenuOrderThenDate);
 
 	return services.map((service) => ({
 		params: { slug: service.id },
@@ -21,119 +23,86 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { service } = Astro.props;
-const { data } = service;
 const { Content } = await render(service);
-
-// Projects that share a capability with this service — a cheap "related work"
-// rail that needs no extra editorial work.
-const capabilities = new Set(data.capabilities.map((capability) => capability.slug));
-const related =
-	capabilities.size > 0
-		? (await getCollection('projects'))
-				.filter((project) => project.data.capabilities.some((capability) => capabilities.has(capability.slug)))
-				.sort(byMenuOrderThenDate)
-				.slice(0, 3)
-		: [];
+const { title, tagline, summary, bullets, startingPrice, seo } = service.data;
 ---
 
-<BaseLayout title={data.title} description={data.summary} seo={data.seo}>
-	<section class="section">
+<BaseLayout title={title} description={tagline ?? summary} seo={seo} nav>
+	<section class="section hero">
 		<div class="wrap">
-			<p class="eyebrow">Service</p>
-			<h1>{data.title}</h1>
-			{data.tagline && <p class="lede">{data.tagline}</p>}
+			<p class="eyebrow"><a href="/services">Services</a></p>
+			<h1>{title}</h1>
+			{(tagline || summary) && <p class="lede">{tagline ?? summary}</p>}
+			{startingPrice && <p class="price price--lead">{startingPrice}</p>}
 		</div>
 	</section>
 
-	<div class="section section--alt">
-		<div class="wrap service-body">
+	<section class="section body">
+		<div class="wrap cols">
 			<div class="prose">
 				<Content />
 			</div>
-
-			<aside>
-				{
-					data.bullets.length > 0 && (
-						<div class="aside-block">
-							<h2 class="aside-block__title">What's included</h2>
-							<ul class="aside-list">
-								{data.bullets.map((bullet) => (
-									<li>{bullet}</li>
-								))}
-							</ul>
+			{
+				bullets.length > 0 && (
+					<div class="panel included">
+						<div class="panel__bar">
+							<span>Included</span>
+							<span>{service.id.slice(0, 12).toUpperCase()}</span>
 						</div>
-					)
-				}
-
-				{
-					data.startingPrice && (
-						<div class="aside-block">
-							<h2 class="aside-block__title">Starting at</h2>
-							<p class="price">{data.startingPrice}</p>
+						<div class="panel__body">
+							{bullets.map((bullet) => (
+								<div class="row">
+									<span>{bullet}</span>
+									<span class="row__value">Yes</span>
+								</div>
+							))}
 						</div>
-					)
-				}
-
-				<p><a class="button" href="/contact">Start a project</a></p>
-			</aside>
-		</div>
-	</div>
-
-	{
-		related.length > 0 && (
-			<section class="section">
-				<div class="wrap">
-					<h2>Related work</h2>
-					<div class="grid grid--3">
-						{related.map((project) => (
-							<ProjectCard project={project} />
-						))}
 					</div>
-				</div>
-			</section>
-		)
-	}
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section section--ink">
+		<div class="wrap">
+			<h2>Want this done?</h2>
+			<p class="lede">Call and describe the job. You’ll get a number, not a discovery call.</p>
+			<div class="cta-row cta">
+				<a class="btn btn--hivis" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
+				<a class="btn" href="/#start">Send the details</a>
+			</div>
+		</div>
+	</section>
 </BaseLayout>
 
 <style>
-	.service-body {
-		display: grid;
-		gap: clamp(2rem, 5vw, 4rem);
-		align-items: start;
+	.hero {
+		padding: 56px 0 24px;
 	}
 
-	@media (min-width: 60rem) {
-		.service-body {
-			grid-template-columns: minmax(0, 1fr) 16rem;
-		}
+	h1 {
+		font-size: clamp(2.1rem, 6vw, 3.4rem);
 	}
 
-	.aside-block {
-		margin-bottom: 2rem;
+	.price--lead {
+		font-size: 30px;
+		margin: 24px 0 0;
+		color: var(--rust);
 	}
 
-	.aside-block__title {
-		font-family: var(--font-mono);
-		font-size: var(--step--1);
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--ink-faint);
-		margin-bottom: 0.5rem;
+	.body {
+		--col: 300px;
 	}
 
-	.aside-list {
-		margin: 0;
-		padding-left: 1.1rem;
-		font-size: var(--step--1);
+	.included {
+		max-width: none;
 	}
 
-	.aside-list li + li {
-		margin-top: 0.25rem;
+	.included .row:last-child {
+		border-bottom: 0;
 	}
 
-	.price {
-		font-family: var(--font-serif);
-		font-size: var(--step-2);
-		margin: 0;
+	.cta {
+		margin-top: 26px;
 	}
 </style>

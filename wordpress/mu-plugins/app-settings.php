@@ -51,8 +51,8 @@ function schema(): array {
 			'fields'      => [
 				'stripe_secret_key'     => [ 'label' => __( 'Secret key', 'app' ), 'secret' => true, 'placeholder' => 'sk_test_…' ],
 				'stripe_webhook_secret' => [ 'label' => __( 'Webhook signing secret', 'app' ), 'secret' => true, 'placeholder' => 'whsec_…' ],
-				'stripe_price_starter'  => [ 'label' => __( 'Price ID — Starter', 'app' ), 'placeholder' => 'price_…' ],
-				'stripe_price_studio'   => [ 'label' => __( 'Price ID — Studio', 'app' ), 'placeholder' => 'price_…' ],
+				'stripe_price_core'     => [ 'label' => __( 'Price ID — Core', 'app' ), 'placeholder' => 'price_…' ],
+				'stripe_price_growth'   => [ 'label' => __( 'Price ID — Growth', 'app' ), 'placeholder' => 'price_…' ],
 			],
 		],
 		'paypal'   => [
@@ -70,8 +70,8 @@ function schema(): array {
 					'label' => __( 'Webhook ID', 'app' ),
 					'desc'  => __( 'Required — without it every PayPal webhook is rejected.', 'app' ),
 				],
-				'paypal_plan_starter'  => [ 'label' => __( 'Plan ID — Starter', 'app' ), 'placeholder' => 'P-…' ],
-				'paypal_plan_studio'   => [ 'label' => __( 'Plan ID — Studio', 'app' ), 'placeholder' => 'P-…' ],
+				'paypal_plan_core'    => [ 'label' => __( 'Plan ID — Core', 'app' ), 'placeholder' => 'P-…' ],
+				'paypal_plan_growth'  => [ 'label' => __( 'Plan ID — Growth', 'app' ), 'placeholder' => 'P-…' ],
 			],
 		],
 		'emailit'  => [

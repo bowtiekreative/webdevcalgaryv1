@@ -1,0 +1,66 @@
+---
+/**
+ * The work-order motif: ruled rows, a mono serial, items listed as "Included"
+ * with a single priced line.
+ *
+ * Trades people recognise this form instantly — which is the entire reason the
+ * pricing block is shaped like an invoice rather than a SaaS pricing card.
+ */
+
+export interface WorkOrderRow {
+	label: string;
+	value: string;
+}
+
+interface Props {
+	/** Left side of the mono bar. */
+	heading?: string;
+	/** Right side — WC-RUSH, WC-100, WC-047. */
+	serial: string;
+	rows: WorkOrderRow[];
+	total: WorkOrderRow;
+	rust?: boolean;
+	featured?: boolean;
+	class?: string;
+}
+
+const {
+	heading = 'Work order',
+	serial,
+	rows,
+	total,
+	rust = false,
+	featured = false,
+	class: className = '',
+} = Astro.props;
+
+const hasNote = Astro.slots.has('default');
+---
+
+<div class:list={['panel', { 'panel--featured': featured }, className]}>
+	<div class:list={['panel__bar', { 'panel__bar--rust': rust }]}>
+		<span>{heading}</span>
+		<span>{serial}</span>
+	</div>
+	<div class="panel__body">
+		{
+			rows.map((row) => (
+				<div class="row">
+					<span>{row.label}</span>
+					<span class="row__value">{row.value}</span>
+				</div>
+			))
+		}
+		<div class="row row--total">
+			<span>{total.label}</span>
+			<span class="row__value">{total.value}</span>
+		</div>
+		{hasNote && <p class="panel__note"><slot /></p>}
+	</div>
+</div>
+
+<style>
+	.panel {
+		max-width: 640px;
+	}
+</style>

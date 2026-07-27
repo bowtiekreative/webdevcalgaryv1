@@ -1,5 +1,11 @@
 ---
-import WpImage from './WpImage.astro';
+/**
+ * Peer proof — a text testimonial from a business owner.
+ *
+ * From the design brief: peer proof is what closes trades, so it gets the
+ * larger, more prominent treatment. Authority proof (the video endorsements)
+ * is deliberately smaller and never stands alone — see AuthorityProof.astro.
+ */
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -7,104 +13,43 @@ interface Props {
 }
 
 const { testimonial } = Astro.props;
-const { data } = testimonial;
+const { quote, author, role, company } = testimonial.data;
 
-const attribution = [data.author, data.role, data.company].filter(Boolean).join(', ');
+const attribution = [role, company].filter(Boolean).join(' · ');
 ---
 
-<figure class="quote">
-	<blockquote class="quote__body">
-		<p>{data.quote}</p>
-	</blockquote>
-
-	<figcaption class="quote__cite">
-		{data.photo && <WpImage media={data.photo} class="quote__photo" sizes="56px" alt="" />}
-
-		<div>
-			{attribution && <p class="quote__who">{attribution}</p>}
-			{
-				data.rating !== null && (
-					<p class="quote__rating">
-						<span class="visually-hidden">Rated {data.rating} out of 5.</span>
-						<span aria-hidden="true">{'★'.repeat(Math.max(0, Math.min(5, data.rating)))}</span>
-					</p>
-				)
-			}
-			{
-				data.project?.slug && (
-					<p class="quote__project">
-						<a href={data.project.path}>{data.project.title ?? 'View the project'}</a>
-					</p>
-				)
-			}
-		</div>
+<figure class="card quote">
+	<blockquote>{quote}</blockquote>
+	<figcaption>
+		{author && <b>{author}</b>}
+		{attribution && <span>{author ? ' · ' : ''}{attribution}</span>}
 	</figcaption>
 </figure>
 
 <style>
 	.quote {
-		display: grid;
-		gap: 1.25rem;
-		align-content: space-between;
-		margin: 0;
-		padding: clamp(1.5rem, 3vw, 2.25rem);
-		border-radius: var(--radius);
-		background: var(--paper);
-		border: 1px solid var(--line);
-	}
-
-	.quote__body {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: var(--step-1);
-		line-height: 1.45;
-	}
-
-	.quote__body p {
-		margin: 0;
-	}
-
-	.quote__body p::before {
-		content: '“';
-	}
-
-	.quote__body p::after {
-		content: '”';
-	}
-
-	.quote__cite {
 		display: flex;
-		align-items: center;
-		gap: 0.85rem;
-	}
-
-	.quote__photo {
-		width: 3.5rem;
-		height: 3.5rem;
-		border-radius: 50%;
-		object-fit: cover;
-		flex: none;
-	}
-
-	.quote__who {
+		flex-direction: column;
+		gap: 14px;
 		margin: 0;
-		font-size: var(--step--1);
-		font-weight: 600;
+		padding: 26px 24px;
 	}
 
-	.quote__rating {
+	blockquote {
 		margin: 0;
-		font-size: var(--step--1);
-		color: var(--accent);
-		letter-spacing: 0.1em;
+		font-size: 15px;
+		color: var(--ink);
+		line-height: 1.7;
 	}
 
-	.quote__project {
-		margin: 0.15rem 0 0;
-		font-size: var(--step--1);
+	figcaption {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--ink-2);
+		margin-top: auto;
 	}
 
-	.quote__project a {
-		color: var(--ink-faint);
+	figcaption b {
+		color: var(--ink);
 	}
 </style>

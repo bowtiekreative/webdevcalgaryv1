@@ -1,0 +1,221 @@
+---
+/**
+ * The $47 tripwire — the 24-Hour Website Teardown.
+ *
+ * Its job is not the $47. It is a buyer filter (someone who pays has proven
+ * they'll transact) and a pre-sell: by the time they finish watching they have
+ * a list of everything wrong and one obvious person to fix it. The $47 credits
+ * against the rush fee, which is what makes the next step feel free.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkOrder from '../components/WorkOrder.astro';
+import { contact, offers } from '../config';
+import { teardownFindings } from '../funnel';
+
+const teardown = offers.teardown;
+const rush = offers.rush;
+---
+
+<BaseLayout
+	title={`$${teardown.amount} website teardown`}
+	description={`$${teardown.amount} and I'll record a walkthrough of your website and Google listing, and show you exactly what's costing you calls. Delivered within 24 hours.`}
+	narrow
+	startHref="#order"
+	startLabel="Get it →"
+>
+	<section class="section hero">
+		<div class="wrap wrap--narrow">
+			<p class="eyebrow">The 24-hour website teardown · ${teardown.amount}</p>
+			<h1>
+				${teardown.amount} and I’ll show you exactly<br /><em class="accent"
+					>what’s costing you calls.</em
+				>
+			</h1>
+			<p class="lede hero__lede">
+				I’ll record a video walking through your actual website and your Google listing, and point out
+				everything that’s quietly losing you business. Usually it’s three or four things — and none of
+				them are what people expect.
+			</p>
+			<div class="cta-row">
+				<a class="btn btn--primary" href="#order">Get my teardown — ${teardown.amount}</a>
+				<span class="mono">Video + fix list within 24 hours</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="section section--concrete">
+		<div class="wrap wrap--narrow">
+			<WorkOrder
+				serial={teardown.serial}
+				rows={[
+					{ label: '8–12 minute recorded walkthrough of your site', value: 'Included' },
+					{ label: 'Your Google Business Profile, reviewed', value: 'Included' },
+					{ label: 'One-page fix list, in plain English', value: 'Included' },
+					{ label: 'Delivered within 24 hours', value: 'Included' },
+				]}
+				total={{ label: 'The teardown', value: `$${teardown.amount}` }}
+			>
+				<b>The ${teardown.amount} comes off the rush fee</b> if you decide to have us build the new
+				site. Take the list to whoever you want — it’s yours either way.
+			</WorkOrder>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="wrap wrap--narrow">
+			<h2>Why would I show you what’s wrong<br />instead of just selling you a site?</h2>
+			<p class="lede why__lede">
+				Because after twenty years, I know how this goes. Once you see the list — the wrong hours, the
+				form that doesn’t send, the map listing pointing at your old address — you’ll want it fixed.
+				Maybe by me, maybe by someone else. Either way, you stop losing calls.
+			</p>
+			<div class="grid">
+				{
+					teardownFindings.map((finding) => (
+						<div class="card">
+							<span class="card__index">{finding.index}</span>
+							<h3>{finding.heading}</h3>
+							<p>{finding.body}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section id="order" class="section section--ink">
+		<div class="wrap wrap--narrow">
+			<p class="eyebrow">Get yours</p>
+			<h2>Send me your website.<br />I’ll send back the truth.</h2>
+			<p class="lede order__lede">Video and fix list in your inbox within 24 hours.</p>
+			<div class="cols">
+				<form class="form" data-teardown>
+					<input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+					<input type="url" name="website" placeholder="Your website address" required />
+					<input
+						type="email"
+						name="email"
+						placeholder="Email for delivery"
+						required
+						autocomplete="email"
+					/>
+					<input type="tel" name="phone" placeholder="Phone (optional)" autocomplete="tel" />
+					<p class="form__error" data-error hidden></p>
+					<button type="submit">Pay ${teardown.amount} — start my teardown</button>
+					<p class="form__note">
+						Secure checkout · Credited against the ${rush.amount} rush fee if you build with us
+					</p>
+				</form>
+				<div class="alt">
+					<h3>Not ready to spend ${teardown.amount}?</h3>
+					<p>
+						Call and I’ll tell you the first thing I’d fix, free. No pitch, no form — that’s what the
+						phone is for.
+					</p>
+					<a class="btn btn--block" href={`tel:${contact.phoneRaw}`}>Call {contact.phone} →</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.hero {
+		padding: 56px 0 32px;
+	}
+
+	h1 {
+		font-size: clamp(2.2rem, 7vw, 3.8rem);
+	}
+
+	.hero__lede {
+		margin-bottom: 30px;
+	}
+
+	h2 {
+		font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+	}
+
+	.why__lede {
+		margin-bottom: 26px;
+	}
+
+	.order__lede {
+		margin-bottom: 26px;
+	}
+
+	.alt {
+		border: 1px solid var(--field-border);
+		padding: 22px;
+	}
+
+	.alt h3 {
+		margin: 0 0 10px;
+		color: var(--paper);
+	}
+
+	.alt p {
+		margin: 0 0 16px;
+		color: #a8aeb8;
+		font-size: 15px;
+	}
+</style>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('[data-teardown]');
+
+	form?.addEventListener('submit', async (event) => {
+		event.preventDefault();
+
+		if (!form.reportValidity()) {
+			return;
+		}
+
+		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		const error = form.querySelector<HTMLElement>('[data-error]');
+		const original = button?.textContent ?? '';
+		const data = new FormData(form);
+
+		if (button) {
+			button.disabled = true;
+			button.textContent = 'Opening PayPal…';
+		}
+
+		if (error) {
+			error.hidden = true;
+		}
+
+		try {
+			const response = await fetch('/api/billing/paypal-order', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					offers: ['teardown'],
+					name: data.get('name'),
+					email: data.get('email'),
+					phone: data.get('phone'),
+					website: data.get('website'),
+					notes: 'Teardown request',
+				}),
+			});
+
+			const payload = (await response.json()) as { approveUrl?: string; error?: string };
+
+			if (!response.ok || !payload.approveUrl) {
+				throw new Error(payload.error || 'Could not start checkout.');
+			}
+
+			window.location.href = payload.approveUrl;
+		} catch (cause) {
+			if (error) {
+				error.textContent = cause instanceof Error ? cause.message : String(cause);
+				error.hidden = false;
+			}
+
+			if (button) {
+				button.disabled = false;
+				button.textContent = original;
+			}
+		}
+	});
+</script>

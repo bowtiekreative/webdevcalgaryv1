@@ -72,7 +72,14 @@ async function accessToken(): Promise<string> {
 	return tokenCache.token;
 }
 
-async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
+/**
+ * Authenticated PayPal REST call.
+ *
+ * Exported because one-time orders (billing/paypal-orders.ts) speak to a
+ * different API family (/v2/checkout) but share this token cache and base URL
+ * — two token caches would double the auth round trips for no reason.
+ */
+export async function paypalApi<T>(path: string, init: RequestInit = {}): Promise<T> {
 	const response = await fetch(`${await apiBase()}${path}`, {
 		...init,
 		headers: {
@@ -122,7 +129,7 @@ export async function createSubscription(options: {
 	returnUrl: string;
 	cancelUrl: string;
 }): Promise<{ id: string; approveUrl: string }> {
-	const subscription = await api<PayPalSubscription>('/v1/billing/subscriptions', {
+	const subscription = await paypalApi<PayPalSubscription>('/v1/billing/subscriptions', {
 		method: 'POST',
 		body: JSON.stringify({
 			plan_id: options.planId,
@@ -147,11 +154,11 @@ export async function createSubscription(options: {
 }
 
 export function getSubscription(id: string): Promise<PayPalSubscription> {
-	return api<PayPalSubscription>(`/v1/billing/subscriptions/${encodeURIComponent(id)}`);
+	return paypalApi<PayPalSubscription>(`/v1/billing/subscriptions/${encodeURIComponent(id)}`);
 }
 
 export async function cancelSubscription(id: string, reason = 'Cancelled from dashboard'): Promise<void> {
-	await api(`/v1/billing/subscriptions/${encodeURIComponent(id)}/cancel`, {
+	await paypalApi(`/v1/billing/subscriptions/${encodeURIComponent(id)}/cancel`, {
 		method: 'POST',
 		body: JSON.stringify({ reason }),
 	});
@@ -188,7 +195,7 @@ export async function verifyWebhook(options: {
 		return false;
 	}
 
-	const result = await api<{ verification_status: string }>('/v1/notifications/verify-webhook-signature', {
+	const result = await paypalApi<{ verification_status: string }>('/v1/notifications/verify-webhook-signature', {
 		method: 'POST',
 		body: JSON.stringify({
 			auth_algo: options.headers.get('paypal-auth-algo'),

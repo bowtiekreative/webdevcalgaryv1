@@ -1,0 +1,21 @@
+---
+/**
+ * Sticky bottom bar on mobile: Call now | Start →.
+ *
+ * From the design brief's layout rules, verbatim: "Non-negotiable." The
+ * audience reads this on a phone, in a truck, between jobs.
+ */
+import { contact } from '../config';
+
+interface Props {
+	startHref?: string;
+	startLabel?: string;
+}
+
+const { startHref = '/#start', startLabel = 'Start →' } = Astro.props;
+---
+
+<div class="stickybar">
+	<a href={`tel:${contact.phoneRaw}`}>Call now</a>
+	<a href={startHref}>{startLabel}</a>
+</div>

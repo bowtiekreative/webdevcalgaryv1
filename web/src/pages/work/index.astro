@@ -1,35 +1,111 @@
 ---
+/**
+ * The portfolio index — every industry we've built for.
+ *
+ * "These are live right now. Click any of them — that's the whole point." The
+ * proof this page carries is not that the sites look good; it is that they are
+ * still up and still maintained years later.
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
+import { contact, offers } from '../../config';
 
 const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
+
+const oldest = projects.reduce<number | null>((min, project) => {
+	const year = project.data.year;
+
+	return year && (min === null || year < min) ? year : min;
+}, null);
 ---
 
-<BaseLayout title="Work" description="Selected projects from the studio.">
-	<section class="section">
+<BaseLayout
+	title="Portfolio"
+	description="Calgary businesses we built websites for — and still maintain. HVAC, plumbing, electrical, roofing, dental, law, and more."
+	nav
+>
+	<section class="section hero">
 		<div class="wrap">
-			<p class="eyebrow">Portfolio</p>
-			<h1>Work</h1>
-			<p class="lede">Identity, web and campaign work for clients who care about the details.</p>
+			<p class="eyebrow">Still running</p>
+			<h1>Sites we built.<br /><em class="accent">Sites we still maintain.</em></h1>
+			<p class="lede">
+				Anyone can show you a launch. The question is whether it’s still right three years later —
+				current hours, current prices, current photos. Every site below is live now.
+			</p>
+			<div class="stats">
+				<div><b>{projects.length || '14'}</b>Industries</div>
+				{oldest && <div><b>{new Date().getFullYear() - oldest}+ yrs</b>Longest-running</div>}
+				<div><b>Unlimited</b>Changes, all of them</div>
+			</div>
 		</div>
 	</section>
 
-	<section class="section section--alt">
+	<section class="section listing">
 		<div class="wrap">
 			{
 				projects.length > 0 ? (
-					<div class="grid grid--3">
-						{projects.map((project, index) => (
-							<ProjectCard project={project} eager={index < 3} />
+					<div class="grid" style="--col:240px">
+						{projects.map((project) => (
+							<ProjectCard project={project} />
 						))}
 					</div>
 				) : (
-					<EmptyState what="projects" adminPath="Work → Add New Project" />
+					<EmptyState what="projects" adminPath="Projects" />
 				)
 			}
 		</div>
 	</section>
+
+	<section class="section section--ink">
+		<div class="wrap">
+			<p class="eyebrow">Your turn</p>
+			<h2>Yours could be on this page tomorrow.</h2>
+			<p class="lede">
+				Same build, same maintenance, same price lock. The only question is whether you want it live
+				tomorrow or in a week.
+			</p>
+			<div class="cta-row cta">
+				<a class="btn btn--hivis" href="/checkout">Pay the ${offers.rush.amount} rush fee →</a>
+				<a class="btn" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
+			</div>
+		</div>
+	</section>
 </BaseLayout>
+
+<style>
+	.hero {
+		padding: 56px 0 32px;
+	}
+
+	.listing {
+		padding-top: 0;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+		gap: 22px;
+		margin-top: 34px;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--ink-2);
+		line-height: 1.5;
+	}
+
+	.stats b {
+		display: block;
+		font-family: var(--font-display);
+		font-size: 26px;
+		font-weight: 800;
+		color: var(--ink);
+		letter-spacing: -0.02em;
+		margin-bottom: 2px;
+	}
+
+	.cta {
+		margin-top: 26px;
+	}
+</style>
