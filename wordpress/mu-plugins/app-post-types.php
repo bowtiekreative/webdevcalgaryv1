@@ -188,6 +188,13 @@ add_action( 'pre_get_posts', __NAMESPACE__ . '\\default_ordering' );
 function maybe_flush_rewrites(): void {
 	$version = '1.0.1';
 
+	// During `wp core install` this fires on init before wp_options exists,
+	// which fills the log with "Table 'wp_options' doesn't exist" on every
+	// fresh install. The rules get flushed on the next request anyway.
+	if ( wp_installing() ) {
+		return;
+	}
+
 	if ( get_option( 'app_rewrite_version' ) === $version ) {
 		return;
 	}

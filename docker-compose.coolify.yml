@@ -47,6 +47,20 @@ services:
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
       WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${SERVICE_PASSWORD_MYSQL}
+
+      # Read by wordpress/bin/bootstrap-production.sh on first boot, which
+      # installs core, WPGraphQL, Meta Box and the seed content — so a deploy
+      # is the whole setup, with no manual step to forget.
+      #
+      # SERVICE_PASSWORD_* asks Coolify to generate and store a strong value;
+      # read it from the resource's environment tab to sign in the first time.
+      # The bootstrap refuses to install if this is empty rather than falling
+      # back to something guessable.
+      WP_ADMIN_USER: ${WP_ADMIN_USER:-btkadmin}
+      WP_ADMIN_PASSWORD: ${SERVICE_PASSWORD_WPADMIN}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-websites@bowtiekreative.com}
+      WP_SITE_TITLE: ${WP_SITE_TITLE:-WebDevCalgary}
+
       WORDPRESS_CONFIG_EXTRA: |
         /* Behind Coolify's proxy, so trust the forwarded scheme or WordPress
            will build http:// URLs and mixed-content warnings follow. */

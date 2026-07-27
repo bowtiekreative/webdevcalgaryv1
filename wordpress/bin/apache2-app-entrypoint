@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# The container's command, wrapping apache2-foreground.
+#
+# The name matters. The base image's entrypoint only lays down WordPress core
+# and generates wp-config.php when the command starts with "apache2":
+#
+#     if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then ... fi
+#
+# so calling this anything else would silently skip that setup and leave an
+# empty webroot. Renaming it is not a cosmetic change.
+#
+# Two jobs before Apache takes over:
+#
+#   1. Sync the app's own files into the webroot. In production /var/www/html
+#      is a named volume, and a volume only takes image content the first time
+#      it is created — so anything COPYed straight there stops updating after
+#      the first deploy. The mu-plugins *are* the content model, so that
+#      failure mode is "deploys silently stop working". Staging them outside
+#      the volume and syncing on boot is what makes a deploy mean something.
+#
+#   2. Kick off the bootstrap, in the background, so a slow first run does not
+#      hold up the health check.
+
+set -euo pipefail
+
+STAGE=/opt/app
+WEBROOT=/var/www/html
+
+echo "==> Syncing mu-plugins into the webroot"
+mkdir -p "${WEBROOT}/wp-content/mu-plugins"
+# --delete so a mu-plugin removed from the repo is removed from the running
+# site too. Scoped to this one directory, which nothing else writes to.
+rsync -a --delete "${STAGE}/mu-plugins/" "${WEBROOT}/wp-content/mu-plugins/"
+chown -R www-data:www-data "${WEBROOT}/wp-content/mu-plugins"
+
+echo "==> Starting bootstrap in the background"
+(
+	# Never let a bootstrap failure stop the site from serving. A WordPress
+	# that is up but unconfigured can be fixed from wp-admin; one that will
+	# not boot cannot.
+	if ! timeout 600 "${STAGE}/bin/bootstrap-production.sh"; then
+		echo "warning: bootstrap did not complete — check the log above." >&2
+	fi
+) &
+
+exec apache2-foreground
