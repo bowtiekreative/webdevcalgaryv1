@@ -100,13 +100,32 @@ bootstrapped and reachable at `WP_GRAPHQL_ENDPOINT` *before* the front end will
 build at all — with `WP_FAIL_ON_ERROR=1` it fails the build rather than shipping
 a site with no content.
 
-That is why a fresh environment needs, in this order:
+A fresh environment needs, in this order:
 
 1. DNS: `webdevcalgary.com` and `cms.webdevcalgary.com` → `212.1.213.81`.
-2. Deploy `webdevcalgary-wordpress`, wait for the certificate.
-3. Run `scripts/wp-bootstrap.sh` against it — installs WPGraphQL and Meta Box
-   and seeds the content model. Nothing works before this.
-4. Deploy `webdevcalgary-web`.
+2. Deploy `webdevcalgary-wordpress`. It installs core, WPGraphQL, Meta Box and
+   the seed content **itself** on first boot — there is no manual bootstrap
+   step in production. Sign in with `WP_ADMIN_USER` and the generated
+   `SERVICE_PASSWORD_WPADMIN`, both on the resource's environment tab.
+3. Deploy `webdevcalgary-web`.
+
+### Two things that are not obvious, and both broke production
+
+**`WP_GRAPHQL_ENDPOINT` deliberately does not use `cms.webdevcalgary.com`.**
+It points at `http://wp.212.1.213.81.sslip.io/graphql`, which resolves straight
+to the server. The public hostname is proxied through Cloudflare, and the
+Coolify server cannot reach its own domain back through Cloudflare — so the
+Astro build failed with `fetch failed` while `npm ci` downloaded happily from
+the same network. Internal service-to-service traffic should not leave the box
+anyway. If the `cms` record is ever switched to DNS-only (grey cloud), the
+public hostname would work here too.
+
+**`security.allowedDomains` in [astro.config.mjs](web/astro.config.mjs) is
+load-bearing.** TLS terminates at Traefik, so the Node server sees plain HTTP
+and — with no allowed domains — ignores `X-Forwarded-Proto` and builds
+`Astro.url` as `http://`. Browsers post forms with `Origin: https://`, the two
+disagree, and Astro's `checkOrigin` rejects **every form on the site**. It fails
+only in production; the dev server cannot reproduce it.
 
 GitHub Actions:
 
@@ -119,6 +138,9 @@ Repository secrets it needs: `COOLIFY_URL`, `COOLIFY_TOKEN`, `COOLIFY_WEB_UUID`,
 `COOLIFY_WORDPRESS_UUID`.
 
 ## Before this goes live
+
+The site is deployed and serving. These are the things still standing between
+it and taking money.
 
 - [ ] **The 14 portfolio entries are seeded as drafts and must stay that way
       until they are real.** They are the fictional brands from the design deck,
