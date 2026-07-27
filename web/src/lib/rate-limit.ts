@@ -56,15 +56,36 @@ export function rateLimited(key: string, { name, limit, windowMs }: RateLimitOpt
 }
 
 /**
- * Caller's IP.
+ * Caller's IP, as seen through Cloudflare and then Traefik.
  *
- * Behind Coolify's Traefik the socket address is the proxy, so the forwarded
- * header is the only useful value. It is spoofable in principle — but a
- * spoofer is only splitting their own budget across more keys, which is a
- * strictly worse attack than not spoofing.
+ * Header order here is load-bearing, and getting it wrong silently disables
+ * rate limiting rather than breaking anything visibly.
+ *
+ * This site is proxied by Cloudflare, so the connection Traefik sees comes from
+ * a Cloudflare **edge** address — and Cloudflare answers from many edge IPs,
+ * rotating between requests from the same visitor. Keying on
+ * `X-Forwarded-For`'s first entry or on `clientAddress` therefore produces a
+ * *different* key almost every request, every bucket holds one hit, and nothing
+ * is ever limited. Verified against production: through Cloudflare the limit
+ * never tripped; bypassing it with --resolve, the eleventh request 429'd.
+ *
+ * `CF-Connecting-IP` is Cloudflare's canonical real-client address and is
+ * overwritten by them on every proxied request, so it cannot be forged by a
+ * visitor coming through the CDN.
+ *
+ * A request sent straight to the origin IP can set it to anything. That is
+ * worth knowing but not worth blocking here: the endpoints this guards are
+ * public and unauthenticated, so the worst it buys is exhausting some other
+ * address's share — and anyone willing to do that could just use more source
+ * addresses instead.
  */
 export function clientKey(request: Request, fallback: string | undefined): string {
-	const forwarded = request.headers.get('x-forwarded-for');
+	const headers = request.headers;
 
-	return forwarded?.split(',')[0]?.trim() || fallback || 'unknown';
+	const candidate =
+		headers.get('cf-connecting-ip') ??
+		headers.get('true-client-ip') ??
+		headers.get('x-forwarded-for')?.split(',')[0];
+
+	return candidate?.trim() || fallback || 'unknown';
 }
