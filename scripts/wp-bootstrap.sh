@@ -113,7 +113,7 @@ seed_post app_service "Website build and hosting" "website-build" \
 seed_post app_service "Unlimited changes" "unlimited-changes" \
   "<p>Send any change and it's done, usually within 48 hours. New page, seasonal promo, updated photos, changed hours. No change fee, no hourly clock.</p>"
 seed_post app_service "Google Business Profile" "google-business-profile" \
-  "<p>Categories, services, photos, hours and posting — the map listing that decides who gets the call. Included in Growth, or $97 one-time as a rescue.</p>"
+  "<p>Categories, services, photos, hours and posting — the map listing that decides who gets the call. Included in Growth, or \$97 one-time as a rescue.</p>"
 seed_post app_service "Local and AI search" "local-search" \
   "<p>Built to be found for Calgary searches, and by the AI assistants people now ask for recommendations. Included in Growth.</p>"
 seed_post app_service "Website Rescue" "website-rescue" \
