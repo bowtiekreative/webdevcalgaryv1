@@ -182,17 +182,59 @@ The Astro *server* talks to WordPress over a shared secret
 calls those endpoints. Without it the auth API refuses every request, so the
 dashboard fails closed rather than open.
 
-### In-app documentation
+### Documentation
 
-`/dashboard/docs` is a live guide — how to sign in, what each role sees, how to
-test payments, and a **status panel that reads the running server** rather than
-listing what ought to be configured. `/dashboard/docs/api` is the full API
-reference: REST CRUD, GraphQL, the `app/v1` endpoints, webhooks and status codes.
+Public, linked from the site navbar:
+
+| Page | Contents |
+| --- | --- |
+| [`/docs`](web/src/pages/docs/index.astro) | How the pieces fit, signing in, editing content, adding a field |
+| [`/docs/api`](web/src/pages/docs/api.astro) | REST CRUD, GraphQL, `app/v1` endpoints, webhooks, status codes |
+| [`/docs/ai`](web/src/pages/docs/ai.astro) | Rules for AI coding agents, and the traps that look like bugs |
+
+Public docs deliberately contain **no configuration state** — "which payment
+provider is wired up" helps an attacker and no one else. That lives in the
+admin-only Health tab.
+
+### Health tab — is it actually working?
+
+`/dashboard/health` (administrators) runs live checks on load. Every row is a
+real call, so "OK" means it works, not that a value is present.
+
+The centrepiece is the mapping table. Content has to survive four hops —
+**MySQL row → WordPress post type → GraphQL/REST → Astro collection → route** —
+and a break at any one shows up as content quietly missing rather than as an
+error. Each hop is counted separately and compared, so a mismatch is visible
+instead of inferred.
+
+It also verifies the Stripe/PayPal/Emailit keys by calling those APIs, checks
+that webhook endpoints are actually registered with the provider, and reports
+row counts per table, field-group coverage in GraphQL vs REST, and the site
+mode.
+
+### For AI coding agents
+
+[AGENTS.md](AGENTS.md) is read automatically by Claude Code, Cursor and Copilot.
+It carries the five rules that matter, the file map, and the trap table.
+
+Three skills in [.claude/skills/](.claude/skills/) cover the tasks that span
+several files:
+
+| Skill | Use |
+| --- | --- |
+| `/add-content-type` | New post type end to end — nine files, in order |
+| `/add-field` | One custom field across the five places it must appear |
+| `/verify-stack` | Run every check and interpret the failures |
 
 ### API keys without a redeploy
 
 Keys can live in **either** [web/.env](web/.env.example) **or** Settings → App
 Settings in wp-admin. The environment always wins.
+
+The same screen manages the **API access secret** the front end presents as
+`X-App-Secret`. Both a `wp-config` constant and a generated secret are accepted
+at once, so rotation has no downtime: generate a new one, deploy it to
+`web/.env`, then revoke the old. A generated secret is shown exactly once.
 
 Env is the right place for production secrets — not in the database, not in
 backups, not readable by anyone who gets a WordPress admin session. The admin

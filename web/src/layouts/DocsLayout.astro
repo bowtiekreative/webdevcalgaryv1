@@ -1,0 +1,182 @@
+---
+/**
+ * Shell for the public documentation.
+ *
+ * Wraps BaseLayout so docs keep the site header, footer and styling. These
+ * pages are prerendered and public — deliberately no live configuration
+ * readout, because "which payment provider is wired up" is useful to an
+ * attacker and useless to a reader. That belongs in /dashboard/health, behind
+ * the admin check.
+ */
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+const current = Astro.url.pathname.replace(/\/+$/, '') || '/docs';
+
+const sections = [
+	{ href: '/docs', label: 'Getting started' },
+	{ href: '/docs/api', label: 'API reference' },
+	{ href: '/docs/ai', label: 'AI agents' },
+];
+---
+
+<BaseLayout title={title} description={description}>
+	<div class="section">
+		<div class="wrap docs">
+			<aside class="docs__nav">
+				<p class="eyebrow">Documentation</p>
+				<ul>
+					{
+						sections.map((section) => (
+							<li>
+								<a href={section.href} aria-current={current === section.href ? 'page' : undefined}>
+									{section.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</aside>
+
+			<article class="docs__body">
+				<slot />
+			</article>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.docs {
+		display: grid;
+		gap: clamp(2rem, 5vw, 3.5rem);
+		align-items: start;
+	}
+
+	@media (min-width: 60rem) {
+		.docs {
+			grid-template-columns: 13rem minmax(0, 1fr);
+		}
+
+		.docs__nav {
+			position: sticky;
+			top: 6rem;
+		}
+	}
+
+	.docs__nav ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.15rem;
+	}
+
+	@media (min-width: 60rem) {
+		.docs__nav ul {
+			flex-direction: column;
+		}
+	}
+
+	.docs__nav a {
+		display: block;
+		padding: 0.4rem 0.7rem;
+		border-radius: 8px;
+		font-size: var(--step--1);
+		color: var(--ink-soft);
+		text-decoration: none;
+	}
+
+	.docs__nav a:hover {
+		background: var(--paper-alt);
+		color: var(--ink);
+	}
+
+	.docs__nav a[aria-current='page'] {
+		background: var(--accent-soft);
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.docs__body {
+		max-width: 48rem;
+		min-width: 0;
+	}
+
+	.docs__body :global(h2) {
+		font-size: var(--step-2);
+		margin-top: 2.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.docs__body :global(h2:first-of-type) {
+		margin-top: 1.5rem;
+	}
+
+	.docs__body :global(h3) {
+		font-size: var(--step-1);
+		margin-top: 2rem;
+	}
+
+	.docs__body :global(pre) {
+		background: var(--paper-alt);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		padding: 1rem 1.25rem;
+		overflow-x: auto;
+		font-size: var(--step--1);
+	}
+
+	.docs__body :global(:not(pre) > code) {
+		background: var(--paper-alt);
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		padding: 0.1em 0.35em;
+		font-size: 0.9em;
+	}
+
+	.docs__body :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--step--1);
+		margin: 1.25rem 0;
+		display: block;
+		overflow-x: auto;
+	}
+
+	.docs__body :global(:is(th, td)) {
+		text-align: left;
+		padding: 0.55rem 0.75rem;
+		border-bottom: 1px solid var(--line);
+		vertical-align: top;
+	}
+
+	.docs__body :global(th) {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--ink-faint);
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.docs__body :global(.callout) {
+		border-left: 3px solid var(--accent);
+		background: var(--paper-alt);
+		padding: 0.9rem 1.1rem;
+		border-radius: 0 var(--radius) var(--radius) 0;
+		margin: 1.25rem 0;
+		font-size: var(--step--1);
+	}
+
+	.docs__body :global(.callout p:last-child) {
+		margin-bottom: 0;
+	}
+</style>

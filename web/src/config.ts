@@ -35,6 +35,7 @@ export const fallbackNav = [
 	{ label: 'Services', href: '/services' },
 	{ label: 'Journal', href: '/blog' },
 	{ label: 'About', href: '/about' },
+	{ label: 'Docs', href: '/docs' },
 	{ label: 'Contact', href: '/contact' },
 ] as const;
 

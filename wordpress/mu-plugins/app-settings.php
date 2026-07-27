@@ -299,6 +299,156 @@ function masked( string $value ): string {
 	return MASK . ( strlen( $value ) > 4 ? ' …' . substr( $value, -4 ) : '' );
 }
 
+/* -------------------------------------------------------------------------
+ * API access secret
+ * ---------------------------------------------------------------------- */
+
+const SECRET_OPTION = 'app_api_secret';
+
+/**
+ * Handle the "generate" / "revoke" buttons for the API access secret.
+ *
+ * Kept out of the Settings API because a secret should be shown exactly once,
+ * not round-tripped through a form field on every page load.
+ */
+function handle_secret_actions(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$action = isset( $_POST['app_secret_action'] ) ? sanitize_key( wp_unslash( $_POST['app_secret_action'] ) ) : '';
+
+	if ( '' === $action ) {
+		return;
+	}
+
+	check_admin_referer( 'app_secret_action' );
+
+	if ( 'generate' === $action ) {
+		// 32 bytes of CSPRNG output, hex encoded — same shape as
+		// `openssl rand -hex 32`.
+		$secret = bin2hex( random_bytes( 32 ) );
+		update_option( SECRET_OPTION, $secret, false );
+
+		// Shown once on the next render, then discarded.
+		set_transient( 'app_secret_reveal', $secret, 300 );
+
+		add_settings_error( OPTION, 'app_secret_generated', __( 'New API secret generated.', 'app' ), 'success' );
+	}
+
+	if ( 'revoke' === $action ) {
+		delete_option( SECRET_OPTION );
+		add_settings_error( OPTION, 'app_secret_revoked', __( 'Stored API secret revoked.', 'app' ), 'success' );
+	}
+}
+add_action( 'load-settings_page_app-settings', __NAMESPACE__ . '\\handle_secret_actions' );
+
+/**
+ * The API access section of the settings screen.
+ */
+function render_secret_section(): void {
+	$stored     = (string) get_option( SECRET_OPTION, '' );
+	$constant   = defined( 'APP_SHARED_SECRET' ) && '' !== trim( (string) APP_SHARED_SECRET );
+	$reveal     = get_transient( 'app_secret_reveal' );
+	$has_secret = $constant || '' !== $stored;
+
+	if ( is_string( $reveal ) && '' !== $reveal ) {
+		delete_transient( 'app_secret_reveal' );
+	}
+	?>
+	<h2><?php esc_html_e( 'API access secret', 'app' ); ?></h2>
+	<p class="description">
+		<?php
+		esc_html_e(
+			'The front end sends this as the X-App-Secret header to read users, billing and settings. It is server-to-server only — never expose it to a browser.',
+			'app'
+		);
+		?>
+	</p>
+
+	<?php if ( is_string( $reveal ) && '' !== $reveal ) : ?>
+		<div class="notice notice-success" style="padding:1rem">
+			<p><strong><?php esc_html_e( 'Copy this now — it will not be shown again:', 'app' ); ?></strong></p>
+			<p>
+				<input type="text" readonly class="large-text code" onclick="this.select()"
+					value="<?php echo esc_attr( $reveal ); ?>" />
+			</p>
+			<p>
+				<?php esc_html_e( 'Put it in web/.env as:', 'app' ); ?>
+				<code>WP_SHARED_SECRET=<?php echo esc_html( $reveal ); ?></code>
+			</p>
+			<p class="description">
+				<?php
+				esc_html_e(
+					'Both the old and new secrets work until you revoke the old one, so nothing breaks while you deploy.',
+					'app'
+				);
+				?>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<table class="form-table" role="presentation">
+		<tbody>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'wp-config constant', 'app' ); ?></th>
+				<td>
+					<?php if ( $constant ) : ?>
+						<span style="color:#1a7f37"><strong><?php esc_html_e( 'Set', 'app' ); ?></strong></span>
+						<p class="description">
+							<?php esc_html_e( 'APP_SHARED_SECRET is defined. This is the recommended place for it.', 'app' ); ?>
+						</p>
+					<?php else : ?>
+						<span style="color:#888"><?php esc_html_e( 'Not set', 'app' ); ?></span>
+					<?php endif; ?>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Generated secret', 'app' ); ?></th>
+				<td>
+					<?php if ( '' !== $stored ) : ?>
+						<code><?php echo esc_html( '••••••••' . substr( $stored, -6 ) ); ?></code>
+					<?php else : ?>
+						<span style="color:#888"><?php esc_html_e( 'None', 'app' ); ?></span>
+					<?php endif; ?>
+
+					<form method="post" style="margin-top:0.75rem;display:inline-block">
+						<?php wp_nonce_field( 'app_secret_action' ); ?>
+						<input type="hidden" name="app_secret_action" value="generate" />
+						<?php submit_button( __( 'Generate new secret', 'app' ), 'secondary', 'submit', false ); ?>
+					</form>
+
+					<?php if ( '' !== $stored ) : ?>
+						<form method="post" style="margin-top:0.75rem;display:inline-block">
+							<?php wp_nonce_field( 'app_secret_action' ); ?>
+							<input type="hidden" name="app_secret_action" value="revoke" />
+							<?php submit_button( __( 'Revoke', 'app' ), 'delete', 'submit', false ); ?>
+						</form>
+					<?php endif; ?>
+
+					<p class="description">
+						<?php
+						esc_html_e(
+							'Both secrets are accepted at once, so you can generate a new one, deploy it, then revoke the old.',
+							'app'
+						);
+						?>
+					</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<?php if ( ! $has_secret ) : ?>
+		<div class="notice notice-error inline" style="margin:1rem 0;padding:0.75rem 1rem">
+			<p style="margin:0">
+				<?php esc_html_e( 'No secret is configured, so the dashboard cannot sign anyone in and the app API returns 503.', 'app' ); ?>
+			</p>
+		</div>
+	<?php endif; ?>
+	<?php
+}
+
 /**
  * Render the settings page.
  */
@@ -311,6 +461,9 @@ function render_page(): void {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'App Settings', 'app' ); ?></h1>
+
+		<?php settings_errors( OPTION ); ?>
+		<?php render_secret_section(); ?>
 
 		<div class="notice notice-info inline" style="margin:1rem 0;padding:0.75rem 1rem">
 			<p style="margin:0">

@@ -43,12 +43,38 @@ const MAX_ATTEMPTS = 8;
 const ATTEMPT_WINDOW = 900;
 
 /**
- * The shared secret the Astro server must present.
+ * Secrets the Astro server may present.
  *
- * @return string Empty when unset, which disables the API entirely.
+ * Two are accepted so a key can be rotated without downtime: generate a new one
+ * in wp-admin (stored in the `app_api_secret` option), update web/.env at your
+ * leisure, then clear whichever you no longer want. The wp-config constant is
+ * the more secure of the two and is always accepted when set.
+ *
+ * @return array<int,string> Non-empty secrets, in no particular order.
+ */
+function shared_secrets(): array {
+	$secrets = [];
+
+	if ( defined( 'APP_SHARED_SECRET' ) && '' !== trim( (string) APP_SHARED_SECRET ) ) {
+		$secrets[] = trim( (string) APP_SHARED_SECRET );
+	}
+
+	$stored = trim( (string) get_option( 'app_api_secret', '' ) );
+
+	if ( '' !== $stored ) {
+		$secrets[] = $stored;
+	}
+
+	return array_values( array_unique( $secrets ) );
+}
+
+/**
+ * Whether any secret is configured at all.
+ *
+ * @return string First configured secret, or '' when the API is disabled.
  */
 function shared_secret(): string {
-	return defined( 'APP_SHARED_SECRET' ) ? (string) APP_SHARED_SECRET : '';
+	return shared_secrets()[0] ?? '';
 }
 
 /**
@@ -58,24 +84,33 @@ function shared_secret(): string {
  * @return true|\WP_Error
  */
 function require_shared_secret( \WP_REST_Request $request ) {
-	$secret = shared_secret();
+	$secrets = shared_secrets();
 
-	if ( '' === $secret ) {
+	if ( [] === $secrets ) {
 		return new \WP_Error(
 			'app_auth_disabled',
-			__( 'APP_SHARED_SECRET is not set in wp-config.php, so the auth API is disabled.', 'app' ),
+			__( 'No API secret is configured, so the app API is disabled. Set APP_SHARED_SECRET in wp-config.php, or generate one under Settings → App Settings.', 'app' ),
 			[ 'status' => 503 ]
 		);
 	}
 
 	$provided = (string) $request->get_header( 'x-app-secret' );
 
-	// hash_equals keeps the comparison constant-time.
-	if ( '' === $provided || ! hash_equals( $secret, $provided ) ) {
+	if ( '' === $provided ) {
 		return new \WP_Error( 'app_forbidden', __( 'Bad or missing app secret.', 'app' ), [ 'status' => 401 ] );
 	}
 
-	return true;
+	foreach ( $secrets as $secret ) {
+		// hash_equals compares in constant time, so a wrong secret leaks
+		// nothing about how much of it was right. There are at most two
+		// candidates and both are valid credentials, so returning on the first
+		// match is fine.
+		if ( hash_equals( $secret, $provided ) ) {
+			return true;
+		}
+	}
+
+	return new \WP_Error( 'app_forbidden', __( 'Bad or missing app secret.', 'app' ), [ 'status' => 401 ] );
 }
 
 /**

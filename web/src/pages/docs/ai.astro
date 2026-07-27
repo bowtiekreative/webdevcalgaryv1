@@ -1,0 +1,167 @@
+---
+/**
+ * Instructions for AI coding agents working in this codebase.
+ *
+ * Public and prerendered — an agent may be pointed at this URL without
+ * credentials. It restates the rules in AGENTS.md so both a human reading the
+ * docs and an agent reading the repo get the same answer.
+ */
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+	title="AI agents"
+	description="How to build and maintain a site on this framework with an AI coding agent."
+>
+	<p class="eyebrow">Docs</p>
+	<h1>Working with AI agents</h1>
+	<p class="lede">
+		This project is set up so a coding agent can extend it safely. The rules below are the ones that stop an agent
+		producing something that looks right and silently isn't.
+	</p>
+
+	<div class="callout">
+		<p>
+			<strong>Point your agent at <code>AGENTS.md</code> in the repository root.</strong> Claude Code, Cursor and
+			Copilot read it automatically. It contains these rules in a form written for a machine, plus the exact
+			verification commands.
+		</p>
+	</div>
+
+	<h2>Packaged skills</h2>
+	<p>
+		<code>.claude/skills/</code> holds step-by-step procedures for the tasks that touch several files at once. In
+		Claude Code, invoke one by name:
+	</p>
+	<table>
+		<thead>
+			<tr><th>Skill</th><th>Use it to</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>/add-content-type</code></td>
+				<td>Add a post type end to end: WordPress registration, fields, GraphQL, REST, Astro collection, routes, tests</td>
+			</tr>
+			<tr>
+				<td><code>/add-field</code></td>
+				<td>Add one Meta Box field across all five places it has to appear</td>
+			</tr>
+			<tr>
+				<td><code>/verify-stack</code></td>
+				<td>Run every check and interpret the failures</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>The five rules</h2>
+
+	<h3>1. A field exists in five places or not at all</h3>
+	<p>
+		Meta Box names are <em>derived</em>, not written down: the bridge strips the shared prefix, so
+		<code>app_project_client</code> is queried as <code>client</code>. Nothing records that mapping, which is why
+		changing one file and not the others produces a field that is present in the schema and absent from the page.
+	</p>
+	<pre><code>wordpress/mu-plugins/app-fields.php      # define
+web/src/lib/wp/queries.ts                # request
+web/src/lib/wp/schema.ts                 # validate + normalise
+web/scripts/mock-wp.mjs                  # keep the offline mock honest
+wordpress/tests/schema-contract.php      # assert the names still match</code></pre>
+
+	<h3>2. Verify with commands, not by reading</h3>
+	<p>Every claim about this stack is checkable. Run these before saying something works:</p>
+	<pre><code>php wordpress/tests/schema-contract.php   # PHP names vs the queries
+cd web
+npm run mock:validate                     # queries vs the schema
+npm run check                             # types
+npm run build                             # the whole thing</code></pre>
+
+	<h3>3. Prerendered pages have no request</h3>
+	<p>
+		Public pages are prerendered. They have no session, no cookies and no user — in
+		<code>astro dev</code> as well as in production. An agent that adds a personalised element to a public page will
+		get an empty result, not an error. Anything per-user needs <code>export const prerender = false</code>, which
+		makes that route render on demand.
+	</p>
+
+	<h3>4. Webhooks grant access; redirects do not</h3>
+	<p>
+		Subscription state is written only by the Stripe and PayPal webhook handlers. A browser returning from checkout
+		proves nothing — the tab can be closed and the redirect is forgeable. Never add code that marks a user
+		subscribed because they reached a success URL.
+	</p>
+
+	<h3>5. Secrets belong in the environment</h3>
+	<p>
+		Read configuration through <code>setting()</code> in <code>web/src/lib/settings.ts</code>, which checks the
+		environment first and WordPress second. Never hardcode a key, never log one, and never send one to the browser.
+		The <code>X-App-Secret</code> header is server-to-server only.
+	</p>
+
+	<h2>Where things live</h2>
+	<table>
+		<thead>
+			<tr><th>To change</th><th>Edit</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>Post types, taxonomies</td><td><code>wordpress/mu-plugins/app-post-types.php</code></td></tr>
+			<tr><td>Custom fields</td><td><code>wordpress/mu-plugins/app-fields.php</code></td></tr>
+			<tr><td>Meta Box → GraphQL</td><td><code>app-graphql-metabox.php</code> (generic; rarely needs edits)</td></tr>
+			<tr><td>Meta Box → REST</td><td><code>app-rest-fields.php</code> (generic; rarely needs edits)</td></tr>
+			<tr><td>Queries</td><td><code>web/src/lib/wp/queries.ts</code></td></tr>
+			<tr><td>Collections and validation</td><td><code>web/src/content.config.ts</code>, <code>web/src/lib/wp/schema.ts</code></td></tr>
+			<tr><td>Pages and routes</td><td><code>web/src/pages/</code></td></tr>
+			<tr><td>Brand, plans</td><td><code>web/src/config.ts</code></td></tr>
+			<tr><td>Auth and route guards</td><td><code>web/src/middleware.ts</code>, <code>web/src/lib/auth/</code></td></tr>
+		</tbody>
+	</table>
+
+	<h2>Building a new site on this</h2>
+	<ol>
+		<li>Clone, then <code>cp .env.example .env</code> and run <code>./scripts/wp-bootstrap.sh</code>.</li>
+		<li>
+			Rename the prefix if you want one of your own: change <code>app_</code> in the mu-plugins and
+			<code>web/src/lib/wp/</code>, then run <code>./scripts/migrate-prefix.sh app yourprefix</code> so existing
+			rows follow.
+		</li>
+		<li>Set <code>SITE_NAME</code> and <code>SITE_TAGLINE</code> in <code>web/.env</code>.</li>
+		<li>Replace the demo content types with yours using <code>/add-content-type</code>.</li>
+		<li>Run the checks in rule 2, then open <a href="/dashboard/health">Health</a> and confirm every row is green.</li>
+	</ol>
+
+	<h2>Traps that look like bugs</h2>
+	<table>
+		<thead>
+			<tr><th>Symptom</th><th>Cause</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>A collection loads zero items</td>
+				<td>WPGraphQL treats a post type as private unless <code>public</code> or <code>publicly_queryable</code> is true. It returns an empty list, not an error.</td>
+			</tr>
+			<tr>
+				<td>Edits in WordPress don't appear</td>
+				<td>Content loaders run once at dev-server start. The dev integration polls every 5s; a build needs rerunning.</td>
+			</tr>
+			<tr>
+				<td><code>rest_cannot_create</code></td>
+				<td>Application passwords are refused over plain HTTP unless <code>WP_ENVIRONMENT_TYPE</code> is local.</td>
+			</tr>
+			<tr>
+				<td>REST writes ignore custom fields</td>
+				<td>Post meta is invisible to REST until registered — that is what <code>app-rest-fields.php</code> does.</td>
+			</tr>
+			<tr>
+				<td>A number field errors in GraphQL</td>
+				<td>Meta Box stores an untouched number as <code>''</code>, which cannot coerce to Int. Resolve numerics to null when empty.</td>
+			</tr>
+			<tr>
+				<td>The whole site is a "coming soon" page</td>
+				<td>It was built while the site mode was not Live. The gate is baked in until the next build.</td>
+			</tr>
+			<tr>
+				<td><code>wp db query</code> fails</td>
+				<td>The wp-cli image ships a MariaDB client that cannot authenticate to MySQL 8. Use <code>wp eval</code>.</td>
+			</tr>
+		</tbody>
+	</table>
+</DocsLayout>

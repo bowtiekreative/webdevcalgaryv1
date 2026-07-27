@@ -1,14 +1,18 @@
 ---
-export const prerender = false;
+/**
+ * Public API reference.
+ *
+ * Prerendered: it documents the shape of the API, which does not vary per
+ * request, and carries no configuration state. Anything that reveals what is
+ * actually configured lives in /dashboard/health instead.
+ */
+import DocsLayout from '../../layouts/DocsLayout.astro';
 
-import DashboardLayout from '../../../layouts/DashboardLayout.astro';
-import { envValue } from '../../../lib/settings';
-
-const user = Astro.locals.user!;
-
+// Read at build time. The GraphQL endpoint is public by nature, so naming it
+// here leaks nothing.
 const wpOrigin = (() => {
 	try {
-		return new URL(envValue('WP_GRAPHQL_ENDPOINT') || 'http://localhost:8080/graphql').origin;
+		return new URL(import.meta.env.WP_GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql').origin;
 	} catch {
 		return 'http://localhost:8080';
 	}
@@ -36,13 +40,12 @@ const appEndpoints = [
 ];
 ---
 
-<DashboardLayout title="API reference" user={user}>
-	<header class="dash__head">
-		<h1>API reference</h1>
-		<p>Three APIs, for different jobs. All of them run on WordPress.</p>
-	</header>
+<DocsLayout title="API reference" description="REST CRUD, GraphQL and the app endpoints.">
+	<p class="eyebrow">Docs</p>
+	<h1>API reference</h1>
+	<p class="lede">Three APIs, for different jobs. All of them run on WordPress.</p>
 
-	<nav class="panel" aria-label="Sections">
+	<nav class="callout" aria-label="Sections">
 		<p style="margin:0"><strong>Jump to:</strong>
 			<a href="#which">Which API</a> ·
 			<a href="#auth">Authentication</a> ·
@@ -55,10 +58,10 @@ const appEndpoints = [
 		</p>
 	</nav>
 
-	<div class="panel" id="which">
-		<h2 class="panel__title">Which API should I use?</h2>
-		<div class="table-scroll">
-			<table class="table">
+	<div class="doc-section" id="which">
+		<h2>Which API should I use?</h2>
+		<div>
+			<table>
 				<thead>
 					<tr><th>Job</th><th>Use</th><th>Why</th></tr>
 				</thead>
@@ -83,8 +86,8 @@ const appEndpoints = [
 		</div>
 	</div>
 
-	<div class="panel" id="auth">
-		<h2 class="panel__title">Authentication</h2>
+	<div class="doc-section" id="auth">
+		<h2>Authentication</h2>
 
 		<h3 style="font-size:var(--step-0);margin:0 0 0.5rem">REST — application passwords</h3>
 		<p style="color:var(--ink-soft);font-size:var(--step--1)">
@@ -104,14 +107,14 @@ const appEndpoints = [
   "${wpOrigin}/wp-json/app/v1/auth/users"`}</code></pre>
 	</div>
 
-	<div class="panel" id="rest">
-		<h2 class="panel__title">REST CRUD</h2>
+	<div class="doc-section" id="rest">
+		<h2>REST CRUD</h2>
 		<p style="color:var(--ink-soft);font-size:var(--step--1)">
 			Base: <code>{wpOrigin}/wp-json/wp/v2</code>
 		</p>
 
-		<div class="table-scroll">
-			<table class="table">
+		<div>
+			<table>
 				<thead>
 					<tr><th>Operation</th><th>Request</th></tr>
 				</thead>
@@ -127,8 +130,8 @@ const appEndpoints = [
 		</div>
 
 		<h3 style="font-size:var(--step-0);margin:1.5rem 0 0.5rem">Endpoints by type</h3>
-		<div class="table-scroll">
-			<table class="table">
+		<div>
+			<table>
 				<thead>
 					<tr><th>Type</th><th>REST</th><th>GraphQL</th><th>Field group</th></tr>
 				</thead>
@@ -146,7 +149,7 @@ const appEndpoints = [
 				</tbody>
 			</table>
 		</div>
-		<p class="field__hint">
+		<p class="meta">
 			Taxonomies: <code>/wp/v2/app_capability</code> and <code>/wp/v2/app_industry</code>.
 		</p>
 
@@ -172,20 +175,20 @@ const appEndpoints = [
   -u "$WP_USER:$WP_APP_PASSWORD" \\
   -H "Content-Type: application/json" \\
   -d '{"meta":{"app_project_year":2027}}'`}</code></pre>
-		<p class="field__hint">
+		<p class="meta">
 			<code>meta</code> is merged, not replaced — keys you omit keep their value.
 		</p>
 	</div>
 
-	<div class="panel" id="fields">
-		<h2 class="panel__title">Custom fields</h2>
+	<div class="doc-section" id="fields">
+		<h2>Custom fields</h2>
 		<p style="color:var(--ink-soft);font-size:var(--step--1)">
 			Meta Box fields are exposed under <code>meta</code> by
 			<code>app-rest-fields.php</code>. They use their raw ids there, unlike GraphQL where the shared prefix is
 			stripped — <code>app_project_client</code> in REST is <code>projectDetails.client</code> in GraphQL.
 		</p>
-		<div class="table-scroll">
-			<table class="table">
+		<div>
+			<table>
 				<thead>
 					<tr><th>Meta Box type</th><th>REST shape</th><th>Example</th></tr>
 				</thead>
@@ -200,14 +203,14 @@ const appEndpoints = [
 				</tbody>
 			</table>
 		</div>
-		<p class="field__hint">
+		<p class="meta">
 			Images are attachment IDs. Upload first via <code>POST /wp/v2/media</code>, then write the returned id.
 			GraphQL resolves the same fields to full objects with url, alt and dimensions.
 		</p>
 	</div>
 
-	<div class="panel" id="graphql">
-		<h2 class="panel__title">GraphQL</h2>
+	<div class="doc-section" id="graphql">
+		<h2>GraphQL</h2>
 		<p style="color:var(--ink-soft);font-size:var(--step--1)">
 			<code>POST {wpOrigin}/graphql</code> · explore it in
 			<a href={`${wpOrigin}/wp-admin/admin.php?page=graphiql-ide`} target="_blank" rel="noopener noreferrer">GraphiQL</a>.
@@ -225,20 +228,20 @@ const appEndpoints = [
           gallery { url alt width height }
         }
       } }"}'`}</code></pre>
-		<p class="field__hint">
+		<p class="meta">
 			Meta Box groups appear as one object field each. Values resolve lazily, so a field you don't ask for costs
 			no database read. Cursor pagination: <code>projects(first: 100, after: $cursor)</code> — WPGraphQL caps
 			<code>first</code> at 100.
 		</p>
 	</div>
 
-	<div class="panel" id="app">
-		<h2 class="panel__title">App endpoints</h2>
+	<div class="doc-section" id="app">
+		<h2>App endpoints</h2>
 		<p style="color:var(--ink-soft);font-size:var(--step--1)">
 			Base: <code>{wpOrigin}/wp-json/app/v1</code> · all require <code>X-App-Secret</code>.
 		</p>
-		<div class="table-scroll">
-			<table class="table">
+		<div>
+			<table>
 				<thead>
 					<tr><th>Method</th><th>Path</th><th>Description</th></tr>
 				</thead>
@@ -257,10 +260,10 @@ const appEndpoints = [
 		</div>
 	</div>
 
-	<div class="panel" id="webhooks">
-		<h2 class="panel__title">Webhooks this app receives</h2>
-		<div class="table-scroll">
-			<table class="table">
+	<div class="doc-section" id="webhooks">
+		<h2>Webhooks this app receives</h2>
+		<div>
+			<table>
 				<thead>
 					<tr><th>Path</th><th>From</th><th>Verified by</th></tr>
 				</thead>
@@ -283,16 +286,16 @@ const appEndpoints = [
 				</tbody>
 			</table>
 		</div>
-		<p class="field__hint">
+		<p class="meta">
 			Webhooks are the only thing that grants a subscription. Unverified events are rejected with 400; a handler
 			failure returns 500 so the provider retries.
 		</p>
 	</div>
 
-	<div class="panel" id="errors">
-		<h2 class="panel__title">Status codes</h2>
-		<div class="table-scroll">
-			<table class="table">
+	<div class="doc-section" id="errors">
+		<h2>Status codes</h2>
+		<div>
+			<table>
 				<tbody>
 					<tr><td><code>400</code></td><td>Malformed body, or a webhook that failed verification.</td></tr>
 					<tr><td><code>401</code></td><td>Missing/wrong <code>X-App-Secret</code>, or bad credentials.</td></tr>
@@ -303,9 +306,9 @@ const appEndpoints = [
 				</tbody>
 			</table>
 		</div>
-		<p class="field__hint">
+		<p class="meta">
 			WordPress errors come back as <code>{'{ code, message, data: { status } }'}</code>. Failed logins always say
 			the same thing regardless of whether the account exists.
 		</p>
 	</div>
-</DashboardLayout>
+</DocsLayout>

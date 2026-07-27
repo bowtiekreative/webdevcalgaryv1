@@ -1,0 +1,276 @@
+---
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ROLE_ADMIN } from '../../config';
+import { buildHealthReport, type Status } from '../../lib/health';
+
+const user = Astro.locals.user!;
+
+if (!user.roles.includes(ROLE_ADMIN)) {
+	return new Response('Not found', { status: 404 });
+}
+
+const report = await buildHealthReport();
+
+const BADGE: Record<Status, string> = {
+	ok: 'badge--active',
+	warn: 'badge--warn',
+	fail: 'badge--none',
+	skip: 'badge--none',
+};
+
+const LABEL: Record<Status, string> = {
+	ok: 'OK',
+	warn: 'Check',
+	fail: 'Failed',
+	skip: 'Not set',
+};
+
+const all = [...report.connectivity, ...report.integrations, ...report.webhooks, ...report.security];
+const failures = all.filter((check) => check.status === 'fail').length
+	+ report.mapping.filter((row) => row.status === 'fail').length;
+const warnings = all.filter((check) => check.status === 'warn').length
+	+ report.mapping.filter((row) => row.status === 'warn').length;
+
+const num = (value: number | null): string => (value === null ? '—' : value === -1 ? '?' : String(value));
+---
+
+<DashboardLayout title="Health" user={user}>
+	<header class="dash__head">
+		<h1>Health</h1>
+		<p>Every row is a live check, run when this page loaded — not a list of what should be configured.</p>
+	</header>
+
+	{
+		failures === 0 && warnings === 0 ? (
+			<p class="alert alert--ok">Everything checked out.</p>
+		) : (
+			<p class={`alert ${failures > 0 ? 'alert--error' : 'alert--ok'}`}>
+				{failures > 0 ? `${failures} failing` : 'No failures'}
+				{warnings > 0 ? `, ${warnings} worth a look` : ''}.
+			</p>
+		)
+	}
+
+	<div class="panel">
+		<h2 class="panel__title">Content mapping</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Content has to survive four hops. A break at any one of them shows up as content quietly missing rather than
+			as an error, so each hop is counted separately.
+		</p>
+		<div class="table-scroll">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>DB</th>
+						<th>GraphQL</th>
+						<th>REST</th>
+						<th>Collection</th>
+						<th>Route</th>
+						<th>Fields</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						report.mapping.map((row) => (
+							<tr>
+								<td>
+									<strong>{row.label}</strong>
+									<br />
+									<code style="color:var(--ink-faint)">{row.postType}</code>
+								</td>
+								<td>{num(row.dbRows)}</td>
+								<td>
+									{num(row.graphqlCount)}
+									<br />
+									<code style="color:var(--ink-faint)">{row.graphql}</code>
+								</td>
+								<td>
+									{num(row.restCount)}
+									<br />
+									<code style="color:var(--ink-faint)">{row.rest}</code>
+								</td>
+								<td>
+									{num(row.collectionCount)}
+									<br />
+									<code style="color:var(--ink-faint)">{row.collection}</code>
+								</td>
+								<td><code style="color:var(--ink-faint)">{row.route}</code></td>
+								<td>{row.fieldsInRest}</td>
+								<td>
+									<span class={`badge ${BADGE[row.status]}`}>{LABEL[row.status]}</span>
+									<br />
+									<span style="color:var(--ink-faint);font-size:var(--step--1)">{row.note}</span>
+								</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+		<p class="field__hint">
+			<strong>DB</strong> is published rows in MySQL. <strong>GraphQL</strong> and <strong>REST</strong> are what
+			those APIs return right now. <strong>Collection</strong> is what the last build put into the site.
+			<strong>Fields</strong> counts custom fields registered for REST.
+		</p>
+	</div>
+
+	<div class="panel">
+		<h2 class="panel__title">Connectivity</h2>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					{
+						report.connectivity.map((check) => (
+							<tr>
+								<td style="width:14rem"><strong>{check.label}</strong></td>
+								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td style="color:var(--ink-soft)">{check.detail}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="panel">
+		<h2 class="panel__title">API keys</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Each of these made a real authenticated call, so "OK" means the key works — not merely that a value is set.
+		</p>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					{
+						report.integrations.map((check) => (
+							<tr>
+								<td style="width:14rem"><strong>{check.label}</strong></td>
+								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td style="color:var(--ink-soft)">{check.detail}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="panel">
+		<h2 class="panel__title">Webhooks</h2>
+		<p style="color:var(--ink-soft);font-size:var(--step--1)">
+			Webhooks are the only thing that activates a subscription. If these are not right, checkout appears to
+			succeed and the plan never appears.
+		</p>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					{
+						report.webhooks.map((check) => (
+							<tr>
+								<td style="width:14rem"><strong>{check.label}</strong></td>
+								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td style="color:var(--ink-soft)">{check.detail}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="panel">
+		<h2 class="panel__title">Security &amp; mode</h2>
+		<div class="table-scroll">
+			<table class="table">
+				<tbody>
+					{
+						report.security.map((check) => (
+							<tr>
+								<td style="width:14rem"><strong>{check.label}</strong></td>
+								<td style="width:7rem"><span class={`badge ${BADGE[check.status]}`}>{LABEL[check.status]}</span></td>
+								<td style="color:var(--ink-soft)">{check.detail}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	{
+		report.fieldGroups.length > 0 && (
+			<div class="panel">
+				<h2 class="panel__title">Custom field groups</h2>
+				<div class="table-scroll">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Group</th>
+								<th>GraphQL</th>
+								<th>Attached to</th>
+								<th>Fields</th>
+								<th>In GraphQL</th>
+								<th>In REST</th>
+							</tr>
+						</thead>
+						<tbody>
+							{report.fieldGroups.map((group) => (
+								<tr>
+									<td><code>{group.id}</code></td>
+									<td><code>{group.graphqlName || '—'}</code></td>
+									<td style="color:var(--ink-faint)">{group.postTypes.join(', ')}</td>
+									<td>{group.total}</td>
+									<td>
+										{group.inGraphql}
+										{group.inGraphql < group.total && (
+											<span style="color:var(--ink-faint)"> of {group.total}</span>
+										)}
+									</td>
+									<td>
+										{group.inRest}
+										{group.inRest < group.total && (
+											<span style="color:var(--ink-faint)"> of {group.total}</span>
+										)}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				<p class="field__hint">
+					Groups are exposed in full to GraphQL. REST skips nested <code>group</code> fields, whose shape depends
+					on a paid Meta Box extension — those stay GraphQL-only.
+				</p>
+			</div>
+		)
+	}
+
+	{
+		report.tables.length > 0 && (
+			<div class="panel">
+				<h2 class="panel__title">Database tables</h2>
+				<div class="table-scroll">
+					<table class="table">
+						<tbody>
+							{report.tables.map((table) => (
+								<tr>
+									<td><code>{table.name}</code></td>
+									<td style="color:var(--ink-soft)">{table.rows === -1 ? 'unreadable' : `${table.rows} rows`}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		)
+	}
+
+	<p class="field__hint">
+		Generated {report.generatedAt}. WordPress {report.wordpress.version ?? '?'} on PHP {report.wordpress.php ?? '?'}.
+		Reload to run the checks again.
+	</p>
+</DashboardLayout>
