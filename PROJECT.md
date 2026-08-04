@@ -110,14 +110,18 @@ nothing on its own — anyone can visit that URL — so nothing is fulfilled off
 
 ## Deployment
 
-Coolify at `https://cauziva.com`, project **WebDevCalgary**
-(`q2h4n68fo8ctxjzmmrwr5kwv`), environment `production`, server `localhost`
-(`v77gud1vzixsbejg9kqw3eze`, `212.1.213.81`).
+Dokploy at `https://dashboard.cauziva.com`, project **WebDevCalgary**, server
+`212.1.213.81` (deploys land on the Dokploy host — no remote servers configured).
 
-| Resource | UUID | Build | Domain |
+| Resource | ID | Build | Domain |
 |---|---|---|---|
-| `webdevcalgary-wordpress` | `drp4wlpdbsqst4qoi442h054` | compose, `/docker-compose.coolify.yml` | `cms.webdevcalgary.com` |
-| `webdevcalgary-web` | `dhu40u5p8o1607y2l2f0qibn` | Dockerfile, base `/web` | `webdevcalgary.com` |
+| `wdc-wordpress` | `8VnSHUtULUce-i6kZx_go` (compose) | compose, `./docker-compose.dokploy.yml` | `cms.webdevcalgary.com` |
+| `wdc-web` | `nCK4Lrpv0tyZpo16fbq5R` (application) | Dockerfile, context `web` | `webdevcalgary.com`, `www.` |
+
+Coolify previously ran this stack on the same box and has been removed. The repo
+still carries [docker-compose.coolify.yml](docker-compose.coolify.yml) for
+reference; [docker-compose.dokploy.yml](docker-compose.dokploy.yml) is the live
+one.
 
 **The order matters and is not cosmetic.** The Astro site is prerendered, so
 `npm run build` inside its Dockerfile queries WPGraphQL. WordPress has to be up,
@@ -125,23 +129,26 @@ bootstrapped and reachable at `WP_GRAPHQL_ENDPOINT` *before* the front end will
 build at all — with `WP_FAIL_ON_ERROR=1` it fails the build rather than shipping
 a site with no content.
 
-A fresh environment needs, in this order:
+That is why a fresh environment needs, in this order:
 
 1. DNS: `webdevcalgary.com` and `cms.webdevcalgary.com` → `212.1.213.81`.
-2. Deploy `webdevcalgary-wordpress`. It installs core, WPGraphQL, Meta Box and
-   the seed content **itself** on first boot — there is no manual bootstrap
-   step in production. Sign in with `WP_ADMIN_USER` and the generated
-   `SERVICE_PASSWORD_WPADMIN`, both on the resource's environment tab.
-3. **Wait for the seed to finish**, then deploy `webdevcalgary-web`. The
-   bootstrap runs in the background so it never delays Apache, which means a
-   front-end build started straight after a WordPress deploy will race it and
-   bake in half-seeded content. It looks like a caching bug and is not. Poll
-   until the counts are right:
+   `cms` must be **unproxied** (grey cloud) — Let's Encrypt's HTTP-01 challenge
+   cannot reach the origin through Cloudflare, and the Astro build cannot reach
+   the CMS back through it either.
+2. Deploy `wdc-wordpress`. It installs core, WPGraphQL, Meta Box and the seed
+   content **itself** on first boot — there is no manual bootstrap step. Sign in
+   with `WP_ADMIN_USER` / `WP_ADMIN_PASSWORD` from the resource's Environment tab.
+3. **Wait for the seed to finish**, then deploy `wdc-web`. The bootstrap runs in
+   the background so it never delays Apache, which means a front-end build
+   started straight after a CMS deploy races it and bakes in half-seeded
+   content. Counts alone are not enough — the field pass that sets `menu_order`
+   runs after every post is created, so poll until the *ordering* is right:
 
    ```bash
    curl -s -X POST https://cms.webdevcalgary.com/graphql \
      -H 'Content-Type: application/json' \
-     -d '{"query":"{testimonials(first:30){nodes{slug}}}"}'
+     -d '{"query":"{testimonials(first:30){nodes{slug menuOrder}}}"}'
+   # tier 1 leads (anatoli-barbu first) => seeding is genuinely done
    ```
 
 ### Dokploy

@@ -1,4 +1,4 @@
-name: Deploy to Coolify
+name: Deploy to Dokploy
 
 on:
   push:
@@ -19,15 +19,15 @@ concurrency:
 
 jobs:
   deploy:
-    name: Trigger Coolify
+    name: Trigger Dokploy
     runs-on: ubuntu-latest
     environment: production
 
     env:
-      COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
-      COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
-      WEB_UUID: ${{ secrets.COOLIFY_WEB_UUID }}
-      WP_UUID: ${{ secrets.COOLIFY_WORDPRESS_UUID }}
+      DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+      DOKPLOY_KEY: ${{ secrets.DOKPLOY_KEY }}
+      WEB_ID: ${{ secrets.DOKPLOY_WEB_ID }}
+      WP_ID: ${{ secrets.DOKPLOY_COMPOSE_ID }}
       TARGET: ${{ inputs.target || 'web' }}
 
     steps:
@@ -68,7 +68,7 @@ jobs:
       - name: Check the secrets are set
         run: |
           missing=0
-          for name in COOLIFY_URL COOLIFY_TOKEN WEB_UUID; do
+          for name in DOKPLOY_URL DOKPLOY_KEY WEB_ID; do
             if [ -z "${!name}" ]; then
               echo "::error::Repository secret $name is not set."
               missing=1
@@ -82,18 +82,18 @@ jobs:
       - name: Deploy WordPress
         if: github.event_name == 'workflow_dispatch' && (inputs.target == 'wordpress' || inputs.target == 'both')
         run: |
-          test -n "$WP_UUID" || { echo "::error::COOLIFY_WORDPRESS_UUID is not set."; exit 1; }
-          ./.github/scripts/coolify-deploy.sh "$WP_UUID" wordpress
+          test -n "$WP_ID" || { echo "::error::DOKPLOY_COMPOSE_ID is not set."; exit 1; }
+          ./.github/scripts/dokploy-deploy.sh compose "$WP_ID" wordpress
 
       - name: Deploy the Astro front end
         if: github.event_name == 'push' || inputs.target == 'web' || inputs.target == 'both'
-        run: ./.github/scripts/coolify-deploy.sh "$WEB_UUID" web
+        run: ./.github/scripts/dokploy-deploy.sh app "$WEB_ID" web
 
       - name: Summary
         if: always()
         run: |
           {
-            echo "### Coolify deploy"
+            echo "### Dokploy deploy"
             echo
             echo "- Commit: \`${GITHUB_SHA:0:8}\`"
             echo "- Trigger: ${{ github.event_name }}"
