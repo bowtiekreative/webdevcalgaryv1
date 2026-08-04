@@ -49,10 +49,14 @@ done
 
 # --- Core -----------------------------------------------------------------
 
-SITE_URL="${SERVICE_FQDN_WORDPRESS:-}"
+# WP_FQDN is the panel-neutral name; SERVICE_FQDN_WORDPRESS is what Coolify's
+# magic variables populate. Accepting both keeps one image working on either
+# platform with no code change — which is the whole reason a Dokploy migration
+# is a config exercise rather than a rebuild.
+SITE_URL="${WP_FQDN:-${SERVICE_FQDN_WORDPRESS:-}}"
 
 if [[ -z "${SITE_URL}" ]]; then
-	warn "SERVICE_FQDN_WORDPRESS is not set; cannot install core with the right URL."
+	warn "Neither WP_FQDN nor SERVICE_FQDN_WORDPRESS is set; cannot install core with the right URL."
 	exit 0
 fi
 

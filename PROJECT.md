@@ -144,6 +144,43 @@ A fresh environment needs, in this order:
      -d '{"query":"{testimonials(first:30){nodes{slug}}}"}'
    ```
 
+### Dokploy
+
+[docker-compose.dokploy.yml](docker-compose.dokploy.yml) is the same stack for
+Dokploy. It differs from the Coolify file in exactly two ways, both of which
+fail silently rather than loudly:
+
+- **No magic variables.** Coolify generated `SERVICE_PASSWORD_*` and
+  `SERVICE_FQDN_*`; on Dokploy every one is yours to set. They are `:?`-guarded
+  so an unset value fails at deploy rather than resolving empty at runtime.
+- **`dokploy-network`.** Traefik lives there. A service with a domain but no
+  membership gets a working router and a dead backend — every request 502s.
+
+The image itself needs no change: `bootstrap-production.sh` accepts `WP_FQDN`
+or Coolify's `SERVICE_FQDN_WORDPRESS`, and it configures WordPress on first boot
+either way. That self-bootstrapping is what makes moving panels a config
+exercise rather than a rebuild.
+
+**The Astro resource's variables split in two, and putting one in the wrong
+place is undetectable.** The site is prerendered, so anything baked into the
+HTML is read during `docker build` and must be a **build arg** with a matching
+`ARG` in [web/Dockerfile](web/Dockerfile). A build-time value set only as a
+runtime env var produces a successful build against the defaults.
+
+| Build args — baked into the HTML | Runtime env — only the server touches |
+|---|---|
+| `WP_GRAPHQL_ENDPOINT`, `WP_SHARED_SECRET` | `WP_GRAPHQL_ENDPOINT`, `WP_SHARED_SECRET` (also needed at runtime for the orders API) |
+| `SITE_URL`, `SITE_NAME`, `SITE_TAGLINE` | `PAYPAL_*` (six) |
+| `SITE_PHONE`, `SITE_PHONE_RAW`, `SITE_EMAIL` | `EMAILIT_*`, `SALES_NOTIFY_EMAIL` |
+| `WP_FAIL_ON_ERROR=1` | |
+
+Build paths for this monorepo — all three repo-root-relative, or Docker gets the
+repo root as context and `COPY package.json` fails in about five seconds:
+
+```json
+{ "customGitBuildPath": "/", "dockerfile": "web/Dockerfile", "dockerContextPath": "web" }
+```
+
 ### Two things that are not obvious, and both broke production
 
 **`WP_GRAPHQL_ENDPOINT` deliberately does not use `cms.webdevcalgary.com`.**

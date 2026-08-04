@@ -1,0 +1,140 @@
+# WordPress + MySQL, for Dokploy.
+#
+# The Coolify variant of this file is docker-compose.coolify.yml. They differ in
+# exactly two ways, and both cause silent failures rather than errors:
+#
+#   1. Coolify's magic variables do not exist here. SERVICE_PASSWORD_* and
+#      SERVICE_FQDN_* were generated and stored for you; on Dokploy every one of
+#      them is a variable you set yourself in the Environment tab. Anything left
+#      unset resolves to empty and fails at runtime, not at deploy time — hence
+#      the `:?` guards below.
+#
+#   2. The `wordpress` service must join the external `dokploy-network`, which
+#      is where Traefik lives. Without it Dokploy routes the hostname happily
+#      and every request 502s.
+#
+# Deploy this first and on its own. The Astro front end is a separate resource,
+# and it is prerendered — its build queries WordPress, so WordPress has to be up
+# and answering on its real domain before the front end will build at all.
+#
+# Check the file renders before handing it to Dokploy; the panel reports a YAML
+# parse error as a generic deploy failure:
+#
+#   MYSQL_PASSWORD=x MYSQL_ROOT_PASSWORD=y WP_FQDN=cms.example.com \
+#   WP_ADMIN_PASSWORD=z APP_SHARED_SECRET=s FRONTEND_URL=https://example.com \
+#     docker compose -f docker-compose.dokploy.yml config
+
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-wordpress}"
+      MYSQL_USER: "${MYSQL_USER:-wordpress}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:?generate with openssl rand -hex 24}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:?generate with openssl rand -hex 24}"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    # No domain, so no dokploy-network. It only talks to `wordpress` over
+    # `default`, and keeping it off the shared network keeps it unroutable.
+
+  wordpress:
+    build:
+      context: ./wordpress
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # A bare hostname — no scheme. The scheme is added in exactly one place,
+      # below. A value like "https://cms.example.com" here would render as
+      # https://https://cms.example.com and the site would never load.
+      WP_FQDN: "${WP_FQDN:?bare hostname, e.g. cms.webdevcalgary.com}"
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: "${MYSQL_DATABASE:-wordpress}"
+      WORDPRESS_DB_USER: "${MYSQL_USER:-wordpress}"
+      WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD:?}"
+
+      # Read by wordpress/bin/bootstrap-production.sh on first boot, which
+      # installs core, WPGraphQL, Meta Box and the seed content — so a deploy is
+      # the whole setup, with no manual step to forget. That self-bootstrapping
+      # is what makes this image portable between panels: neither Coolify nor
+      # Dokploy offers a reliable exec hook for first-run configuration.
+      #
+      # The bootstrap refuses to install with an empty password rather than
+      # falling back to something guessable.
+      WP_ADMIN_USER: "${WP_ADMIN_USER:-btkadmin}"
+      WP_ADMIN_PASSWORD: "${WP_ADMIN_PASSWORD:?generate with openssl rand -hex 16}"
+      WP_ADMIN_EMAIL: "${WP_ADMIN_EMAIL:-websites@bowtiekreative.com}"
+      WP_SITE_TITLE: "${WP_SITE_TITLE:-WebDevCalgary}"
+
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Behind Traefik, so trust the forwarded scheme or WordPress will build
+           http:// URLs and mixed-content warnings follow. */
+        if ( isset( $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+            $$_SERVER['HTTPS'] = 'on';
+        }
+        define( 'WP_HOME', 'https://${WP_FQDN}' );
+        define( 'WP_SITEURL', 'https://${WP_FQDN}' );
+
+        /* Where the Astro front end lives. */
+        define( 'APP_FRONTEND_URL', '${FRONTEND_URL:?set this to your public site URL}' );
+        define( 'APP_PREVIEW_SECRET', '${PREVIEW_SECRET:-}' );
+
+        /* Shared secret for the app API. Must equal WP_SHARED_SECRET on the
+           front-end resource — copy this value into it. */
+        define( 'APP_SHARED_SECRET', '${APP_SHARED_SECRET:?generate with openssl rand -hex 32}' );
+
+        /* Dokploy deploy webhook for the front-end resource, so publishing
+           content rebuilds the site. */
+        define( 'APP_BUILD_HOOK_URL', '${BUILD_HOOK_URL:-}' );
+        define( 'APP_BUILD_HOOK_AUTH', '${BUILD_HOOK_AUTH:-}' );
+
+        /* Emailit, for password resets and other WordPress mail. */
+        define( 'APP_EMAILIT_API_KEY', '${EMAILIT_API_KEY:-}' );
+        define( 'APP_EMAILIT_FROM', '${EMAILIT_FROM:-}' );
+
+        define( 'WP_ENVIRONMENT_TYPE', 'production' );
+        define( 'DISALLOW_FILE_EDIT', true );
+        define( 'WP_DEBUG', false );
+    volumes:
+      # Uploads are the only WordPress data that is neither in the database nor
+      # the image.
+      - wp_uploads:/var/www/html/wp-content/uploads
+      # Core plus anything installed through wp-admin.
+      #
+      # Note this volume sits over the webroot, so Docker seeds it from the
+      # image only when it is first created. That is exactly why the image
+      # stages mu-plugins in /opt/app and rsyncs them in on boot — anything
+      # COPYd straight to this path would freeze at first-deploy contents while
+      # every later deploy reported success.
+      - wp_data:/var/www/html
+    networks:
+      - default
+      - dokploy-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1/wp-admin/install.php >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+networks:
+  # Created by Dokploy itself. Declared external, never defined here.
+  dokploy-network:
+    external: true
+
+volumes:
+  db_data:
+  wp_data:
+  wp_uploads:
