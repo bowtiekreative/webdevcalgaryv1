@@ -277,6 +277,14 @@ function upsert( array $data, bool $patch = false ) {
 	if ( $existing instanceof WP_Post ) {
 		$postarr['ID'] = $existing->ID;
 
+		// wp_insert_post() fills defaults for anything absent, including on an
+		// update — so omitting post_status here silently moves the lead to
+		// 'draft' and drops it out of every pipeline view. Carry the current
+		// status forward unless the caller explicitly asked to change it.
+		if ( ! isset( $postarr['post_status'] ) ) {
+			$postarr['post_status'] = $existing->post_status;
+		}
+
 		if ( ! $patch || '' !== trim( $title, ' —' ) ) {
 			$postarr['post_title'] = '' !== trim( $title, ' —' ) ? $title : $existing->post_title;
 		}
