@@ -11,21 +11,47 @@ headless WordPress, forked from
 
 ## The offer
 
-| | Price | Where it is charged |
-|---|---|---|
-| 24-hour rush fee | $497 | PayPal Orders, `/checkout` |
-| Split rush fee | 2 × $249 | PayPal Orders, `/checkout` |
-| Website Teardown (tripwire) | $47 | PayPal Orders, `/teardown` |
-| Google Business Profile Rescue (bump) | +$97 | PayPal Orders, `/checkout` |
-| Website Rescue (downsell) | $297 | by phone |
-| Core plan | $147/mo | PayPal Subscriptions |
-| Growth plan | $497/mo | PayPal Subscriptions |
+Nothing is sold on the site. There is no checkout, no payment provider in the
+funnel, and no self-serve path to becoming a client — the only conversion is a
+qualification form, and its output is a scored callback queue.
 
-**Every one of those numbers lives in [web/src/config.ts](web/src/config.ts).**
-The landing page, the checkout summary and the PayPal order all read the same
-constants, so a price can only be changed in one place. The browser posts offer
-*ids*, never amounts — `/api/billing/paypal-order` reprices the cart server-side
-before it charges anything.
+| Plan | Price | How it is sold |
+|---|---|---|
+| Core | $147/mo | agreed on the call |
+| Growth | $497/mo | agreed on the call |
+
+Prices are still stated out loud on the page, because the voice rules insist on
+it and "contact us for pricing" is the thing this offer is positioned against.
+
+**Qualification lives in [web/src/config.ts](web/src/config.ts)** — five
+questions, their options and their weights — and is applied by
+[web/src/lib/qualify.ts](web/src/lib/qualify.ts) **on the server**. The form
+posts choice *ids*, never a score. The grade decides who gets called first, so a
+request that could name its own grade could jump the queue.
+
+Two axes, deliberately separate:
+
+- **grade** (`hot` / `warm` / `cold`) — how it looked on arrival. The scorer
+  sets this.
+- **status** (`app-new` → `app-qualified` / `app-nurture` → `app-contacted` →
+  `app-won` / `app-lost`) — where it is in the pipeline. A human sets this.
+
+Keeping them apart means a cold lead that buys anyway, or a hot one that ghosts,
+is just data rather than a reason to change the model.
+
+## MCP server
+
+[mcp/](mcp/) is a stdio MCP server with full read/write over the site — leads,
+content and settings. See [mcp/README.md](mcp/README.md) for the tool list and
+how to register it.
+
+It needs `WP_GRAPHQL_ENDPOINT` and `WP_SHARED_SECRET`; content *writes* also
+need a `WP_APPLICATION_PASSWORD`, and without one those three tools refuse with
+an explanation rather than failing obscurely.
+
+Two things it will not do: set a score directly (`qualify_lead` recomputes from
+the answers), and erase anything without being asked twice (`delete_lead` and
+`delete_content` trash by default).
 
 ## The parts that are ours
 
@@ -34,12 +60,13 @@ before it charges anything.
 | [web/src/config.ts](web/src/config.ts) | Brand, contact, plans, offers, the guarantee's cutoff |
 | [web/src/funnel.ts](web/src/funnel.ts) | Funnel argument — problem cards, comparison table, FAQ |
 | [web/src/styles/global.css](web/src/styles/global.css) | The design system, ported from the design deck |
-| [web/src/lib/orders.ts](web/src/lib/orders.ts) | References, the go-live deadline, records, notifications |
-| [web/src/lib/billing/paypal-orders.ts](web/src/lib/billing/paypal-orders.ts) | One-time PayPal charges |
-| [wordpress/mu-plugins/app-orders.php](wordpress/mu-plugins/app-orders.php) | Orders and leads as a wp-admin queue |
+| [web/src/lib/qualify.ts](web/src/lib/qualify.ts) | Scoring — what "qualified" means |
+| [web/src/lib/leads.ts](web/src/lib/leads.ts) | References, records, notifications |
+| [wordpress/mu-plugins/app-leads.php](wordpress/mu-plugins/app-leads.php) | The callback queue in wp-admin, and its API |
+| [mcp/](mcp/) | MCP server — full read/write over leads and content |
 
-Pages: `/` (landing), `/teardown`, `/checkout`, `/thank-you`, `/work` (portfolio),
-`/services`, `/blog`. The dashboard, docs and auth are inherited from the
+Pages: `/` (landing), `/teardown` (free lead magnet), `/thank-you`, `/work`
+(portfolio), `/services`, `/blog`. The dashboard, docs and auth are inherited from the
 boilerplate and untouched.
 
 ## The fourteen demo sites
@@ -84,29 +111,26 @@ From `Design system and funnel review/Design System.dc.html`, which is the spec:
 - **No stock photography of smiling people in hardhats.** Real client sites,
   real screenshots, or nothing.
 
-## Money flow
+## Lead flow
 
 ```
-/checkout  ──POST offer ids──▶  /api/billing/paypal-order
-                                      │ prices the cart from config.ts
-                                      │ records an app-pending order
-                                      ▼
-                                 PayPal approval
-                                      │
-                                      ▼
-                     /api/billing/paypal-return  ──capture──▶ PayPal
-                                      │
-                       COMPLETED ─────┴───── PENDING / failed
-                          │                        │
-        app-paid + go-live deadline          stays app-pending
-        + confirmation and build emails      + "we'll email you"
-                          │
-                          ▼
-                    /thank-you?ref=…
+/  or  /teardown  ──POST choice ids──▶  /api/leads/start
+                                              │ scores server-side (qualify.ts)
+                                              │ records app-new + grade
+                                              ▼
+                                    ┌─────────┴─────────┐
+                                    ▼                   ▼
+                         email to the buyer      email to sales, subject
+                         ("I'll call you")       led by the grade
+                                                        │
+                                                        ▼
+                                        wp-admin Leads, sorted by score
+                                        (or the MCP server's list_leads)
 ```
 
-Only a `COMPLETED` capture counts as paid. The redirect back from PayPal proves
-nothing on its own — anyone can visit that URL — so nothing is fulfilled off it.
+The grade a lead is given also becomes the promise on the thank-you page —
+"today" for hot, "within a day" for warm, "shortly" otherwise. Under-promising a
+callback costs nothing; over-promising one costs the lead.
 
 ## Deployment
 
