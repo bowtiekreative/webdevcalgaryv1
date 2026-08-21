@@ -51,7 +51,7 @@ export const comparison = {
 	columns: ['WebDevCalgary', 'Calgary agency', 'DIY builder'],
 	rows: [
 		{ label: 'Live in', values: ['24 hours', '6–12 weeks', '40+ hrs of your time'] },
-		{ label: 'To start', values: ['$497 rush fee', '$3,000–$10,000', '$0'] },
+		{ label: 'To start', values: ['$0', '$3,000–$10,000', '$0'] },
 		{ label: 'Monthly', values: ['$147, locked', '$150–$300 + change fees', '$30–60 + your labour'] },
 		{ label: 'Changes', values: ['Unlimited, 48h', 'Billed hourly', 'You do them'] },
 		{ label: 'Price increases', values: ['Never', 'Yes', 'Yes'] },
@@ -79,17 +79,17 @@ export const teardownFindings: Card[] = [
 	},
 ];
 
-/** Post-purchase timeline on the thank-you page. */
+/** What happens after the form, shown on the thank-you page. */
 export const nextSteps: Card[] = [
 	{
-		index: 'Now → 1 hr',
-		heading: 'Check your inbox',
-		body: 'Your go-live time in writing, plus a short intake — business details, photos if you have them, and what matters most to you.',
+		index: 'Today',
+		heading: 'I call you',
+		body: 'Five minutes on the phone. What your business does, what the site has to do, and whether this is a fit. If it isn’t, I’ll say so.',
 	},
 	{
-		index: 'Today',
-		heading: 'We build',
-		body: 'Copy, layout, photos, mobile, domain, SSL. You don’t need to do anything except answer the intake.',
+		index: 'If it’s a fit',
+		heading: 'We start',
+		body: 'You say go and the clock starts. Copy, layout, photos, mobile, domain, SSL — you answer a short intake and nothing else.',
 	},
 	{
 		index: 'Tomorrow',
@@ -105,9 +105,14 @@ export interface Faq {
 
 export const faqs: Faq[] = [
 	{
-		question: 'Why a rush fee instead of a build fee?',
+		question: 'What does it cost to start?',
 		answer:
-			'Because that’s what you’re actually buying. The build is handled. What costs us something is dropping everything and getting your site live by tomorrow instead of next week. If tomorrow doesn’t matter to you, take the 7-day standard build and keep the $497.',
+			'Nothing. There is no setup fee and no build fee. We agree the plan on the phone, the site goes live, and the monthly starts once you’re happy with it. If you’re not, you’ve lost nothing.',
+	},
+	{
+		question: 'What happens after I send the form?',
+		answer:
+			'I call you — usually the same day. Five minutes, and you get a straight answer on whether this is a fit and what it would cost. If it isn’t a fit I’ll say so and point you somewhere better. Nobody gets put into a sequence.',
 	},
 	{
 		question: 'How is this live in 24 hours?',

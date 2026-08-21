@@ -12,7 +12,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import WpImage from '../../components/WpImage.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
-import { contact, offers } from '../../config';
+import { contact } from '../../config';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -144,11 +144,11 @@ const facts = [
 		<div class="wrap">
 			<h2>Want one like this? It’s live tomorrow.</h2>
 			<p class="lede">
-				Same build, same maintenance, same price lock — ${offers.rush.amount} to jump the queue, or
-				wait a week and keep it.
+				Same build, same maintenance, same price lock — and a straight answer on the phone
+				before anything starts.
 			</p>
 			<div class="cta-row cta">
-				<a class="btn btn--hivis" href="/checkout">Start my website →</a>
+				<a class="btn btn--hivis" href="/#start">See if we’re a fit →</a>
 				<a class="btn" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
 			</div>
 		</div>

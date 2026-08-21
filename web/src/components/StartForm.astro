@@ -1,13 +1,29 @@
 ---
 /**
- * The "call me back today" lead form.
+ * The qualification form — the only conversion on the site.
  *
- * A plain POST to /api/leads/start, so it works with JavaScript off — the
- * audience reads this on a phone on LTE and a fetch-only form is one more way
- * to lose the lead. The script only adds a submitting state and surfaces the
- * error inline instead of navigating.
+ * Nothing is sold here, so this is where the funnel earns its keep. Five
+ * choice questions and four contact fields: enough to sort the callback queue,
+ * short enough that a contractor finishes it on a phone between jobs.
+ *
+ * A plain POST to /api/leads/start, so it works with JavaScript off. The
+ * script only adds a submitting state and surfaces errors inline rather than
+ * navigating away. The audience reads this on LTE and a fetch-only form is one
+ * more way to lose the lead.
+ *
+ * The questions are ordered by how easy they are to answer, not by how much we
+ * want to know. Trade first (instant), money last (the one people hesitate on)
+ * — asking for budget before earning it is how you get an abandoned form.
  */
-import { plans, STANDARD_BUILD_DAYS, offers } from '../config';
+import { budgets, roles, siteStates, timelines, trades } from '../config';
+
+const questions = [
+	{ name: 'trade', label: 'What kind of business?', options: trades },
+	{ name: 'siteState', label: 'Where are you starting from?', options: siteStates },
+	{ name: 'timeline', label: 'How soon do you need it?', options: timelines },
+	{ name: 'role', label: 'Who am I speaking with?', options: roles },
+	{ name: 'budget', label: 'What works for you monthly?', options: budgets },
+];
 ---
 
 <form class="form" method="POST" action="/api/leads/start" data-start-form>
@@ -41,26 +57,34 @@ import { plans, STANDARD_BUILD_DAYS, offers } from '../config';
 	<label class="sr-only" for="lead-email">Email</label>
 	<input id="lead-email" type="email" name="email" placeholder="Email" required autocomplete="email" />
 
-	<label class="sr-only" for="lead-plan">Plan</label>
-	<select id="lead-plan" name="plan">
-		<option value="">Which plan are you leaning toward?</option>
-		{plans.map((plan) => <option value={plan.id}>{plan.name} — {plan.price}/mo</option>)}
-		<option value="unsure">Not sure yet</option>
-	</select>
+	{
+		questions.map((question) => (
+			<>
+				<label class="q" for={`lead-${question.name}`}>{question.label}</label>
+				<select id={`lead-${question.name}`} name={question.name} required>
+					<option value="">Pick one…</option>
+					{question.options.map((option) => (
+						<option value={option.id}>{option.label}</option>
+					))}
+				</select>
+			</>
+		))
+	}
 
-	<label class="sr-only" for="lead-speed">Speed</label>
-	<select id="lead-speed" name="speed">
-		<option value="rush">Rush — live in 24 hours (${offers.rush.amount})</option>
-		<option value="standard">Standard — {STANDARD_BUILD_DAYS} days, no rush fee</option>
-	</select>
+	<label class="sr-only" for="lead-website">Current website</label>
+	<input id="lead-website" type="url" name="website" placeholder="Current website (if you have one)" />
 
-	<label class="sr-only" for="lead-notes">What does your business do?</label>
-	<textarea id="lead-notes" name="notes" rows="3" placeholder="What does your business do?"></textarea>
+	<label class="sr-only" for="lead-notes">What's the biggest problem?</label>
+	<textarea
+		id="lead-notes"
+		name="notes"
+		rows="3"
+		placeholder="What's the one thing that bugs you most about it right now?"></textarea>
 
 	<p class="form__error" data-error hidden></p>
 
 	<button type="submit">Send it — call me back today</button>
-	<p class="form__note">No card needed to start the conversation.</p>
+	<p class="form__note">No card, no contract, no pitch deck. Just a straight answer.</p>
 </form>
 
 <style>
@@ -81,6 +105,16 @@ import { plans, STANDARD_BUILD_DAYS, offers } from '../config';
 		overflow: hidden;
 		clip-path: inset(50%);
 		white-space: nowrap;
+	}
+
+	.q {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--hivis);
+		margin-top: 6px;
 	}
 </style>
 

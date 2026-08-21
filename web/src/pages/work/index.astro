@@ -18,7 +18,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import DemoCard from '../../components/DemoCard.astro';
 import { byMenuOrderThenDate } from '../../lib/routes';
-import { contact, offers } from '../../config';
+import { contact } from '../../config';
 import demoSites from '../../demo-sites.json';
 
 const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
@@ -84,7 +84,7 @@ const projects = (await getCollection('projects')).sort(byMenuOrderThenDate);
 				tomorrow or in a week.
 			</p>
 			<div class="cta-row cta">
-				<a class="btn btn--hivis" href="/checkout">Pay the ${offers.rush.amount} rush fee →</a>
+				<a class="btn btn--hivis" href="/#start">See if we’re a fit →</a>
 				<a class="btn" href={`tel:${contact.phoneRaw}`}>Call {contact.phone}</a>
 			</div>
 		</div>

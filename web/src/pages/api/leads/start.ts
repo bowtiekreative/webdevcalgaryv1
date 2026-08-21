@@ -1,17 +1,23 @@
 /**
- * POST /api/leads/start — the "call me back today" form.
+ * POST /api/leads/start — the qualification form.
  *
- * Accepts a plain form post (so it works with JavaScript off) and answers with
- * JSON when the browser asks for it. Either way the lead is recorded in
- * WordPress and announced by email.
+ * The site's only conversion. Accepts a plain form post (so it works with
+ * JavaScript off) and answers with JSON when the browser asks for it. Either
+ * way the lead is scored, recorded in WordPress and announced by email.
  *
- * No CSRF token here on purpose: this is an unauthenticated public form with
- * no session to ride on, so a token would protect nothing. Abuse is handled by
- * the honeypot and a per-IP rate limit instead.
+ * The score is computed here, never accepted from the request. The form posts
+ * choice *ids*; lib/qualify.ts applies the weights. That matters because the
+ * grade decides who gets called first — a request that could name its own
+ * grade could jump the queue.
+ *
+ * No CSRF token: this is an unauthenticated public form with no session to
+ * ride on, so a token would protect nothing. Abuse is handled by the honeypot
+ * and a per-IP rate limit instead.
  */
 
 import type { APIContext, APIRoute } from 'astro';
-import { newReference, notifyLead, recordOrder } from '../../../lib/orders';
+import { newReference, notifyLead, recordLead } from '../../../lib/leads';
+import { qualify } from '../../../lib/qualify';
 import { clientKey, rateLimited } from '../../../lib/rate-limit';
 
 export const prerender = false;
@@ -90,25 +96,38 @@ export const POST: APIRoute = async (context) => {
 		return respond(context, { ok: false, error: 'That email address does not look right.' }, 400);
 	}
 
+	const answers = {
+		trade: field(form, 'trade', 40),
+		siteState: field(form, 'siteState', 40),
+		timeline: field(form, 'timeline', 40),
+		role: field(form, 'role', 40),
+		budget: field(form, 'budget', 40),
+	};
+
+	const scored = qualify(answers);
 	const reference = newReference();
 
 	const lead = {
 		reference,
-		status: 'app-lead' as const,
+		// Everything lands as new. Grading sorts the queue; a human decides
+		// whether it is actually qualified, which is what the status means.
+		status: 'app-new' as const,
 		name,
 		business,
 		phone,
 		email,
-		plan: field(form, 'plan', 40),
-		speed: field(form, 'speed', 40),
+		website: field(form, 'website', 300),
 		notes: field(form, 'notes', 2_000),
 		source: field(form, 'source', 200) || '/',
+		...answers,
+		score: scored.score,
+		grade: scored.grade,
 	};
 
 	// Both are best-effort by design — a lead that reached us by email is not
 	// lost just because WordPress was restarting.
-	await recordOrder(lead);
-	await notifyLead(lead);
+	await recordLead(lead);
+	await notifyLead(lead, scored);
 
 	return respond(context, { ok: true, redirect: `/thank-you?lead=1&ref=${reference}` });
 };

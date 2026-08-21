@@ -1,0 +1,16 @@
+{
+  "name": "webdevcalgary-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for the WebDevCalgary lead pipeline and WordPress content",
+  "bin": { "webdevcalgary-mcp": "./src/index.js" },
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "start": "node src/index.js",
+    "check": "node --check src/index.js && node --check src/wp.js && node --check src/tools.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}

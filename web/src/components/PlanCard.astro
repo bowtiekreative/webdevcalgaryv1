@@ -3,7 +3,6 @@
  * A recurring plan, shaped like the work order rather than a SaaS pricing card.
  */
 import type { Plan } from '../config';
-import { offers } from '../config';
 
 interface Props {
 	plan: Plan;
@@ -13,7 +12,6 @@ interface Props {
 }
 
 const { plan, href, ctaLabel } = Astro.props;
-const rush = offers.rush;
 ---
 
 <div class:list={['panel', 'plan', { 'panel--featured': plan.featured }]}>
@@ -26,9 +24,7 @@ const rush = offers.rush;
 		<div class="price plan__price">
 			{plan.price}<small> /{plan.interval}</small>
 		</div>
-		<div class="plan__rush">
-			+ ${rush.amount} rush fee (or wait 7 days)
-		</div>
+		<div class="plan__rush">Locked for life. No setup fee.</div>
 		<ul class="plan__features">
 			{
 				plan.features.map((feature) => (
@@ -41,7 +37,7 @@ const rush = offers.rush;
 	</div>
 	<div class="plan__cta">
 		<a class:list={['btn', 'btn--block', { 'btn--primary': plan.featured }]} href={href}>
-			{ctaLabel ?? `Start with ${plan.name}`}
+			{ctaLabel ?? `Talk about ${plan.name}`}
 		</a>
 	</div>
 </div>

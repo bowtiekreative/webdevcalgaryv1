@@ -1,127 +1,94 @@
 ---
 /**
- * Post-purchase confirmation, and the Growth upsell.
+ * Lead confirmation.
  *
- * Rendered on demand rather than prerendered so the clock shows the *real*
- * go-live deadline stored against the order, not "24 hours from whenever this
- * page loaded". The two differ for anyone who ordered after the 2pm cutoff or
- * on a weekend, and the guarantee is written against the stored one.
+ * Rendered on demand so it can show the lead's own grade back to them as a
+ * response time — "today" for a hot lead is a promise we can keep, and one we
+ * should not make to a cold one.
  *
- * Reachable with only the order reference, which is why references are random
- * rather than sequential. Nothing sensitive is shown either way — no amounts,
- * no contact details, just the deadline they already have by email.
+ * Reachable with only the reference, which is why references are random rather
+ * than sequential. Nothing sensitive is shown either way: no score, no grade
+ * label, no contact details — just what happens next.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DispatchClock from '../components/DispatchClock.astro';
 import { contact, plans } from '../config';
-import { fetchOrder, formatDeadline } from '../lib/orders';
+import { fetchLead } from '../lib/leads';
 import { nextSteps } from '../funnel';
 
 export const prerender = false;
 
 const reference = Astro.url.searchParams.get('ref') ?? '';
-const isLead = Astro.url.searchParams.get('lead') === '1';
+const lead = reference ? await fetchLead(reference) : null;
 
-const order = reference && !isLead ? await fetchOrder(reference) : null;
-const paid = order?.status === 'app-paid';
-
-const deadline = order?.goLiveAt ? new Date(order.goLiveAt) : null;
-const deadlineLabel = deadline && !Number.isNaN(deadline.getTime()) ? formatDeadline(deadline) : null;
-/** Hours left, so the clock counts down to the real deadline. */
-const hoursLeft = deadline ? Math.max(0, (deadline.getTime() - Date.now()) / 3_600_000) : 24;
+/**
+ * The internal grade becomes an external promise. Deliberately conservative —
+ * under-promising a callback costs nothing, over-promising one costs the lead.
+ */
+const when =
+	lead?.grade === 'hot' ? 'today' : lead?.grade === 'warm' ? 'within a day' : 'shortly';
 
 const growth = plans.find((plan) => plan.featured) ?? plans[1];
 ---
 
 <BaseLayout
-	title={isLead ? 'Got it' : 'The clock is running'}
-	description="Order confirmed."
+	title="Got it"
+	description="Your details are in. I'll call you back."
 	narrow
 	sticky={false}
 	seo={{ title: null, description: null, image: null, noindex: true }}
 >
-	{
-		isLead ? (
-			<section class="section hero">
-				<div class="wrap wrap--narrow">
-					<p class="eyebrow">Message received</p>
-					<h1>
-						Got it.<br />
-						<em class="accent">I’ll call you today.</em>
-					</h1>
-					<p class="lede">
-						Your details are in front of me. If you’d rather not wait, call or text{' '}
-						<a href={`tel:${contact.phoneRaw}`}>{contact.phone}</a> — that’s the fastest way to reach
-						me, and you’ll get a person, not a queue.
-					</p>
-					{reference && <p class="mono ref">Reference: {reference}</p>}
-				</div>
-			</section>
-		) : (
-			<section class="section hero">
-				<div class="wrap wrap--narrow">
-					<p class="eyebrow">
-						{paid ? 'Payment received · Order confirmed' : 'Order received'}
-					</p>
-					<h1>
-						The clock is running.<br />
-						<em class="accent">We’re already on it.</em>
-					</h1>
-					<DispatchClock label="Dispatch · confirmed" hours={hoursLeft}>
-						Your site goes live by{' '}
-						{deadlineLabel ? <b>{deadlineLabel}</b> : '{deadline}'}. You’ll get this exact time in
-						writing by email within the hour.
-					</DispatchClock>
-					{reference && <p class="mono ref">Reference: {reference}</p>}
-				</div>
-			</section>
-		)
-	}
+	<section class="section hero">
+		<div class="wrap wrap--narrow">
+			<p class="eyebrow">Message received</p>
+			<h1>Got it.<br /><em class="accent">I’ll call you {when}.</em></h1>
+			<p class="lede">
+				Your answers are in front of me. If you’d rather not wait, call or text{' '}
+				<a href={`tel:${contact.phoneRaw}`}>{contact.phone}</a> — that’s the fastest way to reach me,
+				and you’ll get a person, not a queue.
+			</p>
+			{reference && <p class="mono ref">Reference: {reference}</p>}
+		</div>
+	</section>
 
-	{
-		!isLead && (
-			<section class="section section--concrete">
-				<div class="wrap wrap--narrow">
-					<h2 class="steps__heading">What happens next.</h2>
-					<div class="grid">
-						{nextSteps.map((step) => (
-							<div class="card">
-								<span class="card__index">{step.index}</span>
-								<h3>{step.heading}</h3>
-								<p>{step.body}</p>
-							</div>
-						))}
-					</div>
-				</div>
-			</section>
-		)
-	}
+	<section class="section section--concrete">
+		<div class="wrap wrap--narrow">
+			<h2 class="steps__heading">What happens next.</h2>
+			<div class="grid">
+				{
+					nextSteps.map((step) => (
+						<div class="card">
+							<span class="card__index">{step.index}</span>
+							<h3>{step.heading}</h3>
+							<p>{step.body}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
 
 	<section class="section">
 		<div class="wrap wrap--narrow">
-			<div class="panel panel--featured upsell">
+			<div class="panel panel--featured aside">
 				<div class="panel__bar">
-					<span>One thing worth deciding now</span>
+					<span>While you wait</span>
 					<span>{growth.serial}</span>
 				</div>
-				<div class="upsell__body">
-					<h2>The site’s handled. Now — can people find it?</h2>
+				<div class="aside__body">
+					<h2>Worth a look before we talk.</h2>
 					<p>
-						Growth adds the part that brings the phone calls: your Google Business Profile managed,
-						local SEO for Calgary searches, review requests on autopilot, and visibility in the AI
-						assistants people ask for recommendations now. Plus a monthly report in plain English.
+						Fourteen industries, fourteen different sites — open the one closest to your business and
+						you’ll know in thirty seconds whether we build the kind of thing you want.
 					</p>
 					<div class="cta-row">
-						<a class="btn btn--primary" href={`/checkout?plan=${growth.id}`}>
-							Upgrade to Growth — {growth.price}/mo
-						</a>
-						<span class="mono">Or later — the price is locked either way.</span>
+						<a class="btn btn--primary" href="/work">See the work →</a>
+						<span class="mono">No sign-up, nothing gated.</span>
 					</div>
 				</div>
 			</div>
 			<p class="mono outro">
-				Questions before tomorrow? Call or text{' '}
-				<a href={`tel:${contact.phoneRaw}`}>{contact.phone}</a> — you’ll get a person, not a queue.
+				Questions before the call? Call or text{' '}
+				<a href={`tel:${contact.phoneRaw}`}>{contact.phone}</a>.
 			</p>
 		</div>
 	</section>
@@ -145,20 +112,20 @@ const growth = plans.find((plan) => plan.featured) ?? plans[1];
 		font-size: clamp(1.6rem, 4vw, 2.3rem);
 	}
 
-	.upsell {
+	.aside {
 		max-width: none;
 	}
 
-	.upsell__body {
+	.aside__body {
 		padding: 28px 24px;
 	}
 
-	.upsell__body h2 {
+	.aside__body h2 {
 		margin: 0 0 12px;
 		font-size: clamp(1.5rem, 4vw, 2.1rem);
 	}
 
-	.upsell__body p {
+	.aside__body p {
 		margin: 0 0 18px;
 		color: var(--ink-2);
 		max-width: 60ch;

@@ -82,7 +82,7 @@ interface ErrorBody {
 /**
  * Authenticated call to the WordPress app API.
  *
- * Exported so lib/orders.ts can reach /wp-json/app/v1/orders over the same
+ * Exported so lib/leads.ts can reach /wp-json/app/v1/leads over the same
  * shared secret rather than growing a second, subtly different client.
  */
 export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {

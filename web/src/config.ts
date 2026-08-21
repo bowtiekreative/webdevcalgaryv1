@@ -1,9 +1,9 @@
 /**
  * Single place for anything brand-, offer- or deployment-specific.
  *
- * Prices and copy here are the source of truth for the funnel: the landing
- * page, the checkout summary and the PayPal order that actually gets charged
- * all read the same numbers, so they cannot drift apart.
+ * Prices and copy here are the source of truth for the funnel, and so is the
+ * definition of a qualified lead — the form, the score and the wp-admin queue
+ * all read the same constants, so they cannot drift apart.
  *
  * Values fall back to WordPress's General Settings where that makes sense (see
  * lib/wp/site.ts) — this file supplies the defaults used before WordPress
@@ -55,9 +55,6 @@ export const contact = {
 	serviceArea: ['Calgary', 'Airdrie', 'Okotoks', 'Cochrane', 'Chestermere', 'Strathmore'],
 } as const;
 
-/** Currency every price on the site and in PayPal is denominated in. */
-export const CURRENCY = 'CAD';
-
 /**
  * Fallback navigation, used until a menu is assigned to PRIMARY in WordPress.
  *
@@ -71,7 +68,10 @@ export const fallbackNav = [
 ] as const;
 
 /* -------------------------------------------------------------------------
- * Recurring plans — the business. Charged as PayPal subscriptions.
+ * Recurring plans — the business.
+ *
+ * Shown so the page can say the number out loud, which the voice rules insist
+ * on. Nothing here is charged on the site: the plan is agreed on the call.
  * ---------------------------------------------------------------------- */
 
 export interface Plan {
@@ -80,9 +80,9 @@ export interface Plan {
 	name: string;
 	/** Work-order serial, shown in the mono header bar. */
 	serial: string;
-	/** Display price, e.g. "$147". The provider is authoritative for billing. */
+	/** Display price, e.g. "$147". */
 	price: string;
-	/** Numeric equivalent, for the checkout summary. */
+	/** Numeric equivalent, for sorting and for the qualification budget bands. */
 	amount: number;
 	interval: 'month' | 'year';
 	description: string;
@@ -140,69 +140,91 @@ export function findPlan(id: string | null | undefined): Plan | null {
 }
 
 /* -------------------------------------------------------------------------
- * One-time offers — the ladder from 02-offer-ladder.md.
+ * Lead qualification.
  *
- * Charged through the PayPal Orders API rather than Subscriptions. `id` is
- * what the checkout posts and what the order endpoint prices, so the browser
- * can never name its own amount.
+ * This funnel does not take money. Nothing is sold self-serve — the page's job
+ * is to get a qualified conversation started, and everything below is what
+ * "qualified" means, expressed once so the form, the score and the wp-admin
+ * queue cannot disagree about it.
+ *
+ * The weights are a first pass and deliberately blunt. Replace them with real
+ * numbers after the first fifty leads: the point of scoring is to sort a queue,
+ * not to be right about any individual.
  * ---------------------------------------------------------------------- */
 
-export interface Offer {
+export interface Choice {
 	id: string;
-	name: string;
-	/** What appears on the PayPal receipt. */
-	description: string;
-	amount: number;
-	serial: string;
+	label: string;
+	/** Contribution to the qualification score. */
+	weight: number;
 }
 
-export const offers = {
-	rush: {
-		id: 'rush',
-		name: '24-hour rush fee',
-		description: 'Website live within 24 hours — refunded in full if we miss the window.',
-		amount: 497,
-		serial: 'WC-RUSH',
-	},
-	'rush-split': {
-		id: 'rush-split',
-		name: '24-hour rush fee (1 of 2 payments)',
-		description: 'First of two $249 payments. Second charged on day 30.',
-		amount: 249,
-		serial: 'WC-RUSH-2',
-	},
-	teardown: {
-		id: 'teardown',
-		name: '24-Hour Website Teardown',
-		description: 'Recorded walkthrough of your site and Google listing, plus a one-page fix list.',
-		amount: 47,
-		serial: 'WC-047',
-	},
-	gbp: {
-		id: 'gbp',
-		name: 'Google Business Profile Rescue',
-		description: 'Categories, services, photos, hours and posting fixed. One time, not monthly.',
-		amount: 97,
-		serial: 'WC-GBP',
-	},
-	rescue: {
-		id: 'rescue',
-		name: 'Website Rescue',
-		description: 'Keep your site — we fix the five things costing you the most.',
-		amount: 297,
-		serial: 'WC-297',
-	},
-} satisfies Record<string, Offer>;
+/** How soon they want it. The strongest single signal of intent. */
+export const timelines: Choice[] = [
+	{ id: 'asap', label: 'As soon as possible — this week', weight: 30 },
+	{ id: 'month', label: 'Within the month', weight: 22 },
+	{ id: 'quarter', label: 'Next few months', weight: 10 },
+	{ id: 'exploring', label: 'Just looking for now', weight: 0 },
+];
 
-export function findOffer(id: string | null | undefined): Offer | null {
-	if (!id || !Object.hasOwn(offers, id)) {
-		return null;
-	}
+/** Monthly budget. Bands, not a free-text number — people round anyway. */
+export const budgets: Choice[] = [
+	{ id: 'growth', label: '$497/mo — the works, including Google and SEO', weight: 30 },
+	{ id: 'core', label: '$147/mo — website, hosting, unlimited changes', weight: 24 },
+	{ id: 'unsure', label: 'Not sure yet — tell me what it costs', weight: 14 },
+	{ id: 'under', label: 'Under $100/mo', weight: 4 },
+];
 
-	return offers[id as keyof typeof offers];
-}
+/** Whether we are talking to the person who decides. */
+export const roles: Choice[] = [
+	{ id: 'owner', label: 'I own the business', weight: 20 },
+	{ id: 'partner', label: "I'm a partner or manager", weight: 14 },
+	{ id: 'staff', label: 'I look after the website', weight: 6 },
+	{ id: 'other', label: 'Something else', weight: 3 },
+];
 
-/** Standard build: same site, same plan, no rush fee — the price downsell. */
+/** Where they are starting from. */
+export const siteStates: Choice[] = [
+	{ id: 'stale', label: "I have one, but it's out of date", weight: 15 },
+	{ id: 'none', label: "I don't have a website", weight: 12 },
+	{ id: 'broken', label: "I have one and it doesn't work properly", weight: 15 },
+	{ id: 'fine', label: "I have one and it's fine", weight: 5 },
+];
+
+/**
+ * The trades this offer is built for. Anything outside the list still gets a
+ * callback — it just does not get the in-market bonus.
+ */
+export const trades: Choice[] = [
+	{ id: 'hvac', label: 'HVAC', weight: 15 },
+	{ id: 'plumbing', label: 'Plumbing', weight: 15 },
+	{ id: 'electrical', label: 'Electrical', weight: 15 },
+	{ id: 'roofing', label: 'Roofing', weight: 15 },
+	{ id: 'landscaping', label: 'Landscaping & snow', weight: 15 },
+	{ id: 'concrete', label: 'Concrete', weight: 15 },
+	{ id: 'renovation', label: 'Renovation', weight: 15 },
+	{ id: 'garage-doors', label: 'Garage doors', weight: 15 },
+	{ id: 'dental', label: 'Dental', weight: 12 },
+	{ id: 'med-spa', label: 'Med spa', weight: 12 },
+	{ id: 'law', label: 'Law', weight: 12 },
+	{ id: 'accounting', label: 'Accounting', weight: 12 },
+	{ id: 'auto-repair', label: 'Auto repair', weight: 15 },
+	{ id: 'restaurant', label: 'Restaurant', weight: 10 },
+	{ id: 'other', label: 'Something else', weight: 5 },
+];
+
+/** Highest score achievable, used to normalise to 0-100. */
+export const MAX_SCORE =
+	Math.max(...timelines.map((c) => c.weight)) +
+	Math.max(...budgets.map((c) => c.weight)) +
+	Math.max(...roles.map((c) => c.weight)) +
+	Math.max(...siteStates.map((c) => c.weight)) +
+	Math.max(...trades.map((c) => c.weight));
+
+/** Score bands. `hot` gets called the same day. */
+export const GRADE_HOT = 70;
+export const GRADE_WARM = 45;
+
 export const STANDARD_BUILD_DAYS = 7;
 
 /** Hours on the hero clock, and the window the guarantee is written against. */

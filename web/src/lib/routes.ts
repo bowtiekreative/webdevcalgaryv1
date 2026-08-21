@@ -20,7 +20,6 @@ export const RESERVED_SLUGS = new Set([
 	'404',
 	// The funnel's own routes. A WordPress page at any of these slugs would be
 	// silently dropped, which is a bad way to find out you had a collision.
-	'checkout',
 	'teardown',
 	'thank-you',
 	'login',
