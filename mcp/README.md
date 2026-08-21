@@ -57,6 +57,7 @@ Or in a client's config file:
 | `update_lead` | Move through the pipeline, fix details, append call notes. |
 | `qualify_lead` | Recompute score and grade from the answers, and save. |
 | `create_lead` | Add someone who phoned in. Scored the same way. |
+| `delete_lead` | Trash a lead, or erase it with `force`. |
 | `lead_stats` | Counts by status and by grade. |
 | `qualification_model` | The weights this server applies. |
 

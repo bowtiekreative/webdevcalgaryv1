@@ -219,6 +219,26 @@ export const tools = [
 		},
 	},
 	{
+		name: 'delete_lead',
+		description:
+			'Remove a lead. Trashes by default so it can be restored from wp-admin. Pass force:true to erase permanently — use that for an erasure request, not for tidying.',
+		inputSchema: {
+			type: 'object',
+			properties: {
+				reference: { type: 'string' },
+				force: { type: 'boolean', default: false, description: 'Permanently erase instead of trashing.' },
+			},
+			required: ['reference'],
+		},
+		async run({ reference, force = false }) {
+			return asJson(
+				await app(`/leads/${encodeURIComponent(reference)}?force=${force ? '1' : '0'}`, {
+					method: 'DELETE',
+				}),
+			);
+		},
+	},
+	{
 		name: 'lead_stats',
 		description: 'Counts by pipeline status and by grade.',
 		inputSchema: { type: 'object', properties: {} },

@@ -33,8 +33,9 @@
  * Endpoints (Astro server only, shared-secret protected):
  *   POST  /wp-json/app/v1/leads              create or update by reference
  *   GET   /wp-json/app/v1/leads              list, with filters
- *   GET   /wp-json/app/v1/leads/{reference}  read one back
- *   PATCH /wp-json/app/v1/leads/{reference}  update status / notes / fields
+ *   GET    /wp-json/app/v1/leads/{reference}  read one back
+ *   PATCH  /wp-json/app/v1/leads/{reference}  update status / notes / fields
+ *   DELETE /wp-json/app/v1/leads/{reference}  trash, or ?force=1 to erase
  *
  * @package App
  */
@@ -393,6 +394,11 @@ function register_routes(): void {
 				'callback'            => __NAMESPACE__ . '\\handle_patch',
 				'permission_callback' => $guard,
 			],
+			[
+				'methods'             => 'DELETE',
+				'callback'            => __NAMESPACE__ . '\\handle_delete',
+				'permission_callback' => $guard,
+			],
 		]
 	);
 
@@ -461,6 +467,38 @@ function handle_get( WP_REST_Request $request ) {
 	}
 
 	return new WP_REST_Response( to_array( $post ), 200 );
+}
+
+/**
+ * DELETE /wp-json/app/v1/leads/{reference}
+ *
+ * Trashes by default. `?force=1` erases, which is what an erasure request
+ * needs and what nothing else should use.
+ *
+ * @param WP_REST_Request $request Request.
+ * @return WP_REST_Response|WP_Error
+ */
+function handle_delete( WP_REST_Request $request ) {
+	$post = find( (string) $request['reference'] );
+
+	if ( ! $post instanceof WP_Post ) {
+		return new WP_Error( 'app_lead_not_found', __( 'No such lead.', 'app' ), [ 'status' => 404 ] );
+	}
+
+	$force = (bool) $request->get_param( 'force' );
+
+	if ( ! wp_delete_post( $post->ID, $force ) ) {
+		return new WP_Error( 'app_lead_delete_failed', __( 'Could not delete that lead.', 'app' ), [ 'status' => 500 ] );
+	}
+
+	return new WP_REST_Response(
+		[
+			'reference'          => (string) $request['reference'],
+			'trashed'            => ! $force,
+			'permanentlyDeleted' => $force,
+		],
+		200
+	);
 }
 
 /**
